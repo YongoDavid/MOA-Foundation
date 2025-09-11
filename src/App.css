@@ -1,0 +1,104 @@
+/* Converting Tailwind CSS configuration for React app */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap");
+
+/* Custom CSS Variables */
+:root {
+  --font-poppins: "Poppins", sans-serif;
+  --font-inter: "Inter", sans-serif;
+  --color-royal-purple: #6d28d9;
+  --color-teal: #14b8a6;
+  --color-bright-orange: #fb923c;
+  --color-light-gray: #e5e7eb;
+  --color-dark-gray: #1f2937;
+  --color-medium-gray: #6b7280;
+}
+
+/* Custom utility classes */
+.text-royal-purple {
+  color: var(--color-royal-purple);
+}
+
+.text-teal {
+  color: var(--color-teal);
+}
+
+.text-bright-orange {
+  color: var(--color-bright-orange);
+}
+
+.text-dark-gray {
+  color: var(--color-dark-gray);
+}
+
+.text-medium-gray {
+  color: var(--color-medium-gray);
+}
+
+.bg-royal-purple {
+  background-color: var(--color-royal-purple);
+}
+
+.bg-teal {
+  background-color: var(--color-teal);
+}
+
+.bg-bright-orange {
+  background-color: var(--color-bright-orange);
+}
+
+.bg-light-gray {
+  background-color: var(--color-light-gray);
+}
+
+.border-royal-purple {
+  border-color: var(--color-royal-purple);
+}
+
+.border-teal {
+  border-color: var(--color-teal);
+}
+
+.border-bright-orange {
+  border-color: var(--color-bright-orange);
+}
+
+.font-poppins {
+  font-family: var(--font-poppins);
+}
+
+.font-inter {
+  font-family: var(--font-inter);
+}
+
+.gradient-orange {
+  background: linear-gradient(135deg, #fb923c, #ff6b35);
+}
+
+.gradient-teal {
+  background: linear-gradient(135deg, #14b8a6, #0f766e);
+}
+
+.gradient-dark {
+  background: linear-gradient(135deg, #1f2937, #374151);
+}
+
+.shadow-soft {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-medium {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-large {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-glow {
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+}

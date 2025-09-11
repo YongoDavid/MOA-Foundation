@@ -1,0 +1,237 @@
+"use client"
+
+import { Star, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
+// import { Button } from "@/components/ui/button"
+import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect } from "react"
+
+const heroImages = [
+  {
+    src: "/igbo-cultural-festival-with-traditional-dancers.jpg",
+    alt: "Igbo Cultural Festival",
+  },
+  {
+    src: "/igbo-elders-teaching-young-people-traditional-craf.jpg",
+    alt: "Cultural Mentorship",
+  },
+  {
+    src: "/modern-igbo-community-gathering-with-traditional-a.jpg",
+    alt: "Community Gathering",
+  },
+  {
+    src: "/igbo-youth-learning-traditional-music-and-instrume.jpg",
+    alt: "Cultural Education",
+  },
+]
+
+export default function HeroSection() {
+  const [currentImage, setCurrentImage] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % heroImages.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const nextImage = () => {
+    setCurrentImage((prev) => (prev + 1) % heroImages.length)
+  }
+
+  const prevImage = () => {
+    setCurrentImage((prev) => (prev - 1 + heroImages.length) % heroImages.length)
+  }
+
+  return (
+    <section className="relative min-h-screen flex items-center bg-royal-purple overflow-hidden">
+      <div className="absolute inset-0">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentImage}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            className="absolute inset-0"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30 z-10" />
+            <img
+              src={heroImages[currentImage].src || "/placeholder.svg"}
+              alt={heroImages[currentImage].alt}
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+        </AnimatePresence>
+
+        <button
+          onClick={prevImage}
+          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-2 md:p-3 rounded-full transition-all duration-300 group"
+        >
+          <ChevronLeft className="h-4 w-4 md:h-6 md:w-6 text-white group-hover:scale-110 transition-transform" />
+        </button>
+        <button
+          onClick={nextImage}
+          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-2 md:p-3 rounded-full transition-all duration-300 group"
+        >
+          <ChevronRight className="h-4 w-4 md:h-6 md:w-6 text-white group-hover:scale-110 transition-transform" />
+        </button>
+
+        <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          {heroImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentImage(index)}
+              className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
+                index === currentImage ? "bg-white scale-125" : "bg-white/50 hover:bg-white/75"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-20 z-20">
+        <div className="max-w-3xl bg-black/20 backdrop-blur-sm rounded-2xl md:rounded-3xl p-4 md:p-8 lg:p-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="inline-flex items-center gap-2 bg-white/95 backdrop-blur-sm px-3 md:px-4 py-1.5 md:py-2 rounded-full mb-6 md:mb-8 shadow-soft"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            >
+              <Star className="h-3 w-3 md:h-4 md:w-4 text-bright-orange fill-current" />
+            </motion.div>
+            <span className="text-xs md:text-sm font-poppins font-semibold text-dark-gray">
+              Empowering Communities Since 2020
+            </span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-poppins font-extrabold text-white leading-tight mb-4 md:mb-6"
+            style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.8)" }}
+          >
+            <motion.span
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="block"
+            >
+              Preserving Culture,
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="block text-teal"
+              style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.8)" }}
+            >
+              Building Futures
+            </motion.span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1 }}
+            className="text-base md:text-lg lg:text-xl font-inter text-white leading-relaxed mb-6 md:mb-8 max-w-2xl"
+            style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}
+          >
+            Join UMUIGBO Worldwide in our mission to preserve Igbo heritage while empowering the next generation through
+            mentorship, education, and community development programs.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="flex flex-col sm:flex-row gap-3 md:gap-4"
+          >
+            <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
+              {/* changes from B to b  */}
+              <button className="gradient-orange text-white font-poppins font-semibold px-6 md:px-8 py-3 md:py-4 rounded-full text-base md:text-lg shadow-medium border-0 w-full sm:w-auto">
+                Start Your Journey
+                <motion.div animate={{ x: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}>
+                  <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
+                </motion.div>
+              </button>
+            </motion.div>
+
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              {/* changes from B to b  */}
+              <button
+                variant="outline"
+                className="border-2 border-white text-white font-poppins font-semibold px-6 md:px-8 py-3 md:py-4 rounded-full text-base md:text-lg hover:bg-white hover:text-royal-purple transition-all duration-300 bg-black/20 backdrop-blur-sm w-full sm:w-auto"
+              >
+                Learn More
+              </button>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.4 }}
+            className="flex flex-wrap justify-center sm:justify-start gap-4 md:gap-8 mt-8 md:mt-12 pt-6 md:pt-8 border-t border-white/30"
+          >
+            <motion.div whileHover={{ scale: 1.1 }} className="text-center">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 1.6, type: "spring" }}
+                className="text-2xl md:text-3xl font-poppins font-bold text-white"
+                style={{ textShadow: "2px 2px 6px rgba(0,0,0,0.8)" }}
+              >
+                5,000+
+              </motion.div>
+              <div
+                className="text-xs md:text-sm font-inter text-white/90"
+                style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.8)" }}
+              >
+                Community Members
+              </div>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.1 }} className="text-center">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 1.8, type: "spring" }}
+                className="text-2xl md:text-3xl font-poppins font-bold text-teal"
+                style={{ textShadow: "2px 2px 6px rgba(0,0,0,0.8)" }}
+              >
+                50+
+              </motion.div>
+              <div
+                className="text-xs md:text-sm font-inter text-white/90"
+                style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.8)" }}
+              >
+                Programs Launched
+              </div>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.1 }} className="text-center">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 2, type: "spring" }}
+                className="text-2xl md:text-3xl font-poppins font-bold text-bright-orange"
+                style={{ textShadow: "2px 2px 6px rgba(0,0,0,0.8)" }}
+              >
+                25
+              </motion.div>
+              <div
+                className="text-xs md:text-sm font-inter text-white/90"
+                style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.8)" }}
+              >
+                Countries Reached
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}
