@@ -10,12 +10,12 @@ const AboutSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   const achievements = [
-    "Established mentorship programs in 25+ countries",
-    "Trained over 500 cultural ambassadors worldwide",
-    "Preserved and documented traditional practices",
-    "Connected diaspora communities globally",
+    "Established mentorship programs Nigeria",
+    "Established mentorship programs Nigeria",
+    "Established mentorship programs Nigeria",
     "Launched youth leadership initiatives",
-    "Created educational resources and curricula",
+    "Launched youth leadership initiatives",
+    "Launched youth leadership initiatives",
   ]
 
   const aboutImages = [
