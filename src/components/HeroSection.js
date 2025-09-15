@@ -104,7 +104,7 @@ export default function HeroSection() {
               <Star className="h-3 w-3 md:h-4 md:w-4 text-bright-orange fill-current" />
             </motion.div>
             <span className="text-xs md:text-sm font-poppins font-semibold text-dark-gray">
-              Empowering Communities Since 2020
+              LEADERSHIP, PEACE AND DEVELOPMENT
             </span>
           </motion.div>
 
@@ -121,7 +121,7 @@ export default function HeroSection() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="block"
             >
-              Preserving Culture,
+              Impacting Youths,
             </motion.span>
             <motion.span
               initial={{ opacity: 0, x: 50 }}
@@ -130,7 +130,7 @@ export default function HeroSection() {
               className="block text-teal"
               style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.8)" }}
             >
-              Building Futures
+              Building the Future
             </motion.span>
           </motion.h1>
 
@@ -141,8 +141,7 @@ export default function HeroSection() {
             className="text-base md:text-lg lg:text-xl font-inter text-white leading-relaxed mb-6 md:mb-8 max-w-2xl"
             style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}
           >
-            Join UMUIGBO Worldwide in our mission to preserve Igbo heritage while empowering the next generation through
-            mentorship, education, and community development programs.
+            African youths are at the forefront of governance and leadership, shaping policies, promoting transparency, and building resillient societies that reflect the aspirations of thier communities for equality, prosperity and justice.
           </motion.p>
 
           <motion.div
@@ -151,25 +150,6 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 1.2 }}
             className="flex flex-col sm:flex-row gap-3 md:gap-4"
           >
-            <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
-              {/* changes from B to b  */}
-              <button className="gradient-orange text-white font-poppins font-semibold px-6 md:px-8 py-3 md:py-4 rounded-full text-base md:text-lg shadow-medium border-0 w-full sm:w-auto">
-                Start Your Journey
-                <motion.div animate={{ x: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}>
-                  <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
-                </motion.div>
-              </button>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              {/* changes from B to b  */}
-              <button
-                variant="outline"
-                className="border-2 border-white text-white font-poppins font-semibold px-6 md:px-8 py-3 md:py-4 rounded-full text-base md:text-lg hover:bg-white hover:text-royal-purple transition-all duration-300 bg-black/20 backdrop-blur-sm w-full sm:w-auto"
-              >
-                Learn More
-              </button>
-            </motion.div>
           </motion.div>
 
           <motion.div
@@ -178,57 +158,6 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 1.4 }}
             className="flex flex-wrap justify-center sm:justify-start gap-4 md:gap-8 mt-8 md:mt-12 pt-6 md:pt-8 border-t border-white/30"
           >
-            <motion.div whileHover={{ scale: 1.1 }} className="text-center">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.5, delay: 1.6, type: "spring" }}
-                className="text-2xl md:text-3xl font-poppins font-bold text-white"
-                style={{ textShadow: "2px 2px 6px rgba(0,0,0,0.8)" }}
-              >
-                5,000+
-              </motion.div>
-              <div
-                className="text-xs md:text-sm font-inter text-white/90"
-                style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.8)" }}
-              >
-                Community Members
-              </div>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.1 }} className="text-center">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.5, delay: 1.8, type: "spring" }}
-                className="text-2xl md:text-3xl font-poppins font-bold text-teal"
-                style={{ textShadow: "2px 2px 6px rgba(0,0,0,0.8)" }}
-              >
-                50+
-              </motion.div>
-              <div
-                className="text-xs md:text-sm font-inter text-white/90"
-                style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.8)" }}
-              >
-                Programs Launched
-              </div>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.1 }} className="text-center">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.5, delay: 2, type: "spring" }}
-                className="text-2xl md:text-3xl font-poppins font-bold text-bright-orange"
-                style={{ textShadow: "2px 2px 6px rgba(0,0,0,0.8)" }}
-              >
-                25
-              </motion.div>
-              <div
-                className="text-xs md:text-sm font-inter text-white/90"
-                style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.8)" }}
-              >
-                Countries Reached
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </div>

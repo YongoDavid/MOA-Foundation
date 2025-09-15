@@ -58,9 +58,7 @@ const AboutSection = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-lg font-inter text-medium-gray leading-relaxed mb-8"
             >
-              UMUIGBO Worldwide stands as a beacon of cultural preservation and community empowerment. We bridge the gap
-              between traditional Igbo values and modern opportunities, ensuring our rich heritage thrives in the
-              contemporary world.
+              To empower and equip African youths with knowledge skills and resources needed to actively participate in politics and leadership, fostering a new generation of ethical, visionary and inclusive leaders commited to driving sustainable development and positive change across the continent.
             </motion.p>
 
             <motion.p
@@ -69,8 +67,7 @@ const AboutSection = () => {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="text-lg font-inter text-medium-gray leading-relaxed mb-8"
             >
-              Through innovative mentorship programs, educational initiatives, and global networking, we empower
-              individuals to achieve their full potential while staying connected to their cultural roots.
+              A future where African youths are at the forefront of governance and leadership, shaping policies, promoting transparency, and building resilient societies that reflect the aspirations of thier communities for equality, prosperity and justice
             </motion.p>
 
             <div className="space-y-4 mb-8">

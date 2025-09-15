@@ -13,15 +13,15 @@ const ProgramsSection = () => {
       icon: Users,
       title: "Mentorship Network",
       description:
-        "Connect with experienced professionals and cultural leaders who guide your personal and professional growth journey.",
+        "Connect with Global leaders.",
       color: "text-royal-purple",
       bgColor: "bg-royal-purple/10",
     },
     {
       icon: BookOpen,
-      title: "Cultural Education",
+      title: "Education",
       description:
-        "Comprehensive programs teaching Igbo language, traditions, history, and values to preserve our rich heritage.",
+        "Comprehensive programs and education to help young minds discover themeselves and be the best version of themselves.",
       color: "text-teal",
       bgColor: "bg-teal/10",
     },
@@ -29,7 +29,7 @@ const ProgramsSection = () => {
       icon: Globe,
       title: "Global Community",
       description:
-        "Join a worldwide network of Igbo people and allies working together to strengthen our cultural bonds.",
+        "Join a worldwide network of youths to bridge the gap and foster global impact.",
       color: "text-bright-orange",
       bgColor: "bg-bright-orange/10",
     },
@@ -37,7 +37,7 @@ const ProgramsSection = () => {
       icon: Heart,
       title: "Youth Development",
       description:
-        "Specialized programs for young people focusing on leadership, identity, and cultural pride development.",
+        "Specialized programs for young people focusing on leadership, identity, values and morals",
       color: "text-royal-purple",
       bgColor: "bg-royal-purple/10",
     },
@@ -45,7 +45,7 @@ const ProgramsSection = () => {
       icon: Lightbulb,
       title: "Innovation Hub",
       description:
-        "Fostering entrepreneurship and innovation while maintaining strong connections to our cultural roots.",
+        "Fostering entrepreneurship and innovation to provide impactful and service driven leadership globally.",
       color: "text-teal",
       bgColor: "bg-teal/10",
     },
@@ -102,7 +102,7 @@ const ProgramsSection = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-4xl md:text-5xl font-poppins font-bold text-royal-purple mb-6"
           >
-            Our Programs
+            Aims & Objectives
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -110,7 +110,7 @@ const ProgramsSection = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-xl font-inter text-medium-gray max-w-3xl mx-auto leading-relaxed"
           >
-            Discover comprehensive programs designed to empower individuals, preserve culture, and build stronger
+            Discover programs and schemes designed to empower individuals, preserve our nation, and build stronger
             communities across the globe.
           </motion.p>
         </motion.div>
@@ -176,13 +176,13 @@ const ProgramsSection = () => {
                     {program.description}
                   </motion.p>
 
-                  <motion.div whileHover={{ x: 10 }} transition={{ duration: 0.3 }}>
+                  {/* <motion.div whileHover={{ x: 10 }} transition={{ duration: 0.3 }}>
                     <button
                       className={`${program.color} hover:bg-transparent font-poppins font-semibold p-0 h-auto bg-transparent border-none cursor-pointer`}
                     >
                       Learn More →
                     </button>
-                  </motion.div>
+                  </motion.div> */}
                 </div>
               </motion.div>
             )
@@ -205,9 +205,9 @@ const ProgramsSection = () => {
               y: { duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" },
             }}
           >
-            <button className="gradient-orange text-white font-poppins font-semibold px-8 py-4 rounded-full text-lg shadow-medium">
+            {/* <button className="gradient-orange text-white font-poppins font-semibold px-8 py-4 rounded-full text-lg shadow-medium">
               Explore All Programs
-            </button>
+            </button> */}
           </motion.div>
         </motion.div>
       </div>
