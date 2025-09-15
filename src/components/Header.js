@@ -50,7 +50,7 @@ const Header = () => {
               <img
               src={logo}
               alt="Logo" 
-              class="h-20 w-auto md:h-20 lg:h-20 object-contain"
+              class="h-12 w-auto md:h-20 lg:h-20 object-contain"
             />
             </motion.div>
           </motion.div>
