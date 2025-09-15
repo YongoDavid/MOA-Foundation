@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Menu, X, Search } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import logo from "../Images/logo.jpg";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -20,8 +21,6 @@ const Header = () => {
     { name: "Home", href: "#" },
     { name: "Programs", href: "#programs" },
     { name: "About", href: "#about" },
-    { name: "Community", href: "#community" },
-    { name: "Resources", href: "#resources" },
     { name: "Contact", href: "#contact" },
   ]
 
@@ -48,21 +47,11 @@ const Header = () => {
               }}
               className="text-2xl font-poppins font-bold"
             >
-              UMUIGBO
-            </motion.div>
-            <motion.div
-              animate={{
-                color: ["#14B8A6", "#FF6B35", "#14B8A6"],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-                delay: 1.5,
-              }}
-              className="ml-2 text-sm font-poppins font-medium"
-            >
-              Worldwide
+              <img
+              src={logo}
+              alt="Logo" 
+              class="h-20 w-auto md:h-20 lg:h-20 object-contain"
+            />
             </motion.div>
           </motion.div>
 
@@ -87,7 +76,7 @@ const Header = () => {
           </nav>
 
           <div className="flex items-center space-x-4">
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.8 }}
@@ -108,7 +97,7 @@ const Header = () => {
               <button className="hidden md:flex gradient-orange text-white font-poppins font-semibold px-6 py-3 rounded-full shadow-soft">
                 Join Community
               </button>
-            </motion.div>
+            </motion.div> */}
 
             <motion.div whileTap={{ scale: 0.9 }}>
               <button className="md:hidden p-2 hover:bg-gray-100 rounded-md" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -164,7 +153,7 @@ const Header = () => {
                     {item.name}
                   </motion.a>
                 ))}
-                <motion.div
+                {/* <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.6 }}
@@ -173,7 +162,7 @@ const Header = () => {
                   <button className="w-full gradient-orange text-white font-poppins font-semibold py-3 rounded-full">
                     Join Community
                   </button>
-                </motion.div>
+                </motion.div> */}
               </nav>
             </motion.div>
           )}
