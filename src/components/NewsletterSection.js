@@ -104,7 +104,7 @@ const NewsletterSection = () => {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="text-lg font-inter text-gray-300 leading-relaxed mb-8"
             >
-              Get the latest updates on programs, events, and opportunities to grow with the UMUIGBO Worldwide
+              Get the latest updates on programs, events, and opportunities to grow with the Moses Mentoring foundation
               community. Join thousands of members already part of our newsletter.
             </motion.p>
 

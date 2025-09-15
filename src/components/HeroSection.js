@@ -4,22 +4,41 @@ import { Star, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 // import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
+import Image0 from "../Images/MOA.jpg"
+import Image1 from "../Images/MOA1.jpg"
+import Image2 from "../Images/MOA2.jpg"
+import Image3 from "../Images/MOA3.jpg"
+import Image4 from "../Images/MOA4.jpg"
+import Image5 from "../Images/MOA5.jpg"
+import Image6 from "../Images/MOA6.jpg"
 
 const heroImages = [
   {
-    src: "/igbo-cultural-festival-with-traditional-dancers.jpg",
+    src: Image0,
     alt: "Igbo Cultural Festival",
   },
   {
-    src: "/igbo-elders-teaching-young-people-traditional-craf.jpg",
+    src: Image1,
     alt: "Cultural Mentorship",
   },
   {
-    src: "/modern-igbo-community-gathering-with-traditional-a.jpg",
+    src: Image2,
     alt: "Community Gathering",
   },
   {
-    src: "/igbo-youth-learning-traditional-music-and-instrume.jpg",
+    src: Image3,
+    alt: "Cultural Education",
+  },
+  {
+    src: Image4,
+    alt: "Cultural Education",
+  },
+  {
+    src: Image5,
+    alt: "Cultural Education",
+  },
+  {
+    src: Image6,
     alt: "Cultural Education",
   },
 ]
@@ -163,4 +182,4 @@ export default function HeroSection() {
       </div>
     </section>
   )
-}
+};

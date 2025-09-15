@@ -3,6 +3,9 @@
 import { useRef, useState } from "react"
 import { CheckCircle, Play } from "lucide-react"
 import { motion, useInView } from "framer-motion"
+import Image4 from "../Images/MOA4.jpg"
+import Image5 from "../Images/MOA5.jpg"
+import Image6 from "../Images/MOA6.jpg"
 
 const AboutSection = () => {
   const ref = useRef(null)
@@ -20,15 +23,15 @@ const AboutSection = () => {
 
   const aboutImages = [
     {
-      src: "/igbo-elders-teaching-young-people-traditional-craf.jpg",
+      src: Image4,
       alt: "Cultural Mentorship",
     },
     {
-      src: "/modern-igbo-community-gathering-with-traditional-a.jpg",
+      src: Image5,
       alt: "Community Gathering",
     },
     {
-      src: "/igbo-youth-learning-traditional-music-and-instrume.jpg",
+      src: Image6,
       alt: "Traditional Music Learning",
     },
   ]
@@ -134,7 +137,7 @@ const AboutSection = () => {
                 ))}
               </div>
 
-              <motion.button
+              {/* <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 animate={{
@@ -148,7 +151,7 @@ const AboutSection = () => {
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-4 rounded-full transition-all duration-300"
               >
                 <Play className="h-8 w-8 text-white fill-current" />
-              </motion.button>
+              </motion.button> */}
             </div>
 
             <motion.div

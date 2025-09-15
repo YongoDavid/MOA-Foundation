@@ -10,7 +10,7 @@ const Footer = () => {
 
   const quickLinks = [
     { name: "About Us", href: "#about" },
-    { name: "Programs", href: "#programs" },
+    { name: "Aim & Objectives", href: "#programs" },
     { name: "Community", href: "#community" },
     { name: "Resources", href: "#resources" },
     { name: "Events", href: "#events" },
@@ -19,7 +19,7 @@ const Footer = () => {
 
   const programs = [
     { name: "Mentorship Network", href: "#" },
-    { name: "Cultural Education", href: "#" },
+    { name: "Education", href: "#" },
     { name: "Youth Development", href: "#" },
     { name: "Career Advancement", href: "#" },
     { name: "Innovation Hub", href: "#" },
@@ -33,28 +33,27 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="lg:col-span-1">
             <div className="flex items-center mb-6">
-              <div className="text-2xl font-poppins font-bold text-white">UMUIGBO</div>
-              <div className="ml-2 text-sm font-poppins font-medium text-teal">Worldwide</div>
+              {/* <div className="text-2xl font-poppins font-bold text-white">UMUIGBO</div> */}
+              {/* <div className="ml-2 text-sm font-poppins font-medium text-teal">Worldwide</div> */}
             </div>
 
             <p className="font-inter text-gray-300 leading-relaxed mb-6">
-              Preserving Igbo culture while empowering communities worldwide through mentorship, education, and cultural
-              exchange.
+              MOSES MENTORING FOUNDATION FOR LEADERSHIP AND PEACE DEVELOPMENT
             </p>
 
             {/* Contact Info */}
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-teal" />
-                <span className="font-inter text-gray-300">info@umuigbo.org</span>
+                <span className="font-inter text-gray-300">mosesofafrica@gmail.com</span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-teal" />
-                <span className="font-inter text-gray-300">+1 (555) 123-4567</span>
+                <span className="font-inter text-gray-300">+234 (000) 000-000</span>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="h-5 w-5 text-teal" />
-                <span className="font-inter text-gray-300">Global Headquarters</span>
+                <span className="font-inter text-gray-300">F.C.T Abuja</span>
               </div>
             </div>
           </div>
