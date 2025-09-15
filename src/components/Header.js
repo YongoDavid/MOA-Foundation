@@ -38,7 +38,7 @@ const Header = () => {
           <motion.div whileHover={{ scale: 1.05 }} className="flex items-center cursor-pointer">
             <motion.div
               animate={{
-                color: ["#6D28D9", "#14B8A6", "#6D28D9"],
+                color: ["#6D28D9", "#6D28D9", "#6D28D9"],
               }}
               transition={{
                 duration: 3,
