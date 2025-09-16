@@ -49,7 +49,7 @@ const Header = () => {
             >
               <img
               src={logo}
-              alt="MOA right logo" 
+              alt="MOA logo" 
               class="h-12 w-auto md:h-12 lg:h-12 object-contain"
             />
             </motion.div>
