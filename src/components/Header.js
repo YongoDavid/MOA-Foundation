@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Menu, X, Search } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import Logo from "../Images/Logo.jpg";
+import logo from "../Images/logo.jpg";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -48,7 +48,7 @@ const Header = () => {
               className="text-2xl font-poppins font-bold"
             >
               <img
-              src={Logo}
+              src={logo}
               alt="MOA right logo" 
               class="h-12 w-auto md:h-12 lg:h-12 object-contain"
             />
