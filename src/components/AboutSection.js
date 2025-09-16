@@ -1,16 +1,39 @@
 "use client"
-
+import { useEffect } from "react"
 import { useRef, useState } from "react"
-import { CheckCircle, Play } from "lucide-react"
-import { motion, useInView } from "framer-motion"
+import { CheckCircle, Play, ChevronLeft, ChevronRight } from "lucide-react"
+import { AnimatePresence, motion, useInView } from "framer-motion"
 import Image4 from "../Images/MOA4.jpg"
 import Image5 from "../Images/MOA5.jpg"
 import Image6 from "../Images/MOA6.jpg"
+import Image7 from "../Images/MOA7.jpg"
+import Image8 from "../Images/MOA8.jpg"
+import Image9 from "../Images/MOA9.jpg"
+import Image10 from "../Images/MOA10.jpg"
+import Image11 from "../Images/MOA11.jpg"
+import Image12 from "../Images/MOA12.jpg"
+import Image13 from "../Images/MOA13.jpg"
+import Image14 from "../Images/MOA14.jpg"
 
 const AboutSection = () => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+  useEffect(()=>{
+    const timer = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % aboutImages.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  })
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % aboutImages.length)
+  }
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + aboutImages.length)  % aboutImages.length)
+  }
 
   const achievements = [
     "Established mentorship programs Nigeria",
@@ -32,6 +55,38 @@ const AboutSection = () => {
     },
     {
       src: Image6,
+      alt: "Traditional Music Learning",
+    },
+    {
+      src: Image7,
+      alt: "Traditional Music Learning",
+    },
+    {
+      src: Image8,
+      alt: "Traditional Music Learning",
+    },
+    {
+      src: Image9,
+      alt: "Traditional Music Learning",
+    },
+    {
+      src: Image10,
+      alt: "Traditional Music Learning",
+    },
+    {
+      src: Image11,
+      alt: "Traditional Music Learning",
+    },
+    {
+      src: Image12,
+      alt: "Traditional Music Learning",
+    },
+    {
+      src: Image13,
+      alt: "Traditional Music Learning",
+    },
+    {
+      src: Image14,
       alt: "Traditional Music Learning",
     },
   ]
@@ -110,20 +165,37 @@ const AboutSection = () => {
             className="relative"
           >
             <div className="relative rounded-2xl overflow-hidden shadow-large">
-              <motion.div
-                key={currentImageIndex}
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8 }}
-                className="relative"
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentImageIndex}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  // transition={{ duration: 0.8 }}
+                  transition={{ duration: 1.5, ease: "easeInOut" }}
+                  className="relative"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-royal-purple/20 to-transparent"></div>
+                  <img
+                    src={aboutImages[currentImageIndex].src || "/placeholder.svg"}
+                    alt={aboutImages[currentImageIndex].alt}
+                    className="w-full h-[600px] object-cover"
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              <button
+                onClick={prevImage}
+                className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-2 md:p-3 rounded-full transition-all duration-300 group"
               >
-                <img
-                  src={aboutImages[currentImageIndex].src || "/placeholder.svg"}
-                  alt={aboutImages[currentImageIndex].alt}
-                  className="w-full h-[600px] object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-royal-purple/20 to-transparent"></div>
-              </motion.div>
+                <ChevronLeft/>
+              </button>
+              <button
+                onClick={nextImage}
+                className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-2 md:p-3 rounded-full transition-all duration-300 group"
+              >
+                <ChevronRight/>
+              </button>
 
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                 {aboutImages.map((_, index) => (
@@ -136,22 +208,6 @@ const AboutSection = () => {
                   />
                 ))}
               </div>
-
-              {/* <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                animate={{
-                  scale: [1, 1.1, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "easeInOut",
-                }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-4 rounded-full transition-all duration-300"
-              >
-                <Play className="h-8 w-8 text-white fill-current" />
-              </motion.button> */}
             </div>
 
             <motion.div
@@ -178,7 +234,7 @@ const AboutSection = () => {
                   }}
                   className="text-3xl font-poppins font-bold text-teal"
                 >
-                  15+
+                  2+
                 </motion.div>
                 <div className="text-sm font-inter text-medium-gray">Years of Impact</div>
               </div>
