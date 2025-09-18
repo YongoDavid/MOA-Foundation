@@ -47,47 +47,47 @@ const AboutSection = () => {
   const aboutImages = [
     {
       src: Image4,
-      alt: "Cultural Mentorship",
+      alt: "Mentorship",
     },
     {
       src: Image5,
-      alt: "Community Gathering",
+      alt: "Mentorship",
     },
     {
       src: Image6,
-      alt: "Traditional Music Learning",
+      alt: "Mentorship",
     },
-    {
-      src: Image7,
-      alt: "Traditional Music Learning",
-    },
+    // {
+    //   src: Image7,
+    //   alt: "Mentorship",
+    // },
     {
       src: Image8,
-      alt: "Traditional Music Learning",
+      alt: "Mentorship",
     },
     {
       src: Image9,
-      alt: "Traditional Music Learning",
+      alt: "Mentorship",
     },
     {
       src: Image10,
-      alt: "Traditional Music Learning",
+      alt: "Mentorship",
     },
-    {
-      src: Image11,
-      alt: "Traditional Music Learning",
-    },
+    // {
+    //   src: Image11,
+    //   alt: "Mentorship",
+    // },
     {
       src: Image12,
-      alt: "Traditional Music Learning",
+      alt: "Mentorship",
     },
     {
       src: Image13,
-      alt: "Traditional Music Learning",
+      alt: "Mentorship",
     },
     {
       src: Image14,
-      alt: "Traditional Music Learning",
+      alt: "Mentorship",
     },
   ]
 
