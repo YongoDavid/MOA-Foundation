@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Menu, X, Search } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import logo from "../Images/logo.jpg";
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navItems = [
     { name: "Home", href: "#" },
     { name: "Aim & Objectives", href: "#programs" },
     { name: "About", href: "#about" },
     { name: "Contact", href: "#contact" },
-  ]
+  ];
 
   return (
     <motion.header
@@ -30,12 +30,17 @@ const Header = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/95 backdrop-blur-md shadow-medium" : "bg-white shadow-soft"
+        scrolled
+          ? "bg-white/95 backdrop-blur-md shadow-medium"
+          : "bg-white shadow-soft"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-20">
-          <motion.div whileHover={{ scale: 1.05 }} className="flex items-center cursor-pointer">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="flex items-center cursor-pointer"
+          >
             <motion.div
               animate={{
                 color: ["#6D28D9", "#6D28D9", "#6D28D9"],
@@ -48,10 +53,10 @@ const Header = () => {
               className="text-2xl font-poppins font-bold"
             >
               <img
-              src={logo}
-              alt="MOA only logo" 
-              class="h-12 w-auto md:h-12 lg:h-12 object-contain"
-            />
+                src={logo}
+                alt="MOA only logo"
+                class="h-12 w-auto md:h-12 lg:h-12 object-contain"
+              />
             </motion.div>
           </motion.div>
 
@@ -100,7 +105,10 @@ const Header = () => {
             </motion.div> */}
 
             <motion.div whileTap={{ scale: 0.9 }}>
-              <button className="md:hidden p-2 hover:bg-gray-100 rounded-md" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              <button
+                className="md:hidden p-2 hover:bg-gray-100 rounded-md"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
                 <AnimatePresence mode="wait">
                   {isMenuOpen ? (
                     <motion.div
@@ -169,7 +177,7 @@ const Header = () => {
         </AnimatePresence>
       </div>
     </motion.header>
-  )
-}
+  );
+};
 
 export default Header;

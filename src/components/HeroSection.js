@@ -1,65 +1,67 @@
-"use client"
+"use client";
 
-import { Star, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
+import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 // import { Button } from "@/components/ui/button"
-import { motion, AnimatePresence } from "framer-motion"
-import { useState, useEffect } from "react"
-import Image0 from "../Images/MOA.jpg"
-import Image1 from "../Images/MOA1.jpg"
-import Image2 from "../Images/MOA2.jpg"
-import Image3 from "../Images/MOA3.jpg"
-import Image4 from "../Images/MOA4.jpg"
-import Image5 from "../Images/MOA5.jpg"
-import Image6 from "../Images/MOA6.jpg"
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import Image0 from "../Images/MOA.jpg";
+import Image1 from "../Images/MOA1.jpg";
+import Image2 from "../Images/MOA2.jpg";
+import Image3 from "../Images/MOA3.jpg";
+import Image4 from "../Images/MOA4.jpg";
+import Image5 from "../Images/MOA5.jpg";
+import Image6 from "../Images/MOA6.jpg";
 
 const heroImages = [
   {
     src: Image0,
-    alt: "Igbo Cultural Festival",
+    alt: "Community Mentorship",
   },
   {
     src: Image1,
-    alt: "Cultural Mentorship",
+    alt: "Community Mentorship",
   },
   {
     src: Image2,
-    alt: "Community Gathering",
+    alt: "Community Mentorship",
   },
   {
     src: Image3,
-    alt: "Cultural Education",
+    alt: "Community Mentorship",
   },
   {
     src: Image4,
-    alt: "Cultural Education",
+    alt: "Community Mentorship",
   },
   {
     src: Image5,
-    alt: "Cultural Education",
+    alt: "Community Mentorship",
   },
   {
     src: Image6,
-    alt: "Cultural Education",
+    alt: "Community Mentorshipcc",
   },
-]
+];
 
 export default function HeroSection() {
-  const [currentImage, setCurrentImage] = useState(0)
+  const [currentImage, setCurrentImage] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % heroImages.length)
-    }, 5000)
-    return () => clearInterval(timer)
-  }, [])
+      setCurrentImage((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   const nextImage = () => {
-    setCurrentImage((prev) => (prev + 1) % heroImages.length)
-  }
+    setCurrentImage((prev) => (prev + 1) % heroImages.length);
+  };
 
   const prevImage = () => {
-    setCurrentImage((prev) => (prev - 1 + heroImages.length) % heroImages.length)
-  }
+    setCurrentImage(
+      (prev) => (prev - 1 + heroImages.length) % heroImages.length
+    );
+  };
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -101,7 +103,9 @@ export default function HeroSection() {
               key={index}
               onClick={() => setCurrentImage(index)}
               className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
-                index === currentImage ? "bg-white scale-125" : "bg-white/50 hover:bg-white/75"
+                index === currentImage
+                  ? "bg-white scale-125"
+                  : "bg-white/50 hover:bg-white/75"
               }`}
             />
           ))}
@@ -118,7 +122,11 @@ export default function HeroSection() {
           >
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+              transition={{
+                duration: 2,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
             >
               <Star className="h-3 w-3 md:h-4 md:w-4 text-bright-orange fill-current" />
             </motion.div>
@@ -160,7 +168,10 @@ export default function HeroSection() {
             className="text-base md:text-lg lg:text-xl font-inter text-white leading-relaxed mb-6 md:mb-8 max-w-2xl"
             style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}
           >
-            African youths are at the forefront of governance and leadership, shaping policies, promoting transparency, and building resillient societies that reflect the aspirations of thier communities for equality, prosperity and justice.
+            African youths are at the forefront of governance and leadership,
+            shaping policies, promoting transparency, and building resillient
+            societies that reflect the aspirations of thier communities for
+            equality, prosperity and justice.
           </motion.p>
 
           <motion.div
@@ -168,18 +179,16 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
             className="flex flex-col sm:flex-row gap-3 md:gap-4"
-          >
-          </motion.div>
+          ></motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.4 }}
             className="flex flex-wrap justify-center sm:justify-start gap-4 md:gap-8 mt-8 md:mt-12 pt-6 md:pt-8 border-t border-white/30"
-          >
-          </motion.div>
+          ></motion.div>
         </div>
       </div>
     </section>
-  )
-};
+  );
+}
