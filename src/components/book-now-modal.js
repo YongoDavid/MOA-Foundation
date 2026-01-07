@@ -90,7 +90,7 @@ export default function BookNowModal({ isOpen, onClose }) {
             {/* Modal Content */}
             <div className="pt-2">
               <div className="flex items-center justify-center mb-4">
-                <img src="/umuigbo-colorful-logo-icon.jpg" alt="UMUIGBO Logo" className="h-12 w-12" />
+                <img src="/umuigbo-colorful-logo-icon.jpg" alt="MOA Logo" className="h-12 w-12" />
               </div>
               {/* Book Now Form Section */}
               <motion.div
@@ -98,7 +98,7 @@ export default function BookNowModal({ isOpen, onClose }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 }}
               >
-                <h2 className="text-2xl font-poppins font-bold mb-6">Book Now</h2>
+                <h2 className="text-2xl font-poppins font-bold mb-6">Donate Here</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4 mb-8">
                   {/* Name Input */}
@@ -147,7 +147,7 @@ export default function BookNowModal({ isOpen, onClose }) {
                       type="submit"
                       className="w-32 px-6 py-3 bg-red-600 text-white font-poppins font-bold rounded-md hover:bg-red-700 transition-all duration-300 shadow-md"
                     >
-                      SEND NOW
+                      SEND
                     </button>
                   </div>
                 </form>
@@ -163,10 +163,10 @@ export default function BookNowModal({ isOpen, onClose }) {
                 <h3 className="text-lg font-poppins font-bold mb-4">Contact Info</h3>
 
                 <div className="text-sm text-gray-300 space-y-2 mb-4">
-                  <div>Suite 102, Nwukpabi Plaza Number 14</div>
-                  <div>Waziri</div>
+                  <div>House B61, Supercell Estate, Apo, Abuja, FCT</div>
+                  <div>Abuja</div>
                   <div>+234 8037315490</div>
-                  <div>info@umuigboworldwide.com</div>
+                  <div>mosesofafrica@gmail.com</div>
                 </div>
 
                 <div className="flex space-x-3 mt-2">

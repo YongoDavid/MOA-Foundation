@@ -20,13 +20,13 @@ export default function Header() {
 
   const navItems = [
     { name: "ABOUT US", href: "#about" },
-    { name: "BLOG", href: "#blog" },
+    // { name: "BLOG", href: "#blog" },
     { name: "PROGRAMS", href: "#programs" },
-    { name: "PROJECTS", href: "#projects" },
-    { name: "LOGIN", href: "#login" },
+    // { name: "PROJECTS", href: "#projects" },
+    // { name: "LOGIN", href: "#login" },
     { name: "CONTACT", href: "#contact" },
-    { name: "REGISTER", href: "#register" },
-    { name: "GALLERY", href: "#gallery" },
+    // { name: "REGISTER", href: "#register" },
+    // { name: "GALLERY", href: "#gallery" },
     { name: "DONATION", href: "#donation" },
   ]
 
@@ -48,12 +48,12 @@ export default function Header() {
                 <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}>
                   🌟
                 </motion.div>
-                <span className="font-poppins text-xs sm:text-sm font-medium">Welcome to Umuigbo Worldwide</span>
+                <span className="font-poppins text-xs sm:text-sm font-medium">WELCOME TO MOSES OF AFRICA MENTORING FOUNDATION</span>
               </div>
               <div className="flex items-center space-x-4 sm:space-x-6">
                 <div className="flex items-center space-x-2">
-                  <span className="text-red-500 font-bold">📍</span>
-                  <span className="font-poppins text-xs sm:text-sm font-medium">+234 8037315490</span>
+                  {/* <span className="text-red-500 font-bold">📍</span> */}
+                  <span className="font-poppins text-xs sm:text-sm font-medium">+234 800000000</span>
                 </div>
                 <div className="hidden sm:flex items-center space-x-4">
                   {[
@@ -110,10 +110,10 @@ export default function Header() {
 
             {/* Logo (center on mobile, left on md+) */}
             <motion.div whileHover={{ scale: 1.05 }} className="order-2 md:order-1 flex-1 flex items-center justify-center md:justify-start">
-              <motion.img src="/umuigbo-colorful-logo-icon.jpg" alt="UMUIGBO Logo" className="h-10 w-10 md:h-12 md:w-12" />
+              <motion.img src="/umuigbo-colorful-logo-icon.jpg" alt="MOA Logo" className="h-10 w-10 md:h-12 md:w-12" />
               <motion.div className="ml-2 hidden md:flex flex-col">
-                <div className="text-sm md:text-base font-poppins font-bold text-dark-navy">UMUIGBO</div>
-                <div className="text-xs md:text-sm font-poppins font-medium text-orange-accent">Worldwide</div>
+                <div className="text-sm md:text-base font-poppins font-bold text-dark-navy">M.O.A</div>
+                <div className="text-xs md:text-sm font-poppins font-medium text-orange-accent">M.O.A</div>
               </motion.div>
             </motion.div>
 

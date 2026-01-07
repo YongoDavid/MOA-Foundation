@@ -11,51 +11,79 @@ const ProgramsSection = () => {
   const programs = [
     {
       icon: Users,
-      title: "Mentorship Network",
-      description:
-        "Connect with Global leaders.",
+      title: "PRIMARY OBJECTIVES",
+      description: [
+        "Youth empowerment and development: Support youth driven initiatives, innovation and empowering start-ups",
+        "Education: To reintegrate out of school children and parents into the education system",
+        "Mentorship: mentor Youths to discover their full potentials develop their skills and talents to become a valuable assert in their community.",
+        "Gender inclusion: To promote gender inclusion for women and also people with special needs",
+        "Global Peace advocacy: To advocate and facilitate social, economic and political stability for global peace",
+        "Patriotism: Encouraging patriotism across the continent: Projecting Africa’s good image globally",
+        "Fight political a-party: Encourage youths to participate in politics, vote during election and fight electoral mal-practice.",
+      ],
       color: "text-royal-purple",
       bgColor: "bg-royal-purple/10",
     },
     {
       icon: BookOpen,
-      title: "Education",
-      description:
-        "Comprehensive programs and education to help young minds discover themeselves and be the best version of themselves.",
+      title: "SPECIFIC OBJECTIVES",
+      description: [
+        "Mentorship: Harnessing the youth potentials by pairing them with experience professionals",
+        "Public enlightenment: creating awareness through mass media, training workshops, seminars, conferences and outreaches in schools, places of worships and market",
+        "Advocacy for human and food security by promoting agricultural education as part way to creating employment opportunities and fight insecurity",
+        "Advocacy for transparent free and fair election across the continent",
+        "Advocacy for gender inclusion and awareness creation against gender based violence for the girl child",
+        "Advocacy for human right protection, rule of law, equity, justice and fairness for all",
+        "Advocacy for peace, across ethnic and religious lines and fight against tribalism, nepotism, ethnic and religious sentiment",
+        "Advocacy for good governance, transparency and accountability from political appointees and government",
+        "Education: Utilizing opportunities technology offers to arm the youths with the right knowledge and skills for personal growth and national development",
+        "Innovation: Encouraging creativity and forward thinking solutions for sustainable self and national development",
+      ],
       color: "text-teal",
       bgColor: "bg-teal/10",
     },
     {
       icon: Globe,
-      title: "Global Community",
-      description:
-        "Join a worldwide network of youths to bridge the gap and foster global impact.",
+      title: "SDG ALIGNMENT",
+      description: [
+        "(1) SDG 16: Promotion of world peace and inclusive societies through social, economic and political stability",
+        "(2) SDG 8: Promotion of accelerated sustainable all-inclusive economic growth and eradicate poverty creating employment opportunities across the continent",
+        "(3) SDG 4: Ensure sustainable all-inclusive and equitable quality education",
+        "(4) SDG 5: Achieve gender equality and empower female youths across the continent",
+        "(5) SDG 9: Industry, innovation, and Infrastructure: Build resilient infrastructure, promote inclusive and sustainable industrialization and foster innovation",
+        "(6) SDG 16: Peace, Justice, and strong institution: promote peaceful and inclusive societies for sustainable development, provide access to justice for all and build effective, accountable and inclusive institution for all",
+        "(7) SDG 1 & 2: End poverty and Hunger at all level ensuring food security, improved nutrition and promote sustainable agriculture",
+        "(8) SDG 8: Promotion of accelerated sustainable all-inclusive economic growth and eradicate",
+      ],
       color: "text-bright-orange",
       bgColor: "bg-bright-orange/10",
     },
     {
       icon: Heart,
-      title: "Youth Development",
-      description:
-        "Specialized programs for young people focusing on leadership, identity, values and morals",
+      title: "CORE VALUES",
+      description: [
+        "Integrity: Upholding the principal of honesty and transparency in all our activities",
+        "Excellence: Striving for the highest standards in mentorship and leadership.",
+        "Innovation: Encouraging creativity and forward thinking solutions.",
+        "Empowerment: Providing tools and opportunities for youth to thrive",
+        "Community: Strengthening bonds and fostering collaboration across the globe and within the continent",
+      ],
       color: "text-royal-purple",
       bgColor: "bg-royal-purple/10",
     },
     {
       icon: Lightbulb,
-      title: "Innovation Hub",
-      description:
-        "Fostering entrepreneurship and innovation to provide impactful and service driven leadership globally.",
+      title: "KEY FOCUS AREAS",
+      description: [
+        "Leadership, Peace and Development: Advocating for good governance which fosters peaceful co- existence for sustainable development",
+        "Education Support: Scholarship, tutoring, E leaning in TEC, AI and academic mentoring",
+        "Mentorship Programs: Pairing youth with skilled, ethical and experienced professionals.",
+        "Leadership Development: Training workshops, Seminars and conferences.",
+        "Entrepreneurship and Innovation: Supporting young entrepreneurs and innovators with guidance and resources",
+        "Community Engagement: Promoting volunteerism and social responsibility.",
+      ],
       color: "text-teal",
       bgColor: "bg-teal/10",
-    },
-    {
-      icon: Target,
-      title: "Career Advancement",
-      description:
-        "Professional development resources, networking opportunities, and career guidance for community members.",
-      color: "text-bright-orange",
-      bgColor: "bg-bright-orange/10",
     },
   ]
 
@@ -167,14 +195,24 @@ const ProgramsSection = () => {
                     {program.title}
                   </motion.h3>
 
-                  <motion.p
+                  <motion.div
                     initial={{ opacity: 0 }}
                     animate={isInView ? { opacity: 1 } : { opacity: 0 }}
                     transition={{ duration: 0.6, delay: 1 + index * 0.1 }}
                     className="font-inter text-medium-gray leading-relaxed mb-6"
                   >
-                    {program.description}
-                  </motion.p>
+                    {Array.isArray(program.description) ? (
+                      <ul className="list-disc pl-6 space-y-2 text-base">
+                        {program.description.map((d, i) => (
+                          <li key={i} className="text-medium-gray">
+                            {d}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>{program.description}</p>
+                    )}
+                  </motion.div>
 
                   {/* <motion.div whileHover={{ x: 10 }} transition={{ duration: 0.3 }}>
                     <button

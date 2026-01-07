@@ -131,7 +131,7 @@ export default function HeroSection() {
               <Star className="h-3 w-3 md:h-4 md:w-4 text-bright-orange fill-current" />
             </motion.div>
             <span className="text-xs md:text-sm font-poppins font-semibold text-dark-gray">
-              LEADERSHIP, PEACE AND DEVELOPMENT
+              DONT JUST BELONG, ALWAYS STANDOUT
             </span>
           </motion.div>
 
@@ -148,7 +148,7 @@ export default function HeroSection() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="block"
             >
-              Impacting Youths,
+              Africa’s emerging leaders for 
             </motion.span>
             <motion.span
               initial={{ opacity: 0, x: 50 }}
@@ -157,7 +157,7 @@ export default function HeroSection() {
               className="block text-teal"
               style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.8)" }}
             >
-              Building the Future
+              excellence
             </motion.span>
           </motion.h1>
 
@@ -168,10 +168,7 @@ export default function HeroSection() {
             className="text-base md:text-lg lg:text-xl font-inter text-white leading-relaxed mb-6 md:mb-8 max-w-2xl"
             style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}
           >
-            African youths are at the forefront of governance and leadership,
-            shaping policies, promoting transparency, and building resillient
-            societies that reflect the aspirations of thier communities for
-            equality, prosperity and justice.
+            MOSES OF AFRICA Mentoring Foundation is an (NGO) a non-profit organization with REG NO: 8221777 dedicated to empowering young Africans through mentorship, education and leadership development. We believe that every young person has the potential, skills and talents, if harnessed will become a catalyst for positive change in their communities and across the continent. By connecting experienced mentors with aspiring youth, we foster growth, resilience and innovation for Africa’s Peace and sustainable development.
           </motion.p>
 
           <motion.div

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useRef, useState } from "react";
-import { CheckCircle, Play, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Users, BookOpen, Globe, Heart, Lightbulb, Target, Star, Sparkles } from "lucide-react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import Image4 from "../Images/MOA4.jpg";
 import Image5 from "../Images/MOA5.jpg";
@@ -37,13 +37,30 @@ const AboutSection = () => {
     );
   };
 
-  const achievements = [
-    "Established mentorship programs Nigeria",
-    "Established mentorship programs Nigeria",
-    "Established mentorship programs Nigeria",
-    "Launched youth leadership initiatives",
-    "Launched youth leadership initiatives",
-    "Launched youth leadership initiatives",
+  const visionItems = [
+    {
+      icon: Users,
+      text: "To inspire African emerging leaders for impact driven leadership, high ethics, moral values and integrity.",
+    },
+    {
+      icon: BookOpen,
+      text: "To raise transformational leaders, entrepreneurs and new captains of industries who are keen to transparency, accountability and patriotism. Ensuring equity, justice and fairness",
+    },
+    { icon: Globe, text: "To always project and protect the good image of Africa worldwide" },
+    {
+      icon: Star,
+      text: "To raise Ambassadors for global peace to fight insecurity, terrorism and social instability",
+    },
+    { icon: Lightbulb, text: "To groom African youths to become creators and innovators of goods and services not only influencers" },
+    {
+      icon: Target,
+      text: "To fight political a-party: encourage young Africans to participate in politics, run for office, protect and vote during and after election.",
+    },
+    { icon: Sparkles, text: "To influence government policies to transform the youths dreams and vision into realities by advocacy" },
+    {
+      icon: Heart,
+      text: "To build a continent where every young African’s are intentional in making impact locally and also thriving globally",
+    },
   ];
 
   const aboutImages = [
@@ -95,69 +112,105 @@ const AboutSection = () => {
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.8 }}
           >
-            <motion.h2
+            {/* <motion.h2
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-4xl md:text-5xl font-poppins font-bold text-royal-purple mb-6"
             >
-              Building Bridges Across Generations
-            </motion.h2>
+              MISSION & VISION
+            </motion.h2> */}
+
+            <motion.h3
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.8, delay: 0.35 }}
+              className="text-2xl font-poppins font-semibold text-royal-purple mb-3"
+            >
+              MISSION STATEMENT:
+            </motion.h3>
 
             <motion.p
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-lg font-inter text-medium-gray leading-relaxed mb-8"
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="text-lg font-inter text-medium-gray leading-relaxed mb-6"
             >
-              To empower and equip African youths with knowledge skills and
-              resources needed to actively participate in politics and
-              leadership, fostering a new generation of ethical, visionary and
-              inclusive leaders commited to driving sustainable development and
-              positive change across the continent.
+              To inspire guide and equip African youths with the right
+              knowledge, skills, ethics and moral values required to discover
+              their full potentials, develop their skills and talents to
+              become valuable in the global market being the best version of
+              themselves. We aim at creating opportunities for mentorship,
+              education and leadership that nurture responsible citizens and
+              visionary leaders who will drive sustainable economic, social and
+              political development across the continent and beyond.
             </motion.p>
+
+            <motion.h3
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.8, delay: 0.65 }}
+              className="text-2xl font-poppins font-semibold text-royal-purple mb-3"
+            >
+              VISION STATEMENT:
+            </motion.h3>
 
             <motion.p
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-lg font-inter text-medium-gray leading-relaxed mb-8"
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="text-lg font-inter text-medium-gray leading-relaxed mb-6"
             >
-              A future where African youths are at the forefront of governance
-              and leadership, shaping policies, promoting transparency, and
-              building resilient societies that reflect the aspirations of thier
-              communities for equality, prosperity and justice
+              To build a continent where every young African has access to
+              education, mentorship and empowerment, enabling them to rise as
+              confident leaders, peace advocates, innovators and change makers
+              who contribute to the sustainable development of Africa and also
+              thrive globally.
             </motion.p>
+
+            <motion.h3
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.8, delay: 1 }}
+              className="text-2xl font-poppins font-semibold text-royal-purple mb-4"
+            >
+              OUR VISION
+            </motion.h3>
 
             <div className="space-y-4 mb-8">
-              {achievements.map((achievement, index) => (
+              {visionItems.map((item, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -30 }}
                   animate={
                     isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }
                   }
-                  transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-                  whileHover={{ x: 10, transition: { duration: 0.3 } }}
+                  transition={{ duration: 0.6, delay: 1.1 + index * 0.08 }}
+                  whileHover={{ x: 8, transition: { duration: 0.25 } }}
                   className="flex items-start gap-3"
                 >
                   <motion.div
-                    animate={{
-                      scale: [1, 1.2, 1],
-                      rotate: [0, 180, 360],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Number.POSITIVE_INFINITY,
-                      repeatDelay: 5,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <CheckCircle className="h-6 w-6 text-teal flex-shrink-0 mt-0.5" />
-                  </motion.div>
-                  <span className="font-inter text-dark-gray">
-                    {achievement}
-                  </span>
+                        animate={{
+                          scale: [1, 1.12, 1],
+                        }}
+                        transition={{
+                          duration: 2.2,
+                          repeat: Number.POSITIVE_INFINITY,
+                          repeatDelay: 5 + index * 0.2,
+                          ease: "easeInOut",
+                        }}
+                        className="flex-shrink-0 mt-0.5"
+                      >
+                        {/** render the icon for this item */}
+                        {(() => {
+                          const Icon = item.icon;
+                          return <Icon className="h-6 w-6 text-teal" />;
+                        })()}
+                      </motion.div>
+                      <span className="font-inter text-dark-gray">
+                        <span className="font-semibold text-dark-gray mr-2">{index + 1}.</span>
+                        {item.text}
+                      </span>
                 </motion.div>
               ))}
             </div>
