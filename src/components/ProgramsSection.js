@@ -46,14 +46,14 @@ const ProgramsSection = () => {
       icon: Globe,
       title: "SDG ALIGNMENT",
       description: [
-        "(1) SDG 16: Promotion of world peace and inclusive societies through social, economic and political stability",
-        "(2) SDG 8: Promotion of accelerated sustainable all-inclusive economic growth and eradicate poverty creating employment opportunities across the continent",
-        "(3) SDG 4: Ensure sustainable all-inclusive and equitable quality education",
-        "(4) SDG 5: Achieve gender equality and empower female youths across the continent",
-        "(5) SDG 9: Industry, innovation, and Infrastructure: Build resilient infrastructure, promote inclusive and sustainable industrialization and foster innovation",
-        "(6) SDG 16: Peace, Justice, and strong institution: promote peaceful and inclusive societies for sustainable development, provide access to justice for all and build effective, accountable and inclusive institution for all",
-        "(7) SDG 1 & 2: End poverty and Hunger at all level ensuring food security, improved nutrition and promote sustainable agriculture",
-        "(8) SDG 8: Promotion of accelerated sustainable all-inclusive economic growth and eradicate",
+        " SDG 16: Promotion of world peace and inclusive societies through social, economic and political stability",
+        " SDG 8: Promotion of accelerated sustainable all-inclusive economic growth and eradicate poverty creating employment opportunities across the continent",
+        " SDG 4: Ensure sustainable all-inclusive and equitable quality education",
+        " SDG 5: Achieve gender equality and empower female youths across the continent",
+        " SDG 9: Industry, innovation, and Infrastructure: Build resilient infrastructure, promote inclusive and sustainable industrialization and foster innovation",
+        " SDG 16: Peace, Justice, and strong institution: promote peaceful and inclusive societies for sustainable development, provide access to justice for all and build effective, accountable and inclusive institution for all",
+        " SDG 1 & 2: End poverty and Hunger at all level ensuring food security, improved nutrition and promote sustainable agriculture",
+        " SDG 8: Promotion of accelerated sustainable all-inclusive economic growth and eradicate",
       ],
       color: "text-bright-orange",
       bgColor: "bg-bright-orange/10",
@@ -163,37 +163,41 @@ const ProgramsSection = () => {
                 whileTap={{ scale: 0.98 }}
               >
                 <div className="p-8 bg-white rounded-2xl shadow-soft hover:shadow-large transition-all duration-300 border-0 group cursor-pointer h-full">
-                  <motion.div
-                    className={`inline-flex p-4 rounded-xl ${program.bgColor} mb-6`}
-                    whileHover={{
-                      scale: 1.1,
-                      rotate: 5,
-                      transition: { duration: 0.3 },
-                    }}
-                  >
+                  <div className="flex flex-col items-center">
                     <motion.div
-                      animate={{
-                        rotate: [0, 5, -5, 0],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Number.POSITIVE_INFINITY,
-                        repeatDelay: 3,
-                        ease: "easeInOut",
+                      className={`inline-flex items-center justify-center w-14 h-14 p-0 rounded-xl ${program.bgColor} mb-4`}
+                      whileHover={{
+                        scale: 1.06,
+                        transition: { duration: 0.25 },
                       }}
                     >
-                      <IconComponent className={`h-8 w-8 ${program.color}`} />
+                      <motion.div
+                        animate={{
+                          rotate: [0, 4, -4, 0],
+                          y: [0, -6, 0],
+                          scale: [1, 1.04, 1],
+                        }}
+                        transition={{
+                          duration: 2.2,
+                          repeat: Number.POSITIVE_INFINITY,
+                          repeatDelay: 3,
+                          ease: "easeInOut",
+                        }}
+                        className="flex items-center justify-center leading-none"
+                      >
+                        <IconComponent className={`h-8 w-8 block ${program.color}`} />
+                      </motion.div>
                     </motion.div>
-                  </motion.div>
 
-                  <motion.h3
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                    transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-                    className="text-xl font-poppins font-semibold text-dark-gray mb-4"
-                  >
-                    {program.title}
-                  </motion.h3>
+                    <motion.h3
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                      transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
+                      className="text-xl font-poppins font-semibold text-dark-gray mb-4 text-center"
+                    >
+                      {program.title}
+                    </motion.h3>
+                  </div>
 
                   <motion.div
                     initial={{ opacity: 0 }}
