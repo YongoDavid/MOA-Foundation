@@ -111,7 +111,7 @@ export default function Header() {
 
             {/* Logo (center on mobile, left on md+) */}
             <motion.div whileHover={{ scale: 1.05 }} className="order-2 md:order-1 flex-1 flex items-center justify-center md:justify-start">
-              <motion.img src={Logo1} alt="MOA Logo" className="h-12 md:h-16 w-auto" style={{ objectFit: 'contain' }} />
+              <motion.img src={Logo1} alt="MOA Logo" className="h-16 md:h-20 w-auto" style={{ objectFit: 'contain' }} />
               <motion.div className="ml-2 hidden md:flex flex-col">
                 <div className="text-sm md:text-base font-poppins font-bold text-dark-navy">MOSES OF AFRICA MENTORING FOUNDATION</div>
                 {/* <div className="text-xs md:text-sm font-poppins font-medium text-orange-accent">MOSES OF AFRICA MENTORING FOUNDATION</div> */}

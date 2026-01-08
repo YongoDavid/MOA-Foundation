@@ -91,7 +91,7 @@ export default function BookNowModal({ isOpen, onClose }) {
             {/* Modal Content */}
             <div className="pt-2">
               <div className="flex items-center justify-center mb-4">
-                <img src={Logo1} alt="MOA Logo" className="h-24 md:h-28 w-auto" style={{ objectFit: 'contain' }} />
+                <img src={Logo1} alt="MOA Logo" className="h-32 md:h-40 w-auto" style={{ objectFit: 'contain' }} />
               </div>
               {/* Book Now Form Section */}
               <motion.div
