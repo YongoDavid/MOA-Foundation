@@ -6,6 +6,7 @@ import AboutSection from "./components/AboutSection"
 // import TestimonialsCarousel from "./components/TestimonialsCarousel"
 import NewsletterSection from "./components/NewsletterSection"
 import Footer from "./components/Footer"
+import ScrollToTopButton from "./components/ScrollToTopButton"
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <NewsletterSection />
       </main>
       <Footer />
+      <ScrollToTopButton />
     </div>
   )
 }
