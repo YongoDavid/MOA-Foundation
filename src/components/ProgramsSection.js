@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef } from "react"
-import { Users, BookOpen, Globe, Heart, Lightbulb, Target } from "lucide-react"
+import { Users, BookOpen, Globe, Heart, Lightbulb } from "lucide-react"
 import { motion, useInView } from "framer-motion"
 
 const ProgramsSection = () => {
@@ -116,7 +116,7 @@ const ProgramsSection = () => {
   }
 
   return (
-    <section id="programs" className="py-20 bg-white" ref={ref}>
+    <section id="programs" style={{scrollMarginTop: '5rem'}} className="py-20 bg-white" ref={ref}>
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -162,7 +162,7 @@ const ProgramsSection = () => {
                 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="p-8 bg-white rounded-2xl shadow-soft hover:shadow-large transition-all duration-300 border-0 group cursor-pointer h-full">
+                <div className="p-6 md:p-8 bg-white rounded-2xl shadow-soft hover:shadow-large transition-all duration-300 border-0 group cursor-pointer h-full">
                   <div className="flex flex-col items-center">
                     <motion.div
                       className={`inline-flex items-center justify-center w-14 h-14 p-0 rounded-xl ${program.bgColor} mb-4`}

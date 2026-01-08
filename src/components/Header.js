@@ -92,7 +92,7 @@ export default function Header() {
             className={`sticky top-0 w-full z-50 transition-all duration-300 ${"bg-white shadow-soft"}`}
           >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16 md:h-24">
+          <div className="flex items-center justify-between h-20 md:h-24">
             {/* Left Icons (mobile: visible on left; desktop: ordered to the right) */}
             <div className="flex items-center space-x-3 order-1 md:order-3">
               <motion.button
@@ -124,6 +124,13 @@ export default function Header() {
                 <motion.a
                   key={item.name}
                   href={item.href}
+                  onClick={(e) => {
+                    // Open modal for donation instead of navigating to an anchor
+                    if (item.href === "#donation") {
+                      e.preventDefault()
+                      setIsBookNowOpen(true)
+                    }
+                  }}
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.05 * index }}
@@ -191,7 +198,40 @@ export default function Header() {
                       transition={{ duration: 0.3, delay: 0.1 * index }}
                       whileHover={{ x: 10 }}
                       className="font-poppins font-medium text-dark-gray hover:text-royal-purple px-4 py-3 rounded-md hover:bg-royal-purple/10 transition-all duration-300"
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={(e) => {
+                        // Prevent default for mobile so we can control behavior
+                        e.preventDefault()
+                        setIsMenuOpen(false)
+
+                        // If donation, open the modal
+                        if (item.href === "#donation") {
+                          setIsBookNowOpen(true)
+                          return
+                        }
+
+                        // Smooth-scroll to section with offset for the fixed header
+                        try {
+                          const target = document.querySelector(item.href)
+                          if (target) {
+                            const headerEl = document.querySelector('header')
+                            const headerOffset = headerEl ? headerEl.offsetHeight : 80
+                            const elementTop = target.getBoundingClientRect().top + window.pageYOffset
+                            const scrollTo = Math.max(elementTop - headerOffset - 12, 0)
+                            window.scrollTo({ top: scrollTo, behavior: 'smooth' })
+
+                            // Attempt to focus target for accessibility without scrolling
+                            if (!target.hasAttribute('tabindex')) {
+                              target.setAttribute('tabindex', '-1')
+                              target.focus({ preventScroll: true })
+                              setTimeout(() => target.removeAttribute('tabindex'), 1000)
+                            } else {
+                              target.focus({ preventScroll: true })
+                            }
+                          }
+                        } catch (err) {
+                          // noop
+                        }
+                      }}
                     >
                       {item.name}
                     </motion.a>
@@ -206,7 +246,7 @@ export default function Header() {
                     }}
                     className="mt-4 mx-4 w-full py-3 bg-orange-accent text-white rounded-full font-poppins font-semibold hover:bg-orange-accent/90"
                   >
-                    Book Now
+                    Donate
                   </motion.button>
                 </nav>
               </motion.div>

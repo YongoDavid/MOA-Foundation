@@ -6,11 +6,9 @@ import { AnimatePresence, motion, useInView } from "framer-motion";
 import Image4 from "../Images/MOA4.jpg";
 import Image5 from "../Images/MOA5.jpg";
 import Image6 from "../Images/MOA6.jpg";
-import Image7 from "../Images/MOA7.jpg";
 import Image8 from "../Images/MOA8.jpg";
 import Image9 from "../Images/MOA9.jpg";
 import Image10 from "../Images/MOA10.jpg";
-import Image11 from "../Images/MOA11.jpg";
 import Image12 from "../Images/MOA12.jpg";
 import Image13 from "../Images/MOA13.jpg";
 import Image14 from "../Images/MOA14.jpg";
@@ -103,7 +101,7 @@ const AboutSection = () => {
   ];
 
   return (
-    <section id="about" className="py-20 bg-teal/5" ref={ref}>
+  <section id="about" style={{scrollMarginTop: '5rem'}} className="py-20 bg-teal/5" ref={ref}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Content */}
@@ -239,7 +237,7 @@ const AboutSection = () => {
                       aboutImages[currentImageIndex].src || "/placeholder.svg"
                     }
                     alt={aboutImages[currentImageIndex].alt}
-                    className="w-full h-[600px] object-cover"
+                    className="w-full h-72 md:h-[600px] object-cover"
                   />
                 </motion.div>
               </AnimatePresence>
@@ -285,7 +283,7 @@ const AboutSection = () => {
                 scale: 1.05,
                 transition: { duration: 0.3 },
               }}
-              className="absolute -bottom-8 -left-8 bg-white p-6 rounded-xl shadow-large"
+              className="hidden sm:block absolute -bottom-8 -left-8 bg-white p-6 rounded-xl shadow-large"
             >
               <div className="text-center">
                 <motion.div
@@ -321,7 +319,7 @@ const AboutSection = () => {
                 scale: 1.05,
                 transition: { duration: 0.3 },
               }}
-              className="absolute -top-8 -right-8 bg-white p-6 rounded-xl shadow-large"
+              className="hidden sm:block absolute -top-8 -right-8 bg-white p-6 rounded-xl shadow-large"
             >
               <div className="text-center">
                 <motion.div

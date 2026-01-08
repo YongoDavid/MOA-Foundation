@@ -72,11 +72,13 @@ export default function BookNowModal({ isOpen, onClose }) {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -400, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed left-0 top-0 h-full w-96 max-h-screen bg-gray-900 text-white z-[10000] overflow-y-auto shadow-2xl p-8 pointer-events-auto"
+            // full width on small screens, sidebar on sm+/md+
+            className="fixed left-0 top-0 w-full sm:w-96 bg-gray-900 text-white z-[10000] overflow-y-auto shadow-2xl p-4 sm:p-6 pointer-events-auto"
+            style={{ height: '100dvh', maxHeight: '100dvh' }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
-            <div className="sticky top-0 flex justify-end pb-4 bg-transparent z-10">
+            <div className="sticky top-0 flex justify-end pb-3 bg-transparent z-10">
               <motion.button
                 whileHover={{ rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
@@ -89,9 +91,9 @@ export default function BookNowModal({ isOpen, onClose }) {
             </div>
 
             {/* Modal Content */}
-            <div className="pt-2">
-              <div className="flex items-center justify-center mb-4">
-                <img src={Logo1} alt="MOA Logo" className="h-32 md:h-40 w-auto" style={{ objectFit: 'contain' }} />
+            <div className="pt-1">
+              <div className="flex items-center justify-center mb-3">
+                <img src={Logo1} alt="MOA Logo" className="h-14 sm:h-32 md:h-40 w-auto" style={{ objectFit: 'contain' }} />
               </div>
               {/* Book Now Form Section */}
               <motion.div
@@ -99,9 +101,9 @@ export default function BookNowModal({ isOpen, onClose }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 }}
               >
-                <h2 className="text-2xl font-poppins font-bold mb-6">Donate Here</h2>
+                <h2 className="text-xl sm:text-2xl font-poppins font-bold mb-4">Donate Here</h2>
 
-                <form onSubmit={handleSubmit} className="space-y-4 mb-8">
+                <form onSubmit={handleSubmit} className="space-y-3 mb-6">
                   {/* Name Input */}
                   <div>
                     <input
@@ -112,7 +114,7 @@ export default function BookNowModal({ isOpen, onClose }) {
                       ref={nameRef}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-transparent border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors"
+                      className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-transparent border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors"
                     />
                   </div>
 
@@ -125,7 +127,7 @@ export default function BookNowModal({ isOpen, onClose }) {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-transparent border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors"
+                      className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-transparent border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors"
                     />
                   </div>
 
@@ -137,8 +139,8 @@ export default function BookNowModal({ isOpen, onClose }) {
                       value={formData.message}
                       onChange={handleChange}
                       required
-                      rows={5}
-                      className="w-full px-4 py-3 bg-transparent border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors resize-none"
+                      rows={4}
+                      className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-transparent border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors resize-none"
                     />
                   </div>
 
@@ -146,7 +148,7 @@ export default function BookNowModal({ isOpen, onClose }) {
                   <div>
                     <button
                       type="submit"
-                      className="w-32 px-6 py-3 bg-red-600 text-white font-poppins font-bold rounded-md hover:bg-red-700 transition-all duration-300 shadow-md"
+                      className="w-28 sm:w-32 px-4 py-2 sm:px-6 sm:py-3 bg-red-600 text-white font-poppins font-bold rounded-md hover:bg-red-700 transition-all duration-300 shadow-md"
                     >
                       SEND
                     </button>
@@ -177,14 +179,15 @@ export default function BookNowModal({ isOpen, onClose }) {
                     { icon: "in", label: "LinkedIn" },
                     { icon: "𝕏", label: "Twitter" },
                   ].map((social, idx) => (
-                    <a
+                    <button
                       key={idx}
-                      href="#"
+                      type="button"
+                      onClick={() => { /* TODO: add real link handler */ }}
                       className="flex items-center justify-center h-8 w-8 rounded-full border border-gray-700 text-gray-300 hover:border-red-600 hover:text-red-600 transition-colors"
                       aria-label={social.label}
                     >
                       <span className="text-sm font-bold">{social.icon}</span>
-                    </a>
+                    </button>
                   ))}
                 </div>
               </motion.div>

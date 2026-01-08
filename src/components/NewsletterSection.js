@@ -22,7 +22,7 @@ const NewsletterSection = () => {
   }
 
   return (
-    <section className="py-20 bg-white" ref={ref}>
+  <section id="contact" style={{scrollMarginTop: '5rem'}} className="py-20 bg-white" ref={ref}>
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
@@ -30,7 +30,7 @@ const NewsletterSection = () => {
           transition={{ duration: 0.8 }}
           className="gradient-dark rounded-2xl p-12 md:p-16 text-center text-white relative overflow-hidden"
         >
-          <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden hidden sm:block">
             {[...Array(20)].map((_, i) => (
               <motion.div
                 key={i}
@@ -83,7 +83,7 @@ const NewsletterSection = () => {
                   repeat: Number.POSITIVE_INFINITY,
                   ease: "linear",
                 }}
-                className="absolute -top-2 -right-2"
+                className="absolute -top-2 -right-2 hidden sm:block"
               >
                 <Sparkles className="h-4 w-4 text-bright-orange" />
               </motion.div>
