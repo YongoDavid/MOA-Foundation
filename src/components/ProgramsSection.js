@@ -138,8 +138,8 @@ const ProgramsSection = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-xl font-inter text-medium-gray max-w-3xl mx-auto leading-relaxed"
           >
-            Discover programs and schemes designed to empower individuals, preserve our nation, and build stronger
-            communities across the globe.
+            Using the 3D principles we empower young minds discover their potentials, develop their skills,
+            and talents to be valuable in the global economy and become the best version of themselves for Africa's sustainable future.
           </motion.p>
         </motion.div>
 

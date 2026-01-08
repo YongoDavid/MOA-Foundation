@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Menu, X, Grid3X3 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import BookNowModal from "./book-now-modal"
+import Logo1 from "../Images/Logo1.jpg"
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -110,10 +111,10 @@ export default function Header() {
 
             {/* Logo (center on mobile, left on md+) */}
             <motion.div whileHover={{ scale: 1.05 }} className="order-2 md:order-1 flex-1 flex items-center justify-center md:justify-start">
-              <motion.img src="/umuigbo-colorful-logo-icon.jpg" alt="MOA Logo" className="h-10 w-10 md:h-12 md:w-12" />
+              <motion.img src={Logo1} alt="MOA Logo" className="h-12 md:h-16 w-auto" style={{ objectFit: 'contain' }} />
               <motion.div className="ml-2 hidden md:flex flex-col">
-                <div className="text-sm md:text-base font-poppins font-bold text-dark-navy">M.O.A</div>
-                <div className="text-xs md:text-sm font-poppins font-medium text-orange-accent">M.O.A</div>
+                <div className="text-sm md:text-base font-poppins font-bold text-dark-navy">MOSES OF AFRICA MENTORING FOUNDATION</div>
+                {/* <div className="text-xs md:text-sm font-poppins font-medium text-orange-accent">MOSES OF AFRICA MENTORING FOUNDATION</div> */}
               </motion.div>
             </motion.div>
 
