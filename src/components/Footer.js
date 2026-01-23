@@ -145,7 +145,7 @@ const Footer = () => {
                 Become part of MOA community today.
               </p>
               <a
-                href="#"
+                href="/get-started"
                 className="inline-flex items-center font-poppins font-semibold text-bright-orange hover:text-white transition-colors duration-300"
               >
                 Get Started →
