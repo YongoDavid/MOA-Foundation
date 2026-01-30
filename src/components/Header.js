@@ -54,7 +54,7 @@ export default function Header() {
               <div className="flex items-center space-x-4 sm:space-x-6">
                 <div className="flex items-center space-x-2">
                   {/* <span className="text-red-500 font-bold">📍</span> */}
-                  <span className="font-poppins text-xs sm:text-sm font-medium">+234 800000000</span>
+                  {/* <span className="font-poppins text-xs sm:text-sm font-medium">+234 800000000</span> */}
                 </div>
                 <div className="hidden sm:flex items-center space-x-4">
                   {[
