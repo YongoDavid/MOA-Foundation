@@ -1,260 +1,250 @@
 "use client"
 
-import { useRef } from "react"
-import { Users, BookOpen, Globe, Heart, Lightbulb } from "lucide-react"
-import { motion, useInView } from "framer-motion"
+import { useRef, useState } from "react"
+import { Users, BookOpen, Globe, Heart, Lightbulb, TrendingUp, Scale, Zap, GraduationCap, Gavel, Wheat } from "lucide-react"
+import { motion, useInView, AnimatePresence } from "framer-motion"
 
 const ProgramsSection = () => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const [activeTab, setActiveTab] = useState("specific")
 
-  const programs = [
+  // Feature Grid Items (Primary Objectives)
+  const primaryFeatures = [
     {
       icon: Users,
-      title: "PRIMARY OBJECTIVES",
-      description: [
-        "Youth empowerment and development: Support youth driven initiatives, innovation and empowering start-ups",
-        "Education: To reintegrate out of school children and parents into the education system",
-        "Mentorship: mentor Youths to discover their full potentials develop their skills and talents to become a valuable assert in their community.",
-        "Gender inclusion: To promote gender inclusion for women and also people with special needs",
-        "Global Peace advocacy: To advocate and facilitate social, economic and political stability for global peace",
-        "Patriotism: Encouraging patriotism across the continent: Projecting Africa’s good image globally",
-        "Fight political a-party: Encourage youths to participate in politics, vote during election and fight electoral mal-practice.",
-      ],
+      title: "Youth Empowerment",
+      description: "Supporting youth-driven initiatives, innovation, and empowering starts-ups to drive economic growth.",
       color: "text-royal-purple",
       bgColor: "bg-royal-purple/10",
     },
     {
-      icon: BookOpen,
-      title: "SPECIFIC OBJECTIVES",
-      description: [
-        "Mentorship: Harnessing the youth potentials by pairing them with experience professionals",
-        "Public enlightenment: creating awareness through mass media, training workshops, seminars, conferences and outreaches in schools, places of worships and market",
-        "Advocacy for human and food security by promoting agricultural education as part way to creating employment opportunities and fight insecurity",
-        "Advocacy for transparent free and fair election across the continent",
-        "Advocacy for gender inclusion and awareness creation against gender based violence for the girl child",
-        "Advocacy for human right protection, rule of law, equity, justice and fairness for all",
-        "Advocacy for peace, across ethnic and religious lines and fight against tribalism, nepotism, ethnic and religious sentiment",
-        "Advocacy for good governance, transparency and accountability from political appointees and government",
-        "Education: Utilizing opportunities technology offers to arm the youths with the right knowledge and skills for personal growth and national development",
-        "Innovation: Encouraging creativity and forward thinking solutions for sustainable self and national development",
-      ],
+      icon: GraduationCap,
+      title: "Education & Reintegration",
+      description: "Reintegrating out-of-school children and parents into the education system for a brighter future.",
       color: "text-teal",
       bgColor: "bg-teal/10",
     },
     {
-      icon: Globe,
-      title: "SDG ALIGNMENT",
-      description: [
-        " SDG 16: Promotion of world peace and inclusive societies through social, economic and political stability",
-        " SDG 8: Promotion of accelerated sustainable all-inclusive economic growth and eradicate poverty creating employment opportunities across the continent",
-        " SDG 4: Ensure sustainable all-inclusive and equitable quality education",
-        " SDG 5: Achieve gender equality and empower female youths across the continent",
-        " SDG 9: Industry, innovation, and Infrastructure: Build resilient infrastructure, promote inclusive and sustainable industrialization and foster innovation",
-        " SDG 16: Peace, Justice, and strong institution: promote peaceful and inclusive societies for sustainable development, provide access to justice for all and build effective, accountable and inclusive institution for all",
-        " SDG 1 & 2: End poverty and Hunger at all level ensuring food security, improved nutrition and promote sustainable agriculture",
-        " SDG 8: Promotion of accelerated sustainable all-inclusive economic growth and eradicate",
-      ],
+      icon: Lightbulb,
+      title: "Mentorship",
+      description: "Mentoring youths to discover their full potential, skills, and talents to become valuable assets.",
       color: "text-bright-orange",
       bgColor: "bg-bright-orange/10",
     },
     {
-      icon: Heart,
-      title: "CORE VALUES",
-      description: [
-        "Integrity: Upholding the principal of honesty and transparency in all our activities",
-        "Excellence: Striving for the highest standards in mentorship and leadership.",
-        "Innovation: Encouraging creativity and forward thinking solutions.",
-        "Empowerment: Providing tools and opportunities for youth to thrive",
-        "Community: Strengthening bonds and fostering collaboration across the globe and within the continent",
-      ],
+      icon: Globe,
+      title: "Global Peace Advocacy",
+      description: "Advocating for social, economic, and political stability to foster global peace and prosperity.",
       color: "text-royal-purple",
       bgColor: "bg-royal-purple/10",
     },
-    {
-      icon: Lightbulb,
-      title: "KEY FOCUS AREAS",
-      description: [
-        "Leadership, Peace and Development: Advocating for good governance which fosters peaceful co- existence for sustainable development",
-        "Education Support: Scholarship, tutoring, E leaning in TEC, AI and academic mentoring",
-        "Mentorship Programs: Pairing youth with skilled, ethical and experienced professionals.",
-        "Leadership Development: Training workshops, Seminars and conferences.",
-        "Entrepreneurship and Innovation: Supporting young entrepreneurs and innovators with guidance and resources",
-        "Community Engagement: Promoting volunteerism and social responsibility.",
-      ],
-      color: "text-teal",
-      bgColor: "bg-teal/10",
-    },
   ]
+
+  // Tab Content Data
+  const tabContent = {
+    specific: {
+      title: "Specific Objectives",
+      items: [
+        "Harnessing youth potential through professional mentorship.",
+        "Public enlightenment via seminars, workshops, and outreaches.",
+        "Advocacy for human and food security via agricultural education.",
+        "Promoting transparent, free, and fair elections across Africa.",
+        "Championing gender inclusion and fighting gender-based violence.",
+        "Advocating for human rights, rule of law, equity, and justice.",
+        "Fostering peace across ethnic and religious lines.",
+        "Demanding good governance, transparency, and accountability.",
+        "Utilizing technology for personal growth and national development.",
+        "Encouraging creativity and forward-thinking solutions."
+      ]
+    },
+    sdg: {
+      title: "SDG Alignment",
+      items: [
+        { icon: Scale, text: "SDG 16: Peace, Justice & Strong Institutions" },
+        { icon: TrendingUp, text: "SDG 8: Decent Work & Economic Growth" },
+        { icon: BookOpen, text: "SDG 4: Quality Education" },
+        { icon: Users, text: "SDG 5: Gender Equality" },
+        { icon: Zap, text: "SDG 9: Industry, Innovation & Infrastructure" },
+        { icon: Wheat, text: "SDG 1 & 2: No Poverty & Zero Hunger" },
+      ]
+    },
+    values: {
+      title: "Core Values",
+      items: [
+        { title: "Integrity", desc: "Upholding honesty and transparency." },
+        { title: "Excellence", desc: "Striving for the highest mentorship standards." },
+        { title: "Innovation", desc: "Encouraging creativity and new solutions." },
+        { title: "Empowerment", desc: "Providing tools for youth to thrive." },
+        { title: "Community", desc: "Fostering collaboration across the continent." },
+      ]
+    }
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
   }
 
-  const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: 50,
-      scale: 0.9,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   }
 
   return (
-    <section id="programs" style={{scrollMarginTop: '5rem'}} className="py-20 bg-white" ref={ref}>
+    <section id="programs" style={{ scrollMarginTop: '5rem' }} className="py-20 bg-white" ref={ref}>
       <div className="max-w-7xl mx-auto px-6">
+
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <motion.h2
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl md:text-5xl font-poppins font-bold text-royal-purple mb-6"
-          >
+          <h2 className="text-4xl md:text-5xl font-heading font-bold text-royal-purple mb-6">
             Aims & Objectives
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl font-inter text-medium-gray max-w-3xl mx-auto leading-relaxed"
-          >
-            Using the 3D principles we empower young minds discover their potentials, develop their skills,
-            and talents to be valuable in the global economy and become the best version of themselves for Africa's sustainable future.
-          </motion.p>
+          </h2>
+          <p className="text-xl font-sans text-medium-gray max-w-3xl mx-auto leading-relaxed">
+            Using the 3D principles, we empower young minds to discover their potentials and develop their skills
+            to become the best version of themselves for Africa's sustainable future.
+          </p>
         </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {programs.map((program, index) => {
-            const IconComponent = program.icon
+        {/* Feature Grid (Primary Objectives) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+          {primaryFeatures.map((feature, index) => {
+            const Icon = feature.icon
             return (
               <motion.div
                 key={index}
-                variants={cardVariants}
-                whileHover={{
-                  y: -10,
-                  scale: 1.02,
-                  transition: { duration: 0.3 },
-                }}
-                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+                className="bg-white p-6 rounded-2xl shadow-soft border border-gray-100 hover:shadow-medium transition-all"
               >
-                <div className="p-6 md:p-8 bg-white rounded-2xl shadow-soft hover:shadow-large transition-all duration-300 border-0 group cursor-pointer h-full">
-                  <div className="flex flex-col items-center">
-                    <motion.div
-                      className={`inline-flex items-center justify-center w-14 h-14 p-0 rounded-xl ${program.bgColor} mb-4`}
-                      whileHover={{
-                        scale: 1.06,
-                        transition: { duration: 0.25 },
-                      }}
-                    >
-                      <motion.div
-                        animate={{
-                          rotate: [0, 4, -4, 0],
-                          y: [0, -6, 0],
-                          scale: [1, 1.04, 1],
-                        }}
-                        transition={{
-                          duration: 2.2,
-                          repeat: Number.POSITIVE_INFINITY,
-                          repeatDelay: 3,
-                          ease: "easeInOut",
-                        }}
-                        className="flex items-center justify-center leading-none"
-                      >
-                        <IconComponent className={`h-8 w-8 block ${program.color}`} />
-                      </motion.div>
-                    </motion.div>
-
-                    <motion.h3
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                      transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-                      className="text-xl font-poppins font-semibold text-dark-gray mb-4 text-center"
-                    >
-                      {program.title}
-                    </motion.h3>
-                  </div>
-
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-                    transition={{ duration: 0.6, delay: 1 + index * 0.1 }}
-                    className="font-inter text-medium-gray leading-relaxed mb-6"
-                  >
-                    {Array.isArray(program.description) ? (
-                      <ul className="list-disc pl-6 space-y-2 text-base">
-                        {program.description.map((d, i) => (
-                          <li key={i} className="text-medium-gray">
-                            {d}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p>{program.description}</p>
-                    )}
-                  </motion.div>
-
-                  {/* <motion.div whileHover={{ x: 10 }} transition={{ duration: 0.3 }}>
-                    <button
-                      className={`${program.color} hover:bg-transparent font-poppins font-semibold p-0 h-auto bg-transparent border-none cursor-pointer`}
-                    >
-                      Learn More →
-                    </button>
-                  </motion.div> */}
+                <div className={`w-12 h-12 rounded-xl ${feature.bgColor} flex items-center justify-center mb-4`}>
+                  <Icon className={`h-6 w-6 ${feature.color}`} />
                 </div>
+                <h3 className="text-lg font-heading font-bold text-dark-gray mb-3">{feature.title}</h3>
+                <p className="text-sm font-sans text-medium-gray leading-relaxed">{feature.description}</p>
               </motion.div>
             )
           })}
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.8, delay: 1.5 }}
-          className="text-center mt-16"
-        >
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            animate={{
-              y: [0, -5, 0],
-            }}
-            transition={{
-              y: { duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" },
-            }}
-          >
-            {/* <button className="gradient-orange text-white font-poppins font-semibold px-8 py-4 rounded-full text-lg shadow-medium">
-              Explore All Programs
-            </button> */}
-          </motion.div>
-        </motion.div>
+        {/* Tabs Section */}
+        <div className="max-w-5xl mx-auto">
+          {/* Tab Navigation */}
+          <div className="flex flex-wrap justify-center gap-4 mb-10">
+            {[
+              { id: 'specific', label: 'Specific Objectives' },
+              { id: 'sdg', label: 'SDG Alignment' },
+              { id: 'values', label: 'Core Values' }
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`relative px-6 py-3 rounded-full font-heading font-semibold text-sm md:text-base transition-all duration-300 ${activeTab === tab.id
+                    ? "text-white bg-royal-purple shadow-md"
+                    : "text-medium-gray bg-gray-100 hover:bg-gray-200"
+                  }`}
+              >
+                {tab.label}
+                {activeTab === tab.id && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute inset-0 rounded-full bg-royal-purple -z-10"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Tab Content */}
+          <div className="bg-gray-50 rounded-3xl p-8 md:p-12 border border-gray-100 shadow-sm min-h-[400px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h3 className="text-2xl font-heading font-bold text-dark-gray mb-8 text-center">
+                  {tabContent[activeTab].title}
+                </h3>
+
+                {activeTab === 'specific' && (
+                  <motion.ul
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4"
+                  >
+                    {tabContent.specific.items.map((item, i) => (
+                      <motion.li key={i} variants={itemVariants} className="flex items-start gap-3">
+                        <div className="mt-1.5 w-2 h-2 rounded-full bg-teal flex-shrink-0" />
+                        <span className="font-sans text-medium-gray leading-relaxed">{item}</span>
+                      </motion.li>
+                    ))}
+                  </motion.ul>
+                )}
+
+                {activeTab === 'sdg' && (
+                  <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                  >
+                    {tabContent.sdg.items.map((item, i) => {
+                      const Icon = item.icon
+                      return (
+                        <motion.div
+                          key={i}
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.02 }}
+                          className="bg-white p-6 rounded-xl shadow-soft flex flex-col items-center text-center gap-4 hover:shadow-md transition-all"
+                        >
+                          <div className="w-12 h-12 rounded-full bg-bright-orange/10 flex items-center justify-center">
+                            <Icon className="h-6 w-6 text-bright-orange" />
+                          </div>
+                          <span className="font-heading font-semibold text-dark-gray">{item.text}</span>
+                        </motion.div>
+                      )
+                    })}
+                  </motion.div>
+                )}
+
+                {activeTab === 'values' && (
+                  <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                  >
+                    {tabContent.values.items.map((item, i) => (
+                      <motion.div
+                        key={i}
+                        variants={itemVariants}
+                        className="bg-white p-6 rounded-xl border-l-4 border-royal-purple shadow-sm hover:shadow-md transition-all"
+                      >
+                        <h4 className="font-heading font-bold text-lg text-royal-purple mb-2">{item.title}</h4>
+                        <p className="font-sans text-medium-gray text-sm">{item.desc}</p>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
     </section>
   )
 }
 
-export default ProgramsSection;
+export default ProgramsSection

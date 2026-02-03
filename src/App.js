@@ -8,6 +8,8 @@ import NewsletterSection from "./components/NewsletterSection"
 import Footer from "./components/Footer"
 import ScrollToTopButton from "./components/ScrollToTopButton"
 
+import CTASection from "./components/CTASection"
+
 function App() {
   return (
     <div className="min-h-screen bg-white">
@@ -17,6 +19,7 @@ function App() {
         <ProgramsSection />
         <AboutSection />
         {/* <TestimonialsCarousel /> */}
+        <CTASection />
         <NewsletterSection />
       </main>
       <Footer />

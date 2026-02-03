@@ -45,7 +45,7 @@ const Footer = () => {
               {/* <div className="ml-2 text-sm font-poppins font-medium text-teal">Worldwide</div> */}
             </div>
 
-            <p className="font-inter text-gray-300 leading-relaxed mb-6">
+            <p className="font-sans text-gray-300 leading-relaxed mb-6">
               MOSES MENTORING FOUNDATION FOR LEADERSHIP AND PEACE DEVELOPMENT
             </p>
 
@@ -53,26 +53,26 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-teal" />
-                <span className="font-inter text-gray-300">
+                <span className="font-sans text-gray-300">
                   mosesofafrica@gmail.com
                 </span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-teal" />
-                <span className="font-inter text-gray-300">
+                <span className="font-sans text-gray-300">
                   +234 (000) 000-000
                 </span>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="h-5 w-5 text-teal" />
-                <span className="font-inter text-gray-300">F.C.T Abuja</span>
+                <span className="font-sans text-gray-300">F.C.T Abuja</span>
               </div>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-poppins font-semibold text-white mb-6">
+            <h3 className="text-lg font-heading font-semibold text-white mb-6">
               Quick Links
             </h3>
             <ul className="space-y-3">
@@ -80,7 +80,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="font-inter text-gray-300 hover:text-bright-orange transition-colors duration-300"
+                    className="font-sans text-gray-300 hover:text-bright-orange transition-colors duration-300"
                   >
                     {link.name}
                   </a>
@@ -91,7 +91,7 @@ const Footer = () => {
 
           {/* Programs */}
           <div>
-            <h3 className="text-lg font-poppins font-semibold text-white mb-6">
+            <h3 className="text-lg font-heading font-semibold text-white mb-6">
               Our Programs
             </h3>
             <ul className="space-y-3">
@@ -99,7 +99,7 @@ const Footer = () => {
                 <li key={program.name}>
                   <a
                     href={program.href}
-                    className="font-inter text-gray-300 hover:text-bright-orange transition-colors duration-300"
+                    className="font-sans text-gray-300 hover:text-bright-orange transition-colors duration-300"
                   >
                     {program.name}
                   </a>
@@ -110,11 +110,11 @@ const Footer = () => {
 
           {/* Newsletter & Social */}
           <div>
-            <h3 className="text-lg font-poppins font-semibold text-white mb-6">
+            <h3 className="text-lg font-heading font-semibold text-white mb-6">
               Stay Connected
             </h3>
 
-            <p className="font-inter text-gray-300 mb-6">
+            <p className="font-sans text-gray-300 mb-6">
               Follow us on social media for the updates and community
               highlights.
             </p>
@@ -138,15 +138,15 @@ const Footer = () => {
 
             {/* CTA Card */}
             <div className="bg-bright-orange/20 border border-bright-orange/30 rounded-xl p-6">
-              <h4 className="font-poppins font-semibold text-white mb-2">
+              <h4 className="font-heading font-semibold text-white mb-2">
                 Join Our Community
               </h4>
-              <p className="font-inter text-gray-300 text-sm mb-4">
+              <p className="font-sans text-gray-300 text-sm mb-4">
                 Become part of MOA community today.
               </p>
               <a
                 href="/get-started"
-                className="inline-flex items-center font-poppins font-semibold text-bright-orange hover:text-white transition-colors duration-300"
+                className="inline-flex items-center font-heading font-semibold text-bright-orange hover:text-white transition-colors duration-300"
               >
                 Get Started →
               </a>
@@ -156,7 +156,7 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-600 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="font-inter text-gray-400 text-sm">
+          <p className="font-sans text-gray-400 text-sm">
             © 2025 MOA. All rights reserved.
           </p>
         </div>

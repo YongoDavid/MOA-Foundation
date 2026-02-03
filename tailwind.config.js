@@ -3,6 +3,10 @@ export default {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}", "./public/index.html"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+        heading: ["Outfit", "sans-serif"],
+      },
       colors: {
         "royal-purple": "#6d28d9",
         teal: "#14b8a6",

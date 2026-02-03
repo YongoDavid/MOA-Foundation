@@ -3,13 +3,11 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* Google Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap");
+/* Google Fonts - Moved to index.css */
 
 /* Custom CSS Variables */
 :root {
-  --font-poppins: "Poppins", sans-serif;
-  --font-inter: "Inter", sans-serif;
+  /* Fonts are now managed via Tailwind config */
   --color-royal-purple: #6d28d9;
   --color-teal: #14b8a6;
   --color-bright-orange: #fb923c;
@@ -67,13 +65,7 @@
   border-color: var(--color-bright-orange);
 }
 
-.font-poppins {
-  font-family: var(--font-poppins);
-}
-
-.font-inter {
-  font-family: var(--font-inter);
-}
+/* Font classes removed - use Tailwind font-heading and font-sans */
 
 .gradient-orange {
   background: linear-gradient(135deg, #fb923c, #ff6b35);
@@ -104,6 +96,3 @@
 }
 
 /* Global body font to match design tokens */
-body {
-  font-family: var(--font-inter);
-}

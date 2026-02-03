@@ -101,7 +101,7 @@ export default function BookNowModal({ isOpen, onClose }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 }}
               >
-                <h2 className="text-xl sm:text-2xl font-poppins font-bold mb-4">Donate Here</h2>
+                <h2 className="text-xl sm:text-2xl font-heading font-bold mb-4">Donate Here</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-3 mb-6">
                   {/* Name Input */}
@@ -148,7 +148,7 @@ export default function BookNowModal({ isOpen, onClose }) {
                   <div>
                     <button
                       type="submit"
-                      className="w-28 sm:w-32 px-4 py-2 sm:px-6 sm:py-3 bg-red-600 text-white font-poppins font-bold rounded-md hover:bg-red-700 transition-all duration-300 shadow-md"
+                      className="w-28 sm:w-32 px-4 py-2 sm:px-6 sm:py-3 bg-red-600 text-white font-heading font-bold rounded-md hover:bg-red-700 transition-all duration-300 shadow-md"
                     >
                       SEND
                     </button>
@@ -163,7 +163,7 @@ export default function BookNowModal({ isOpen, onClose }) {
                 transition={{ duration: 0.4, delay: 0.6 }}
                 className="pt-6 border-t border-gray-800"
               >
-                <h3 className="text-lg font-poppins font-bold mb-4">Contact Info</h3>
+                <h3 className="text-lg font-heading font-bold mb-4">Contact Info</h3>
 
                 <div className="text-sm text-gray-300 space-y-2 mb-4">
                   <div>House B61, Supercell Estate, Apo, Abuja, FCT</div>

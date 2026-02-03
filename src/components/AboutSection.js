@@ -62,286 +62,200 @@ const AboutSection = () => {
   ];
 
   const aboutImages = [
-    {
-      src: Image4,
-      alt: "Mentorship",
-    },
-    {
-      src: Image5,
-      alt: "Mentorship",
-    },
-    {
-      src: Image6,
-      alt: "Mentorship",
-    },
-    {
-      src: Image8,
-      alt: "Mentorship",
-    },
-    {
-      src: Image9,
-      alt: "Mentorship",
-    },
-    {
-      src: Image10,
-      alt: "Mentorship",
-    },
-    {
-      src: Image12,
-      alt: "Mentorship",
-    },
-    {
-      src: Image13,
-      alt: "Mentorship",
-    },
-    {
-      src: Image14,
-      alt: "Mentorship",
-    },
+    { src: Image4, alt: "Mentorship" },
+    { src: Image5, alt: "Mentorship" },
+    { src: Image6, alt: "Mentorship" },
+    { src: Image8, alt: "Mentorship" },
+    { src: Image9, alt: "Mentorship" },
+    { src: Image10, alt: "Mentorship" },
+    { src: Image12, alt: "Mentorship" },
+    { src: Image13, alt: "Mentorship" },
+    { src: Image14, alt: "Mentorship" },
+  ];
+
+  const metrics = [
+    { value: "500+", label: "Lives Touched" },
+    { value: "50+", label: "Mentors Active" },
+    { value: "10+", label: "Countries Reached" },
+    { value: "100%", label: "Community Focused" }
   ];
 
   return (
-  <section id="about" style={{scrollMarginTop: '5rem'}} className="py-20 bg-teal/5" ref={ref}>
+    <section id="about" style={{ scrollMarginTop: '5rem' }} className="py-20 bg-teal/5" ref={ref}>
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Content */}
+
+        {/* Section Heading */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          {/* <h2 className="text-sm font-bold text-teal tracking-widest uppercase mb-2">Who We Are</h2> */}
+          {/* <h3 className="text-3xl md:text-4xl font-heading font-bold text-royal-purple">Our Mission & Vision</h3> */}
+        </motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          {/* Left Column: Text Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.8 }}
+            className="space-y-12"
           >
-            {/* <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl md:text-5xl font-poppins font-bold text-royal-purple mb-6"
-            >
-              MISSION & VISION
-            </motion.h2> */}
-
-            <motion.h3
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.8, delay: 0.35 }}
-              className="text-2xl font-poppins font-semibold text-royal-purple mb-3"
-            >
-              MISSION STATEMENT:
-            </motion.h3>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-lg font-inter text-medium-gray leading-relaxed mb-6"
-            >
-              To inspire guide and equip African youths with the right
-              knowledge, skills, ethics and moral values required to discover
-              their full potentials, develop their skills and talents to
-              become valuable in the global market being the best version of
-              themselves. We aim at creating opportunities for mentorship,
-              education and leadership that nurture responsible citizens and
-              visionary leaders who will drive sustainable economic, social and
-              political development across the continent and beyond.
-            </motion.p>
-
-            <motion.h3
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.8, delay: 0.65 }}
-              className="text-2xl font-poppins font-semibold text-royal-purple mb-3"
-            >
-              VISION STATEMENT:
-            </motion.h3>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="text-lg font-inter text-medium-gray leading-relaxed mb-6"
-            >
-              To build a continent where every young African has access to
-              education, mentorship and empowerment, enabling them to rise as
-              confident leaders, peace advocates, innovators and change makers
-              who contribute to the sustainable development of Africa and also
-              thrive globally.
-            </motion.p>
-
-            <motion.h3
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.8, delay: 1 }}
-              className="text-2xl font-poppins font-semibold text-royal-purple mb-4"
-            >
-              OUR VISION
-            </motion.h3>
-
-            <div className="space-y-4 mb-8">
-              {visionItems.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={
-                    isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }
-                  }
-                  transition={{ duration: 0.6, delay: 1.1 + index * 0.08 }}
-                  whileHover={{ x: 8, transition: { duration: 0.25 } }}
-                  className="flex items-start gap-3"
-                >
-                  <motion.div
-                        animate={{
-                          scale: [1, 1.12, 1],
-                        }}
-                        transition={{
-                          duration: 2.2,
-                          repeat: Number.POSITIVE_INFINITY,
-                          repeatDelay: 5 + index * 0.2,
-                          ease: "easeInOut",
-                        }}
-                        className="flex-shrink-0 mt-0.5"
-                      >
-                        {/** render the icon for this item */}
-                        {(() => {
-                          const Icon = item.icon;
-                          return <Icon className="h-6 w-6 text-teal" />;
-                        })()}
-                      </motion.div>
-                      <span className="font-inter text-dark-gray">
-                        <span className="font-semibold text-dark-gray mr-2">{index + 1}.</span>
-                        {item.text}
-                      </span>
-                </motion.div>
-              ))}
+            {/* Mission Statement */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-royal-purple/10 rounded-lg">
+                  <Target className="w-6 h-6 text-royal-purple" />
+                </div>
+                <h3 className="text-2xl font-heading font-semibold text-royal-purple">
+                  MISSION STATEMENT:
+                </h3>
+              </div>
+              <p className="text-lg font-sans text-medium-gray leading-relaxed pl-2 border-l-4 border-royal-purple/20">
+                To inspire guide and equip African youths with the right
+                knowledge, skills, ethics and moral values required to discover
+                their full potentials, develop their skills and talents to
+                become valuable in the global market being the best version of
+                themselves. We aim at creating opportunities for mentorship,
+                education and leadership that nurture responsible citizens and
+                visionary leaders who will drive sustainable economic, social and
+                political development across the continent and beyond.
+              </p>
             </div>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="relative"
-          >
-            <div className="relative rounded-2xl overflow-hidden shadow-large">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentImageIndex}
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  // transition={{ duration: 0.8 }}
-                  transition={{ duration: 1.5, ease: "easeInOut" }}
-                  className="relative"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-royal-purple/20 to-transparent"></div>
-                  <img
-                    src={
-                      aboutImages[currentImageIndex].src || "/placeholder.svg"
-                    }
-                    alt={aboutImages[currentImageIndex].alt}
-                    className="w-full h-72 md:h-[600px] object-cover"
-                  />
-                </motion.div>
-              </AnimatePresence>
+            {/* Vision Statement */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-teal/10 rounded-lg">
+                  <Globe className="w-6 h-6 text-teal" />
+                </div>
+                <h3 className="text-2xl font-heading font-semibold text-royal-purple">
+                  VISION STATEMENT:
+                </h3>
+              </div>
+              <p className="text-lg font-sans text-medium-gray leading-relaxed pl-2 border-l-4 border-teal/20">
+                To build a continent where every young African has access to
+                education, mentorship and empowerment, enabling them to rise as
+                confident leaders, peace advocates, innovators and change makers
+                who contribute to the sustainable development of Africa and also
+                thrive globally.
+              </p>
+            </div>
 
-              <button
-                onClick={prevImage}
-                className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-2 md:p-3 rounded-full transition-all duration-300 group"
-              >
-                <ChevronLeft />
-              </button>
-              <button
-                onClick={nextImage}
-                className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-2 md:p-3 rounded-full transition-all duration-300 group"
-              >
-                <ChevronRight />
-              </button>
-
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {aboutImages.map((_, index) => (
-                  <button
+            {/* Our Vision List */}
+            <div>
+              <h3 className="text-2xl font-heading font-semibold text-royal-purple mb-6 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-bright-orange" />
+                OUR VISION
+              </h3>
+              <div className="space-y-4">
+                {visionItems.map((item, index) => (
+                  <motion.div
                     key={index}
-                    onClick={() => setCurrentImageIndex(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      index === currentImageIndex
-                        ? "bg-white scale-125"
-                        : "bg-white/50 hover:bg-white/75"
-                    }`}
-                  />
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-50"
+                  >
+                    <div className="flex-shrink-0 mt-1">
+                      {(() => {
+                        const Icon = item.icon;
+                        return <Icon className="h-5 w-5 text-teal" />;
+                      })()}
+                    </div>
+                    <span className="font-sans text-dark-gray text-sm md:text-base">
+                      {item.text}
+                    </span>
+                  </motion.div>
                 ))}
               </div>
             </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 50, rotate: -10 }}
-              animate={
-                isInView
-                  ? { opacity: 1, y: 0, rotate: -5 }
-                  : { opacity: 0, y: 50, rotate: -10 }
-              }
-              transition={{ duration: 0.8, delay: 1 }}
-              whileHover={{
-                rotate: 0,
-                scale: 1.05,
-                transition: { duration: 0.3 },
-              }}
-              className="hidden sm:block absolute -bottom-8 -left-8 bg-white p-6 rounded-xl shadow-large"
-            >
-              <div className="text-center">
-                <motion.div
-                  animate={{
-                    scale: [1, 1.1, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Number.POSITIVE_INFINITY,
-                    repeatDelay: 3,
-                    ease: "easeInOut",
-                  }}
-                  className="text-3xl font-poppins font-bold text-teal"
-                >
-                  2+
-                </motion.div>
-                <div className="text-sm font-inter text-medium-gray">
-                  Years of Impact
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: -50, rotate: 10 }}
-              animate={
-                isInView
-                  ? { opacity: 1, y: 0, rotate: 5 }
-                  : { opacity: 0, y: -50, rotate: 10 }
-              }
-              transition={{ duration: 0.8, delay: 1.2 }}
-              whileHover={{
-                rotate: 0,
-                scale: 1.05,
-                transition: { duration: 0.3 },
-              }}
-              className="hidden sm:block absolute -top-8 -right-8 bg-white p-6 rounded-xl shadow-large"
-            >
-              <div className="text-center">
-                <motion.div
-                  animate={{
-                    scale: [1, 1.2, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Number.POSITIVE_INFINITY,
-                    repeatDelay: 4,
-                    ease: "easeInOut",
-                  }}
-                  className="text-3xl font-poppins font-bold text-bright-orange"
-                >
-                  100%
-                </motion.div>
-                <div className="text-sm font-inter text-medium-gray">
-                  Community Focused
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
+
+          {/* Right Column: Image Carousel & Metrics */}
+          <div className="lg:sticky lg:top-24 space-y-12">
+
+            {/* Image Carousel */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative"
+            >
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/5] md:aspect-[4/3] lg:aspect-[3/4]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentImageIndex}
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.8 }}
+                    className="absolute inset-0"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
+                    <img
+                      src={aboutImages[currentImageIndex].src || "/placeholder.svg"}
+                      alt={aboutImages[currentImageIndex].alt}
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Carousel Controls */}
+                <div className="absolute bottom-6 right-6 z-20 flex gap-3">
+                  <button
+                    onClick={prevImage}
+                    className="p-3 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-royal-purple rounded-full transition-all duration-300"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={nextImage}
+                    className="p-3 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-royal-purple rounded-full transition-all duration-300"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Decorative elements behind image */}
+              <div className="absolute -z-10 top-10 -right-10 w-full h-full border-2 border-dashed border-teal/30 rounded-3xl hidden lg:block" />
+              <div className="absolute -z-10 -bottom-10 -left-10 w-full h-full border-2 border-dashed border-royal-purple/30 rounded-3xl hidden lg:block" />
+            </motion.div>
+
+            {/* Impact Metrics Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-royal-purple rounded-2xl p-8 shadow-xl text-white relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                <Globe className="w-32 h-32" />
+              </div>
+
+              <h3 className="text-xl font-heading font-bold mb-6 relative z-10 border-b border-white/20 pb-4">
+                Our Impact
+              </h3>
+
+              <div className="grid grid-cols-2 gap-6 relative z-10">
+                {metrics.map((metric, idx) => (
+                  <div key={idx}>
+                    <div className="text-3xl md:text-4xl font-heading font-bold text-bright-orange mb-1">
+                      {metric.value}
+                    </div>
+                    <div className="text-sm font-sans text-gray-200">
+                      {metric.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+          </div>
         </div>
       </div>
     </section>

@@ -102,11 +102,10 @@ export default function HeroSection() {
             <button
               key={index}
               onClick={() => setCurrentImage(index)}
-              className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
-                index === currentImage
-                  ? "bg-white scale-125"
-                  : "bg-white/50 hover:bg-white/75"
-              }`}
+              className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${index === currentImage
+                ? "bg-white scale-125"
+                : "bg-white/50 hover:bg-white/75"
+                }`}
             />
           ))}
         </div>
@@ -130,8 +129,8 @@ export default function HeroSection() {
             >
               <Star className="h-3 w-3 md:h-4 md:w-4 text-bright-orange fill-current" />
             </motion.div>
-            <span className="text-xs md:text-sm font-poppins font-semibold text-dark-gray">
-              DONT JUST BELONG, ALWAYS STANDOUT
+            <span className="text-xs md:text-sm font-heading font-semibold text-dark-gray">
+              Don't Just Belong, Stand Out
             </span>
           </motion.div>
 
@@ -139,7 +138,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-poppins font-extrabold text-white leading-tight mb-4 md:mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-extrabold text-white leading-tight mb-4 md:mb-6"
             style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.8)" }}
           >
             <motion.span
@@ -148,7 +147,7 @@ export default function HeroSection() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="block"
             >
-              Africa’s emerging leaders for 
+              Africa’s Emerging Leaders for
             </motion.span>
             <motion.span
               initial={{ opacity: 0, x: 50 }}
@@ -157,7 +156,7 @@ export default function HeroSection() {
               className="block text-teal"
               style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.8)" }}
             >
-              excellence
+              Excellence
             </motion.span>
           </motion.h1>
 
@@ -165,10 +164,10 @@ export default function HeroSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1 }}
-            className="text-base md:text-lg lg:text-xl font-inter text-white leading-relaxed mb-6 md:mb-8 max-w-2xl"
+            className="text-base md:text-lg lg:text-xl font-sans text-white leading-relaxed mb-6 md:mb-8 max-w-2xl"
             style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}
           >
-            MOSES OF AFRICA Mentoring Foundation is an (NGO) a non-profit organization with REG NO: 8221777 dedicated to empowering young Africans through mentorship, education and leadership development. We believe that every young person has the potential, skills and talents, if harnessed will become a catalyst for positive change in their communities and across the continent. By connecting experienced mentors with aspiring youth, we foster growth, resilience and innovation for Africa’s Peace and sustainable development.
+            Moses of Africa Mentoring Foundation identifies and empowers young talent through mentorship, education, and leadership development. We connect aspiring youth with experienced mentors to foster growth, innovation, and sustainable development across the continent.
           </motion.p>
 
           <motion.div

@@ -22,7 +22,7 @@ const NewsletterSection = () => {
   }
 
   return (
-  <section id="contact" style={{scrollMarginTop: '5rem'}} className="py-20 bg-white" ref={ref}>
+    <section id="contact" style={{ scrollMarginTop: '5rem' }} className="py-20 bg-white" ref={ref}>
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
@@ -93,7 +93,7 @@ const NewsletterSection = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-3xl md:text-4xl font-poppins font-bold mb-6"
+              className="text-3xl md:text-4xl font-heading font-bold mb-6"
             >
               Stay Connected with Our Community
             </motion.h2>
@@ -102,7 +102,7 @@ const NewsletterSection = () => {
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-lg font-inter text-gray-300 leading-relaxed mb-8"
+              className="text-lg font-sans text-gray-300 leading-relaxed mb-8"
             >
               Get the latest updates on programs, events, and opportunities to grow with the Moses Mentoring foundation
               community. Join thousands of members already part of our newsletter.
@@ -121,7 +121,7 @@ const NewsletterSection = () => {
                   placeholder="Enter your email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-6 py-4 rounded-full border-0 bg-white text-dark-gray font-inter placeholder:text-medium-gray focus:ring-2 focus:ring-bright-orange outline-none"
+                  className="w-full px-6 py-4 rounded-full border-0 bg-white text-dark-gray font-sans placeholder:text-medium-gray focus:ring-2 focus:ring-bright-orange outline-none"
                   required
                   disabled={isSubmitted}
                 />
@@ -131,7 +131,7 @@ const NewsletterSection = () => {
                 <button
                   type="submit"
                   disabled={isSubmitted}
-                  className="gradient-orange text-white font-poppins font-semibold px-8 py-4 rounded-full shadow-medium relative overflow-hidden flex items-center"
+                  className="gradient-orange text-white font-heading font-semibold px-8 py-4 rounded-full shadow-medium relative overflow-hidden flex items-center"
                 >
                   {isSubmitted ? (
                     <motion.span
@@ -160,7 +160,7 @@ const NewsletterSection = () => {
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.8, delay: 1 }}
-              className="text-sm font-inter text-gray-400 mt-6"
+              className="text-sm font-sans text-gray-400 mt-6"
             >
               We respect your privacy. Unsubscribe at any time.
             </motion.p>
