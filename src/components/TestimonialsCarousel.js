@@ -83,15 +83,19 @@ const TestimonialsCarousel = () => {
     }
 
     return (
-        <section id="community" className="py-20 bg-gradient-to-br from-royal-purple/5 to-teal/5">
+        <section id="community" className="py-20 bg-gradient-to-b from-white via-teal-50/30 to-white">
             <div className="max-w-6xl mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
                     viewport={{ once: true }}
-                    className="text-center mb-16"
+                    className="relative z-10 text-center"
                 >
+                    <div className="mb-4">
+                        <span className="text-royal-purple font-semibold tracking-wider uppercase text-sm block">
+                            COMMUNITY VOICES
+                        </span>
+                    </div>
                     <h2 className="text-4xl md:text-5xl font-heading font-bold text-royal-purple mb-6">Voices of Impact</h2>
                     <p className="text-xl font-sans text-medium-gray max-w-3xl mx-auto leading-relaxed">
                         Real stories from the real people building the future of Africa with us.

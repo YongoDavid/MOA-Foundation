@@ -85,14 +85,19 @@ const AboutSection = () => {
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Section Heading */}
+        {/* Section Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          {/* <h2 className="text-sm font-bold text-teal tracking-widest uppercase mb-2">Who We Are</h2> */}
-          {/* <h3 className="text-3xl md:text-4xl font-heading font-bold text-royal-purple">Our Mission & Vision</h3> */}
+          <span className="text-royal-purple font-semibold tracking-wider uppercase text-sm mb-3 block">
+            WHO WE ARE
+          </span>
+          <h2 className="text-3xl md:text-5xl font-heading font-bold text-dark-navy mb-6 leading-tight">
+            Empowering Africa's Future Leaders
+          </h2>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">

@@ -64,7 +64,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-[100dvh] flex items-center overflow-hidden">
       <div className="absolute inset-0">
         <AnimatePresence mode="wait">
           <motion.div
@@ -75,11 +75,12 @@ export default function HeroSection() {
             transition={{ duration: 2, ease: "easeOut" }}
             className="absolute inset-0"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30 z-10" />
+            {/* Reduced gradient opacity slightly for cleaner look, but kept dark enough for text */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30 z-10" />
             <motion.img
               initial={{ scale: 1 }}
-              animate={{ scale: 1.05 }}
-              transition={{ duration: 6, ease: "linear", repeat: 0 }}
+              animate={{ scale: 1.1 }}
+              transition={{ duration: 20, ease: "linear", repeat: 0 }}
               src={heroImages[currentImage].src || "/placeholder.svg"}
               alt={heroImages[currentImage].alt}
               className="w-full h-full object-cover object-center"
@@ -89,14 +90,14 @@ export default function HeroSection() {
 
         <button
           onClick={prevImage}
-          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-4 rounded-full transition-all duration-300 group touch-manipulation"
+          className="hidden md:block absolute left-6 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-md hover:bg-white/30 p-4 rounded-full transition-all duration-300 group touch-manipulation border border-white/20"
           aria-label="Previous Image"
         >
           <ChevronLeft className="h-6 w-6 text-white group-hover:scale-110 transition-transform" />
         </button>
         <button
           onClick={nextImage}
-          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-4 rounded-full transition-all duration-300 group touch-manipulation"
+          className="hidden md:block absolute right-6 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-md hover:bg-white/30 p-4 rounded-full transition-all duration-300 group touch-manipulation border border-white/20"
           aria-label="Next Image"
         >
           <ChevronRight className="h-6 w-6 text-white group-hover:scale-110 transition-transform" />

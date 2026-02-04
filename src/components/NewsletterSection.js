@@ -89,6 +89,18 @@ const NewsletterSection = () => {
               </motion.div>
             </motion.div>
 
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="mb-4"
+            >
+              <span className="text-white/80 font-semibold tracking-wider uppercase text-sm">
+                STAY UPDATED
+              </span>
+            </motion.div>
+
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}

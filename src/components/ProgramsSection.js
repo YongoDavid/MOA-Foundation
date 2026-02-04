@@ -92,7 +92,7 @@ const ProgramsSection = () => {
   }
 
   return (
-    <section id="programs" style={{ scrollMarginTop: '5rem' }} className="py-20 bg-white" ref={ref}>
+    <section id="programs" style={{ scrollMarginTop: '5rem' }} className="py-20 bg-gradient-to-b from-white via-purple-50/30 to-white" ref={ref}>
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Section Header */}
@@ -102,6 +102,9 @@ const ProgramsSection = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
+          <span className="text-royal-purple font-semibold tracking-wider uppercase text-sm mb-3 block">
+            OUR OBJECTIVES
+          </span>
           <h2 className="text-4xl md:text-5xl font-heading font-bold text-royal-purple mb-6">
             Aims & Objectives
           </h2>
@@ -118,11 +121,11 @@ const ProgramsSection = () => {
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                animate={isInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.9 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 whileHover={{ y: -5 }}
-                className="bg-white p-6 rounded-2xl shadow-soft border border-gray-100 hover:shadow-medium transition-all"
+                className="bg-white/80 backdrop-blur-md p-5 md:p-6 rounded-2xl shadow-xl border border-white/20 hover:shadow-2xl transition-all"
               >
                 <div className={`w-12 h-12 rounded-xl ${feature.bgColor} flex items-center justify-center mb-4`}>
                   <Icon className={`h-6 w-6 ${feature.color}`} />
@@ -164,7 +167,7 @@ const ProgramsSection = () => {
           </div>
 
           {/* Tab Content */}
-          <div className="bg-gray-50 rounded-3xl p-8 md:p-12 border border-gray-100 shadow-sm min-h-[400px]">
+          <div className="bg-white/60 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/20 shadow-xl min-h-[400px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
