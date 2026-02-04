@@ -75,8 +75,8 @@ const AboutSection = () => {
 
   const metrics = [
     { value: "500+", label: "Lives Touched" },
-    { value: "50+", label: "Mentors Active" },
-    { value: "10+", label: "Countries Reached" },
+    // { value: "50+", label: "Mentors Active" },
+    // { value: "10+", label: "Countries Reached" },
     { value: "100%", label: "Community Focused" }
   ];
 
