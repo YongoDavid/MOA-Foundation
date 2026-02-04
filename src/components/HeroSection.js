@@ -71,42 +71,52 @@ export default function HeroSection() {
             key={currentImage}
             initial={{ opacity: 0, scale: 1.1 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 2, ease: "easeOut" }}
             className="absolute inset-0"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30 z-10" />
-            <img
+            <motion.img
+              initial={{ scale: 1 }}
+              animate={{ scale: 1.05 }}
+              transition={{ duration: 6, ease: "linear", repeat: 0 }}
               src={heroImages[currentImage].src || "/placeholder.svg"}
               alt={heroImages[currentImage].alt}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
             />
           </motion.div>
         </AnimatePresence>
 
         <button
           onClick={prevImage}
-          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-2 md:p-3 rounded-full transition-all duration-300 group"
+          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-4 rounded-full transition-all duration-300 group touch-manipulation"
+          aria-label="Previous Image"
         >
-          <ChevronLeft className="h-4 w-4 md:h-6 md:w-6 text-white group-hover:scale-110 transition-transform" />
+          <ChevronLeft className="h-6 w-6 text-white group-hover:scale-110 transition-transform" />
         </button>
         <button
           onClick={nextImage}
-          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-2 md:p-3 rounded-full transition-all duration-300 group"
+          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 p-4 rounded-full transition-all duration-300 group touch-manipulation"
+          aria-label="Next Image"
         >
-          <ChevronRight className="h-4 w-4 md:h-6 md:w-6 text-white group-hover:scale-110 transition-transform" />
+          <ChevronRight className="h-6 w-6 text-white group-hover:scale-110 transition-transform" />
         </button>
 
-        <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
           {heroImages.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentImage(index)}
-              className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${index === currentImage
-                ? "bg-white scale-125"
-                : "bg-white/50 hover:bg-white/75"
-                }`}
-            />
+              className="p-2 group focus:outline-none"
+              aria-label={`Go to slide ${index + 1}`}
+            >
+              <div
+                className={`w-3 h-3 md:w-3 md:h-3 rounded-full transition-all duration-300 ${index === currentImage
+                  ? "bg-white scale-125"
+                  : "bg-white/50 group-hover:bg-white/75"
+                  }`}
+              />
+            </button>
           ))}
         </div>
       </div>
@@ -138,7 +148,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-extrabold text-white leading-tight mb-4 md:mb-6"
+            className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-extrabold text-white leading-tight mb-4 md:mb-6"
             style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.8)" }}
           >
             <motion.span

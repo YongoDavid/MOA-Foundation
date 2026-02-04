@@ -208,15 +208,17 @@ const AboutSection = () => {
                 <div className="absolute bottom-6 right-6 z-20 flex gap-3">
                   <button
                     onClick={prevImage}
-                    className="p-3 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-royal-purple rounded-full transition-all duration-300"
+                    className="p-4 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-royal-purple rounded-full transition-all duration-300 active:scale-95 touch-manipulation"
+                    aria-label="Previous Image"
                   >
-                    <ChevronLeft className="w-5 h-5" />
+                    <ChevronLeft className="w-6 h-6" />
                   </button>
                   <button
                     onClick={nextImage}
-                    className="p-3 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-royal-purple rounded-full transition-all duration-300"
+                    className="p-4 bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-royal-purple rounded-full transition-all duration-300 active:scale-95 touch-manipulation"
+                    aria-label="Next Image"
                   >
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="w-6 h-6" />
                   </button>
                 </div>
               </div>
@@ -228,9 +230,9 @@ const AboutSection = () => {
 
             {/* Impact Metrics Section */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-50px" }}
               className="bg-royal-purple rounded-2xl p-8 shadow-xl text-white relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-4 opacity-10">

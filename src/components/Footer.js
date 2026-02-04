@@ -20,8 +20,8 @@ const Footer = () => {
     { name: "About Us", href: "#about" },
     { name: "Aim & Objectives", href: "#programs" },
     { name: "Community", href: "#community" },
-    { name: "Resources", href: "#resources" },
-    { name: "Events", href: "#events" },
+    // { name: "Resources", href: "#resources" },
+    // { name: "Events", href: "#events" },
     { name: "Contact", href: "#contact" },
   ];
 
@@ -35,7 +35,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="gradient-dark text-white">
+    <footer id="contact" className="gradient-dark text-white">
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Section */}
@@ -145,7 +145,7 @@ const Footer = () => {
                 Become part of MOA community today.
               </p>
               <a
-                href="/get-started"
+                href="#get-involved"
                 className="inline-flex items-center font-heading font-semibold text-bright-orange hover:text-white transition-colors duration-300"
               >
                 Get Started →

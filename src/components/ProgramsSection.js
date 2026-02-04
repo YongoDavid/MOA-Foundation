@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { Users, BookOpen, Globe, Heart, Lightbulb, TrendingUp, Scale, Zap, GraduationCap, Gavel, Wheat } from "lucide-react"
+import { Users, BookOpen, Globe, Lightbulb, TrendingUp, Scale, Zap, GraduationCap, Wheat } from "lucide-react"
 import { motion, useInView, AnimatePresence } from "framer-motion"
 
 const ProgramsSection = () => {
@@ -118,9 +118,9 @@ const ProgramsSection = () => {
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
                 whileHover={{ y: -5 }}
                 className="bg-white p-6 rounded-2xl shadow-soft border border-gray-100 hover:shadow-medium transition-all"
               >
@@ -137,7 +137,7 @@ const ProgramsSection = () => {
         {/* Tabs Section */}
         <div className="max-w-5xl mx-auto">
           {/* Tab Navigation */}
-          <div className="flex flex-wrap justify-center gap-4 mb-10">
+          <div className="flex overflow-x-auto md:flex-wrap md:justify-center gap-4 mb-10 pb-4 px-4 -mx-4 md:px-0 md:mx-0 md:pb-0 scrollbar-hide snap-x">
             {[
               { id: 'specific', label: 'Specific Objectives' },
               { id: 'sdg', label: 'SDG Alignment' },
@@ -146,9 +146,9 @@ const ProgramsSection = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative px-6 py-3 rounded-full font-heading font-semibold text-sm md:text-base transition-all duration-300 ${activeTab === tab.id
-                    ? "text-white bg-royal-purple shadow-md"
-                    : "text-medium-gray bg-gray-100 hover:bg-gray-200"
+                className={`relative px-6 py-3 rounded-full font-heading font-semibold text-sm md:text-base whitespace-nowrap transition-all duration-300 snap-center shrink-0 ${activeTab === tab.id
+                  ? "text-white bg-royal-purple shadow-md"
+                  : "text-medium-gray bg-gray-100 hover:bg-gray-200"
                   }`}
               >
                 {tab.label}

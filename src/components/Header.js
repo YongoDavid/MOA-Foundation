@@ -120,30 +120,34 @@ export default function Header() {
 
                 {/* Navigation Menu (desktop) */}
                 <nav className="hidden lg:flex items-center space-x-1 order-4 md:order-2 md:ml-6">
-                  {navItems.map((item, index) => (
-                    <motion.a
-                      key={item.name}
-                      href={item.href}
-                      onClick={(e) => {
-                        // Open modal for donation instead of navigating to an anchor
-                        if (item.href === "#donation") {
-                          e.preventDefault()
-                          setIsBookNowOpen(true)
-                        }
-                      }}
-                      initial={{ opacity: 0, y: -20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.05 * index }}
-                      whileHover={{
-                        scale: 1.05,
-                        color: "#6D28D9",
-                        transition: { duration: 0.2 },
-                      }}
-                      className="font-heading font-medium text-sm text-dark-gray hover:text-royal-purple px-3 py-2 rounded-md hover:bg-royal-purple/10 transition-all duration-300"
-                    >
-                      {item.name}
-                    </motion.a>
-                  ))}
+                  {navItems.map((item, index) => {
+                    const isDonation = item.name === "DONATION"
+                    return (
+                      <motion.a
+                        key={item.name}
+                        href={item.href}
+                        onClick={(e) => {
+                          if (item.href === "#donation") {
+                            e.preventDefault()
+                            setIsBookNowOpen(true)
+                          }
+                        }}
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.05 * index }}
+                        whileHover={isDonation ? { scale: 1.05 } : {
+                          scale: 1.05,
+                          color: "#6D28D9",
+                        }}
+                        className={`font-heading font-medium text-sm transition-all duration-300 px-4 py-2 rounded-md ${isDonation
+                          ? "bg-royal-purple text-white shadow-md hover:bg-royal-purple/90 ml-4"
+                          : "text-dark-gray hover:text-royal-purple hover:bg-royal-purple/10"
+                          }`}
+                      >
+                        {item.name}
+                      </motion.a>
+                    )
+                  })}
                 </nav>
 
                 {/* Hamburger (always on right) */}
@@ -244,9 +248,9 @@ export default function Header() {
                           setIsBookNowOpen(true)
                           setIsMenuOpen(false)
                         }}
-                        className="mt-4 mx-4 w-full py-3 bg-orange-accent text-white rounded-full font-heading font-semibold hover:bg-orange-accent/90"
+                        className="mt-6 mx-4 w-auto py-3 bg-royal-purple text-white rounded-xl font-heading font-bold shadow-md hover:bg-royal-purple/90 transition-all active:scale-95"
                       >
-                        Donate
+                        Donate Now
                       </motion.button>
                     </nav>
                   </motion.div>

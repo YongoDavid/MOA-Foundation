@@ -35,7 +35,7 @@ const CTASection = () => {
     ]
 
     return (
-        <section className="py-20 bg-white">
+        <section id="get-involved" className="py-20 bg-white">
             <div className="max-w-7xl mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -57,29 +57,29 @@ const CTASection = () => {
                         return (
                             <motion.div
                                 key={index}
-                                initial={{ opacity: 0, y: 30 }}
+                                initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                whileHover={{ y: -10 }}
-                                className={`rounded-3xl p-8 bg-gradient-to-br ${card.gradient} border border-gray-100 shadow-soft hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group`}
+                                whileHover={{ y: -5 }}
+                                className={`rounded-3xl p-6 md:p-8 bg-gradient-to-br ${card.gradient} border border-gray-100 shadow-soft hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group`}
                             >
-                                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-white shadow-sm group-hover:scale-110 transition-transform duration-300`}>
-                                    <Icon className={`w-8 h-8 text-${card.color}`} />
+                                <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-5 md:mb-6 bg-white shadow-sm group-hover:scale-110 transition-transform duration-300`}>
+                                    <Icon className={`w-6 h-6 md:w-8 md:h-8 text-${card.color}`} />
                                 </div>
 
-                                <h3 className="text-2xl font-heading font-bold text-dark-navy mb-4">
+                                <h3 className="text-xl md:text-2xl font-heading font-bold text-dark-navy mb-3 md:mb-4">
                                     {card.title}
                                 </h3>
 
-                                <p className="text-medium-gray font-sans mb-8 flex-grow">
+                                <p className="text-sm md:text-base text-medium-gray font-sans mb-6 md:mb-8 flex-grow">
                                     {card.description}
                                 </p>
 
-                                <button className={`w-full py-4 rounded-xl text-white font-heading font-semibold ${card.btnColor} flex items-center justify-center gap-2 transition-colors shadow-md`}>
+                                <motion.button whileTap={{ scale: 0.95 }} className={`w-full py-4 rounded-xl text-white font-heading font-semibold ${card.btnColor} flex items-center justify-center gap-2 transition-colors shadow-md`}>
                                     {card.action}
                                     <ArrowRight className="w-5 h-5" />
-                                </button>
+                                </motion.button>
                             </motion.div>
                         )
                     })}

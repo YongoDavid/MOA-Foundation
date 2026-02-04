@@ -22,13 +22,13 @@ const NewsletterSection = () => {
   }
 
   return (
-    <section id="contact" style={{ scrollMarginTop: '5rem' }} className="py-20 bg-white" ref={ref}>
+    <section id="newsletter" style={{ scrollMarginTop: '5rem' }} className="py-20 bg-white" ref={ref}>
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
           animate={isInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 50, scale: 0.95 }}
           transition={{ duration: 0.8 }}
-          className="gradient-dark rounded-2xl p-12 md:p-16 text-center text-white relative overflow-hidden"
+          className="gradient-dark rounded-2xl p-8 md:p-16 text-center text-white relative overflow-hidden"
         >
           <div className="absolute inset-0 overflow-hidden hidden sm:block">
             {[...Array(20)].map((_, i) => (
@@ -93,7 +93,7 @@ const NewsletterSection = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-3xl md:text-4xl font-heading font-bold mb-6"
+              className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold mb-4 md:mb-6"
             >
               Stay Connected with Our Community
             </motion.h2>
