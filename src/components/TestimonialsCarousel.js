@@ -19,7 +19,7 @@ const testimonials = [
         id: 2,
         name: "Partner Voice",
         role: "Community Partner",
-        location: "Accra, Ghana",
+        location: "Abuja, Nigeria",
         content:
             "Partnering with MOA has allowed us to reach more young people than ever before. Their commitment to integrity and excellence is exactly what Africa needs.",
         rating: 5,
@@ -28,8 +28,8 @@ const testimonials = [
     {
         id: 3,
         name: "Mentor's Perspective",
-        role: "Senior Mentor",
-        location: "Nairobi, Kenya",
+        role: "Mentor",
+        location: "Abuja, Nigeria",
         content:
             "Being a mentor at MOA is incredibly rewarding. Watching these young leaders grow and start their own initiatives gives me hope for the future of our continent.",
         rating: 5,
