@@ -33,6 +33,10 @@ export default function BookNowModal({ isOpen, onClose }) {
 
   // createPortal needs document, which does not exist during server rendering.
   const [mounted, setMounted] = useState(false)
+  // Deliberate setState-in-effect: the standard "am I on the client yet" guard.
+  // The extra render is the point, not an accident — it keeps the server and
+  // first client render identical (both null) so hydration cannot mismatch.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), [])
 
   // Prevent background scrolling and focus first field when modal opens

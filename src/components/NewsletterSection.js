@@ -13,7 +13,11 @@ const NewsletterSection = () => {
   // Particle positions are random, so they must be generated on the client
   // only — computing them during render desyncs server and client HTML.
   const [particles, setParticles] = useState([])
+  // Deliberate setState-in-effect: Math.random() must not run during render or
+  // the server and client emit different HTML and hydration fails. Generating
+  // after mount IS the fix; the extra render is intentional and runs once.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setParticles(
       Array.from({ length: 20 }, () => ({
         dx: Math.random() * 100 - 50,
