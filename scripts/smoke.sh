@@ -38,10 +38,9 @@ contains "page renders"                 "Next.js scaffold live"
 
 echo "-- regressions"
 # Static image imports return an object under Next; a bare {import} in src
-# serialises as "[object Object]". This is the canary for that whole class.
+# serialises as "[object Object]". Vacuously true until Task 4 renders real
+# images, then becomes the live canary for that whole class of regression.
 absent   "no object-serialisation leak"  "[object Object]"
-# Unprocessed Tailwind directives mean PostCSS is not wired up.
-absent   "no raw tailwind directives"    "@tailwind"
 
 echo "-- stylesheet"
 # Turbopack (the default bundler as of Next.js 16) emits CSS under
@@ -59,15 +58,25 @@ else
   else
     fail "brand token royal-purple compiled (Tailwind not processing config)"
   fi
+  # Unprocessed directives in the STYLESHEET mean PostCSS is not wired up.
+  # This must test the CSS, not the HTML — Next never inlines source CSS
+  # text into markup, so checking the page body could never fail.
+  if printf '%s' "$css" | grep -q '@tailwind'; then
+    fail "no raw tailwind directives (PostCSS did not process the layers)"
+  else
+    pass "no raw tailwind directives"
+  fi
   # Under CRA, preflight was emitted twice because index.css and App.css
-  # each imported the Tailwind layers. Exactly one copy is expected now.
+  # each imported the Tailwind layers. Exactly one copy is required — a
+  # regression to 2 is the specific bug this migration set out to fix, so
+  # this gates on equality, not presence.
   # Dev-mode CSS (unminified) keeps a space after the colon; production
   # builds strip it. Tolerate both.
   boxsizing=$(printf '%s' "$css" | grep -Ec 'box-sizing:[[:space:]]*border-box' || true)
-  if [ "$boxsizing" -ge 1 ]; then
-    pass "preflight present (box-sizing occurrences: $boxsizing)"
+  if [ "$boxsizing" -eq 1 ]; then
+    pass "preflight emitted exactly once"
   else
-    fail "preflight present"
+    fail "preflight emitted exactly once (found $boxsizing copies; expected 1)"
   fi
 fi
 
