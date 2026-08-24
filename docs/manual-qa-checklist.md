@@ -4,10 +4,23 @@
 integrity. They cannot cover hydration warnings or interaction. Run this
 list in a real browser before merging, at desktop width and at 390px.
 
-## Console (the highest-value check)
+## Console (the highest-value check — and the ONLY evidence for the Task 5 fix)
 - [ ] Open DevTools console, hard-reload `/`. **Zero errors.**
 - [ ] Specifically: no "Hydration failed", no "server rendered HTML didn't match".
 - [ ] Scroll to the bottom of the page. Still zero errors.
+- [ ] At desktop width, watch the dark newsletter panel near the page bottom:
+      ~20 faint white dots should drift and fade continuously. They appear a
+      moment after load, not instantly. **Zero dots, or a console hydration
+      warning, means the Task 5 fix regressed.**
+
+**This section was never verified by automation.** A hydration mismatch is a
+browser-console warning: `next build` does not surface it, `curl` cannot see
+it, and this project has no test framework by design. The `NewsletterSection`
+particle fix (commit `b6ebb4b`) is correct by construction — `useState([])`
+makes the array empty on both the server render and the first client render,
+so there is nothing to mismatch, and the dots arrive on a later render React
+never compares — but *correct by construction is not the same as observed*.
+A human must read this console once before merge.
 
 ## Donation modal
 - [ ] Header grid icon opens the drawer; heading reads "Donate Here".
