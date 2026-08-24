@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
 import { X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
 import Logo1 from "../Images/Logo1.jpg"
 
 export default function BookNowModal({ isOpen, onClose }) {
@@ -99,7 +100,7 @@ export default function BookNowModal({ isOpen, onClose }) {
             {/* Modal Content */}
             <div className="pt-1">
               <div className="flex items-center justify-center mb-3">
-                <img src={Logo1} alt="MOA Logo" className="h-14 sm:h-32 md:h-40 w-auto" style={{ objectFit: 'contain' }} />
+                <Image src={Logo1} alt="MOA Logo" width={160} height={160} className="h-14 sm:h-32 md:h-40 w-auto" style={{ objectFit: 'contain' }} />
               </div>
               {/* Book Now Form Section */}
               <motion.div

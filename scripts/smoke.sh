@@ -33,8 +33,32 @@ absent() {
 
 echo "Smoke checking $BASE"
 
-echo "-- scaffold"
-contains "page renders"                 "Next.js scaffold live"
+echo "-- sections server-rendered"
+# Copy strings taken verbatim from the components. Apostrophes are avoided
+# deliberately: the source mixes U+2019 (HeroSection) and U+0027
+# (AboutSection), and "&" is HTML-escaped in the served markup.
+contains "hero headline"                "Emerging Leaders for"
+contains "programs heading"             "Aims"
+contains "about heading"                "Future Leaders"
+contains "testimonials heading"         "Voices of Impact"
+contains "cta heading"                  "Get Involved"
+contains "newsletter heading"           "Stay Connected with Our Community"
+contains "foundation name"              "MOSES OF AFRICA MENTORING FOUNDATION"
+contains "mission statement"            "MISSION STATEMENT:"
+
+echo "-- anchor targets the nav depends on"
+contains "anchor #about"                'id="about"'
+contains "anchor #programs"             'id="programs"'
+contains "anchor #community"            'id="community"'
+contains "anchor #get-involved"         'id="get-involved"'
+contains "anchor #newsletter"           'id="newsletter"'
+contains "anchor #contact"              'id="contact"'
+
+echo "-- images"
+contains "logo alt text present"        'alt="MOA Logo"'
+# next/image rewrites srcs through the optimizer; a raw /static/media path
+# would mean the component is still using a bare <img>.
+contains "images routed via optimizer"  "/_next/image"
 
 echo "-- regressions"
 # Static image imports return an object under Next; a bare {import} in src
