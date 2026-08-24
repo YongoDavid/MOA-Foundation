@@ -32,3 +32,8 @@ next-env.d.ts
 # so without this a single `git add -A` commits live service credentials.
 .env
 .env*.local
+
+# IGNORE 
+.claude
+CLAUDE.md
+docs
