@@ -31,6 +31,25 @@ absent() {
   if printf '%s' "$html" | grep -qF -- "$2"; then fail "$1 (found: $2)"; else pass "$1"; fi
 }
 
+# Assert the first URL in the HTML matching a pattern actually resolves to a
+# resource of the expected content-type. Checking that a URL is *referenced*
+# proves nothing — a broken image optimizer still emits the markup.
+# $1 description, $2 grep pattern for the URL, $3 expected content-type prefix
+resolves() {
+  local url status ctype
+  # Cut at the first space so srcset descriptors ("... 1x, ... 2x") are not
+  # swallowed, and unescape &amp; back to & so the query string is valid.
+  url=$(printf '%s' "$html" | grep -o "$2" | head -1 | sed 's/&amp;/\&/g')
+  if [ -z "$url" ]; then fail "$1 (no URL matching $2 in page)"; return; fi
+  status=$(curl -o /dev/null -s -w '%{http_code}' --max-time 20 "$BASE$url")
+  ctype=$(curl -o /dev/null -s -w '%{content_type}' --max-time 20 "$BASE$url")
+  if [ "$status" = "200" ] && case "$ctype" in "$3"*) true ;; *) false ;; esac; then
+    pass "$1 ($status $ctype)"
+  else
+    fail "$1 (got status=$status type=$ctype; expected 200 $3*)"
+  fi
+}
+
 echo "Smoke checking $BASE"
 
 echo "-- sections server-rendered"
@@ -59,6 +78,10 @@ contains "logo alt text present"        'alt="MOA Logo"'
 # next/image rewrites srcs through the optimizer; a raw /static/media path
 # would mean the component is still using a bare <img>.
 contains "images routed via optimizer"  "/_next/image"
+# ...and the optimizer must actually return an image. A missing sharp binary
+# or misconfigured optimizer still emits the markup above while every image
+# on the page is broken, so the reference alone is not evidence.
+resolves "optimizer serves real bytes"  '/_next/image?url=[^" ]*' "image/"
 
 echo "-- regressions"
 # Static image imports return an object under Next; a bare {import} in src
