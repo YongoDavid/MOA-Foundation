@@ -30,6 +30,10 @@ export default function BookNowModal({ isOpen, onClose }) {
 
   const nameRef = useRef(null)
 
+  // createPortal needs document, which does not exist during server rendering.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
   // Prevent background scrolling and focus first field when modal opens
   useEffect(() => {
     if (isOpen) {
@@ -52,6 +56,8 @@ export default function BookNowModal({ isOpen, onClose }) {
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
   }, [isOpen, onClose])
+
+  if (!mounted) return null
 
   return createPortal(
     <AnimatePresence>

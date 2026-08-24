@@ -1,12 +1,31 @@
+import Header from "@/components/Header"
+import HeroSection from "@/components/HeroSection"
+import ProgramsSection from "@/components/ProgramsSection"
+import AboutSection from "@/components/AboutSection"
+import ScrollProgress from "@/components/ScrollProgress"
+import PartnersStrip from "@/components/PartnersStrip"
+import TestimonialsCarousel from "@/components/TestimonialsCarousel"
+import NewsletterSection from "@/components/NewsletterSection"
+import Footer from "@/components/Footer"
+import ScrollToTopButton from "@/components/ScrollToTopButton"
+import CTASection from "@/components/CTASection"
+
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white p-10">
-      <h1 className="font-heading text-3xl font-bold text-dark-navy">
-        Next.js scaffold live
-      </h1>
-      <div className="mt-6 rounded-2xl bg-royal-purple p-6 text-white">
-        Tailwind tokens resolve
-      </div>
-    </main>
+    <div className="min-h-screen bg-white">
+      <ScrollProgress />
+      <Header />
+      <main>
+        <HeroSection />
+        <PartnersStrip />
+        <ProgramsSection />
+        <AboutSection />
+        <TestimonialsCarousel />
+        <CTASection />
+        <NewsletterSection />
+      </main>
+      <Footer />
+      <ScrollToTopButton />
+    </div>
   )
 }
