@@ -98,7 +98,7 @@ contains "title tag"                    "<title>Moses of Africa Mentoring Founda
 contains "description meta"             'name="description"'
 contains "description meta mentions mentorship" 'name="description" content="Moses of Africa Mentoring Foundation identifies and empowers young talent through mentorship'
 contains "canonical link"               'rel="canonical"'
-contains "canonical on prod domain"     "https://mosesofafricafoundation.org"
+contains "canonical on prod domain"     'rel="canonical" href="https://mosesofafricafoundation.org'
 contains "og:title"                     'property="og:title"'
 contains "og:image"                     'property="og:image"'
 contains "twitter:card"                 'name="twitter:card"'
@@ -112,10 +112,29 @@ contains "favicon link"                 'rel="icon"'
 # red, which teaches people to ignore red. So gate it behind an explicit flag:
 #   SMOKE_PROD=1 bash scripts/smoke.sh   # against `next start`
 if [ "${SMOKE_PROD:-0}" = "1" ]; then
-  absent "no localhost in social tags"  'og:image" content="http://localhost'
+  # Positive assertion, not `absent`. An `absent` whose pattern depends on
+  # Next's exact attribute order is vacuous by default: if the emitted markup
+  # ever shifts, it passes forever while telling you nothing.
+  contains "og:image on prod domain"    'content="https://mosesofafricafoundation.org/opengraph-image'
 else
   printf '  skip  no localhost in social tags (dev; use SMOKE_PROD=1 vs next start)\n'
 fi
+
+echo "-- regression guards with no other coverage"
+# commit bc3d229's whole premise is self-hosted fonts. A reintroduced @import
+# would be invisible to every other layer of this safety net.
+absent   "no external font requests"    "fonts.googleapis.com"
+absent   "no external font host"        "fonts.gstatic.com"
+# Hard project constraint: the blog spec's palette must never enter this site.
+# Zero automated coverage before now.
+absent   "no spec-palette violet"       "#6C0FD6"
+absent   "no spec-palette teal"         "#14A38B"
+absent   "no spec-palette amber"        "#F97C1C"
+absent   "no Plus Jakarta Sans"         "Plus Jakarta Sans"
+
+echo "-- file-convention assets actually resolve"
+resolves "favicon resolves"             '/icon[^" ]*\.jpg[^" ]*' "image/"
+resolves "manifest resolves"            '/manifest\.json' "application/"
 
 echo "-- stylesheet"
 # Turbopack (the default bundler as of Next.js 16) emits CSS under
@@ -147,7 +166,11 @@ else
   # this gates on equality, not presence.
   # Dev-mode CSS (unminified) keeps a space after the colon; production
   # builds strip it. Tolerate both.
-  boxsizing=$(printf '%s' "$css" | grep -Ec 'box-sizing:[[:space:]]*border-box' || true)
+  # grep -c counts matching LINES, not occurrences. Production CSS is minified
+  # onto one line, so -c returned 1 whether preflight appeared once or five
+  # times — the single assertion gating the exact bug this migration set out to
+  # fix could not fail under SMOKE_PROD=1. grep -o | wc -l counts occurrences.
+  boxsizing=$(printf '%s' "$css" | grep -oE 'box-sizing:[[:space:]]*border-box' | wc -l | tr -d ' ')
   if [ "$boxsizing" -eq 1 ]; then
     pass "preflight emitted exactly once"
   else

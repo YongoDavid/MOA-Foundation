@@ -26,3 +26,9 @@ yarn-error.log*
 CLAUDE.md
 *.tsbuildinfo
 next-env.d.ts
+
+# Environment — .env.example documents SUPABASE_SERVICE_ROLE_KEY and
+# CLOUDINARY_API_SECRET and invites `cp .env.example .env`. Next loads `.env`,
+# so without this a single `git add -A` commits live service credentials.
+.env
+.env*.local

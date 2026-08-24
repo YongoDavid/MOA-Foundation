@@ -105,6 +105,11 @@ export default function Header() {
                 src={Logo1}
                 alt="MOA Logo"
                 priority
+                // Without `sizes`, next/image offers srcset candidates up to
+                // w=2048 for a logo painted at roughly 27x40 CSS px — and this
+                // one is `priority`, so the browser preloads it ahead of the
+                // hero. Cap the candidate set to what is actually painted.
+                sizes="(max-width: 768px) 48px, 80px"
                 className={`w-auto transition-all duration-300 ${scrolled ? 'h-10 md:h-16' : 'h-12 md:h-20'}`}
                 style={{ objectFit: 'contain' }}
               />

@@ -61,6 +61,24 @@ and 1:1 in the drawer for a file that is actually 2:3, which letterboxed the log
 inside an oversized box. The props are now omitted so Next infers the real size —
 if anyone re-adds them, this is what breaks.
 
+## Gaps nothing automated can cover
+These three were identified in the final branch review as changes with neither
+an automated assertion nor, previously, a checklist item.
+
+- [ ] **CTA card icon colours.** The three "Get Involved" cards must show a
+      purple, a teal and an orange icon. `CTASection.js` composes those class
+      names at runtime (`text-${card.color}`), which Tailwind's scanner cannot
+      see — they only work because `globals.css` hand-writes them. Delete those
+      rules and smoke still passes green while the icons lose their colour.
+- [ ] **First-paint font.** Hard-reload with a cold cache and watch the very
+      first frame: text should appear in the system UI font, then swap to Inter
+      — not in generic Helvetica/Arial. This is the only check on the fallback
+      chain that commit ff3aa96 exists to protect.
+- [ ] **Carousel images on first pass.** Step through the hero and about
+      carousels once each. Only the first hero slide is `priority`; the rest
+      lazy-load, so a slide can show a blank frame the old `<img>` never did.
+      "Advances every 5s" would tick true even with every frame blank.
+
 ## Visual parity
 - [ ] Compare against the pre-migration site side by side. Fonts, colours,
       spacing and image framing are unchanged.

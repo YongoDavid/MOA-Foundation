@@ -14,7 +14,16 @@ const outfit = Outfit({
 })
 
 export const metadata = {
-  metadataBase: new URL("https://mosesofafricafoundation.org"),
+  // .env.example documents NEXT_PUBLIC_SITE_URL as driving canonical and OG
+  // URLs, so it has to actually be read — otherwise every Vercel preview emits
+  // production canonicals and og:urls pointing at the live site. The literal is
+  // the fallback so local runs and a missing var still behave.
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://mosesofafricafoundation.org"
+  ),
+  // public/index.html carried the only <link rel="manifest"> and was deleted
+  // with CRA, so without this the rewritten manifest is referenced by nothing.
+  manifest: "/manifest.json",
   title: {
     default: "Moses of Africa Mentoring Foundation",
     template: "%s · Moses of Africa Mentoring Foundation",
