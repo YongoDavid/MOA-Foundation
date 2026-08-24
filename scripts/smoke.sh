@@ -89,6 +89,24 @@ echo "-- regressions"
 # images, then becomes the live canary for that whole class of regression.
 absent   "no object-serialisation leak"  "[object Object]"
 
+echo "-- document metadata"
+# Anchored to the actual <title> tag / meta content attribute, not a bare
+# substring search: the identical phrase already appears in the rendered
+# About-section body copy, so an unanchored search would pass even with the
+# <head> metadata deleted entirely (verified with a negative control).
+contains "title tag"                    "<title>Moses of Africa Mentoring Foundation</title>"
+contains "description meta"             'name="description"'
+contains "description meta mentions mentorship" 'name="description" content="Moses of Africa Mentoring Foundation identifies and empowers young talent through mentorship'
+contains "canonical link"               'rel="canonical"'
+contains "canonical on prod domain"     "https://mosesofafricafoundation.org"
+contains "og:title"                     'property="og:title"'
+contains "og:image"                     'property="og:image"'
+contains "twitter:card"                 'name="twitter:card"'
+contains "favicon link"                 'rel="icon"'
+# metadataBase must produce absolute URLs; a localhost value here means it
+# was dropped or overridden.
+absent   "no localhost in social tags"  "og:image\" content=\"http://localhost"
+
 echo "-- stylesheet"
 # Turbopack (the default bundler as of Next.js 16) emits CSS under
 # /_next/static/chunks/, not the classic webpack /_next/static/css/ path.
