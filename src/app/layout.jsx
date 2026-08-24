@@ -1,4 +1,17 @@
+import { Inter, Outfit } from "next/font/google"
 import "./globals.css"
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+})
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+})
 
 export const metadata = {
   title: "Moses of Africa Mentoring Foundation",
@@ -7,7 +20,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={`${inter.variable} ${outfit.variable} font-sans`}>
+        {children}
+      </body>
     </html>
   )
 }
