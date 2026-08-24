@@ -36,6 +36,18 @@ list in a real browser before merging, at desktop width and at 390px.
 - [ ] Scroll progress bar fills as the page scrolls.
 - [ ] At 390px, the scroll-to-top button appears after ~300px and returns to top.
 
+## Logo sizing (a real bug once shipped here)
+- [ ] Header logo sits snug against the wordmark — **no empty gap to its right**.
+- [ ] Logo is not squashed or stretched; it is a portrait image (1024×1536).
+- [ ] Logo shrinks smoothly when the header condenses on scroll.
+- [ ] Logo in the donation drawer is the same shape as the header's, just larger.
+
+Why this is called out: hardcoded `width`/`height` props on `next/image` override
+the true dimensions of a static import. They were once set to 2:1 in the header
+and 1:1 in the drawer for a file that is actually 2:3, which letterboxed the logo
+inside an oversized box. The props are now omitted so Next infers the real size —
+if anyone re-adds them, this is what breaks.
+
 ## Visual parity
 - [ ] Compare against the pre-migration site side by side. Fonts, colours,
       spacing and image framing are unchanged.
