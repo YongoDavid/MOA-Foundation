@@ -41,7 +41,17 @@ resolves() {
   # swallowed, and unescape &amp; back to & so the query string is valid.
   url=$(printf '%s' "$html" | grep -o "$2" | head -1 | sed 's/&amp;/\&/g')
   if [ -z "$url" ]; then fail "$1 (no URL matching $2 in page)"; return; fi
+  # One retry. Against a cold `next dev`, the first request for an optimized
+  # image can race route compilation and fail transiently — observed once while
+  # adding the blog routes. A single retry absorbs that without masking a
+  # genuinely broken optimizer, which fails both attempts. A flaky assertion
+  # teaches people to re-run rather than investigate, which is nearly as
+  # corrosive as one that cannot fail.
   status=$(curl -o /dev/null -s -w '%{http_code}' --max-time 20 "$BASE$url")
+  if [ "$status" != "200" ]; then
+    sleep 2
+    status=$(curl -o /dev/null -s -w '%{http_code}' --max-time 20 "$BASE$url")
+  fi
   ctype=$(curl -o /dev/null -s -w '%{content_type}' --max-time 20 "$BASE$url")
   if [ "$status" = "200" ] && case "$ctype" in "$3"*) true ;; *) false ;; esac; then
     pass "$1 ($status $ctype)"
