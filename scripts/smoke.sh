@@ -125,12 +125,16 @@ echo "-- regression guards with no other coverage"
 # would be invisible to every other layer of this safety net.
 absent   "no external font requests"    "fonts.googleapis.com"
 absent   "no external font host"        "fonts.gstatic.com"
-# Hard project constraint: the blog spec's palette must never enter this site.
-# Zero automated coverage before now.
-absent   "no spec-palette violet"       "#6C0FD6"
-absent   "no spec-palette teal"         "#14A38B"
-absent   "no spec-palette amber"        "#F97C1C"
-absent   "no Plus Jakarta Sans"         "Plus Jakarta Sans"
+# RETIRED 25 August 2026. Four assertions here previously required that
+# #6C0FD6, #14A38B, #F97C1C and "Plus Jakarta Sans" never appear, enforcing the
+# 20 August decision to render the blog in the site's own tokens. That decision
+# was reversed: the blog prototype is built to the mockup palette so it matches
+# what the client has already been shown. The assertions were deleted rather
+# than left failing — a permanently red check is how a safety net stops being
+# trusted. Reverting the palette means restoring these four lines.
+#
+# `brand token royal-purple compiled` below is deliberately kept: the homepage
+# still uses site tokens, so it now guards the two palettes coexisting.
 
 echo "-- file-convention assets actually resolve"
 resolves "favicon resolves"             '/icon[^" ]*\.jpg[^" ]*' "image/"
