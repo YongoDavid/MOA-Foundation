@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Mail, ArrowRight, Sparkles } from "lucide-react"
 import { motion, useInView } from "framer-motion"
 
@@ -9,6 +9,26 @@ const NewsletterSection = () => {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+
+  // Particle positions are random, so they must be generated on the client
+  // only — computing them during render desyncs server and client HTML.
+  const [particles, setParticles] = useState([])
+  // Deliberate setState-in-effect: Math.random() must not run during render or
+  // the server and client emit different HTML and hydration fails. Generating
+  // after mount IS the fix; the extra render is intentional and runs once.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setParticles(
+      Array.from({ length: 20 }, () => ({
+        dx: Math.random() * 100 - 50,
+        dy: Math.random() * 100 - 50,
+        duration: Math.random() * 3 + 2,
+        delay: Math.random() * 2,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+      }))
+    )
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -31,24 +51,21 @@ const NewsletterSection = () => {
           className="gradient-dark rounded-2xl p-8 md:p-16 text-center text-white relative overflow-hidden"
         >
           <div className="absolute inset-0 overflow-hidden hidden sm:block">
-            {[...Array(20)].map((_, i) => (
+            {particles.map((p, i) => (
               <motion.div
                 key={i}
                 className="absolute w-2 h-2 bg-white/10 rounded-full"
                 animate={{
-                  x: [0, Math.random() * 100 - 50],
-                  y: [0, Math.random() * 100 - 50],
+                  x: [0, p.dx],
+                  y: [0, p.dy],
                   opacity: [0, 1, 0],
                 }}
                 transition={{
-                  duration: Math.random() * 3 + 2,
+                  duration: p.duration,
                   repeat: Number.POSITIVE_INFINITY,
-                  delay: Math.random() * 2,
+                  delay: p.delay,
                 }}
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                }}
+                style={{ left: p.left, top: p.top }}
               />
             ))}
           </div>

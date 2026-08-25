@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Menu, X, Grid3X3 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
 import BookNowModal from "./book-now-modal"
 import Logo1 from "../Images/Logo1.jpg"
 
@@ -96,7 +97,22 @@ export default function Header() {
 
             {/* Logo (center on mobile, left on md+) */}
             <motion.div whileHover={{ scale: 1.05 }} className="order-2 md:order-1 flex-1 flex items-center justify-center md:justify-start">
-              <motion.img src={Logo1} alt="MOA Logo" className={`w-auto transition-all duration-300 ${scrolled ? 'h-10 md:h-16' : 'h-12 md:h-20'}`} style={{ objectFit: 'contain' }} />
+              {/* No width/height: Logo1 is a static import, so next/image reads
+                  the real intrinsic size (1024x1536) at build time. Hardcoding
+                  dimensions here would override that with a wrong aspect ratio
+                  and letterbox the logo inside an oversized box. */}
+              <Image
+                src={Logo1}
+                alt="MOA Logo"
+                priority
+                // Without `sizes`, next/image offers srcset candidates up to
+                // w=2048 for a logo painted at roughly 27x40 CSS px — and this
+                // one is `priority`, so the browser preloads it ahead of the
+                // hero. Cap the candidate set to what is actually painted.
+                sizes="(max-width: 768px) 48px, 80px"
+                className={`w-auto transition-all duration-300 ${scrolled ? 'h-10 md:h-16' : 'h-12 md:h-20'}`}
+                style={{ objectFit: 'contain' }}
+              />
               <motion.div className="ml-2 hidden md:flex flex-col">
                 <div className="text-sm md:text-base font-heading font-bold text-dark-navy">MOSES OF AFRICA MENTORING FOUNDATION</div>
               </motion.div>

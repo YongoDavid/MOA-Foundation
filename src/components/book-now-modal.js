@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
 import { X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
 import Logo1 from "../Images/Logo1.jpg"
 
 export default function BookNowModal({ isOpen, onClose }) {
@@ -30,6 +31,14 @@ export default function BookNowModal({ isOpen, onClose }) {
 
   const nameRef = useRef(null)
 
+  // createPortal needs document, which does not exist during server rendering.
+  const [mounted, setMounted] = useState(false)
+  // Deliberate setState-in-effect: the standard "am I on the client yet" guard.
+  // The extra render is the point, not an accident — it keeps the server and
+  // first client render identical (both null) so hydration cannot mismatch.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setMounted(true), [])
+
   // Prevent background scrolling and focus first field when modal opens
   useEffect(() => {
     if (isOpen) {
@@ -52,6 +61,8 @@ export default function BookNowModal({ isOpen, onClose }) {
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
   }, [isOpen, onClose])
+
+  if (!mounted) return null
 
   return createPortal(
     <AnimatePresence>
@@ -93,7 +104,8 @@ export default function BookNowModal({ isOpen, onClose }) {
             {/* Modal Content */}
             <div className="pt-1">
               <div className="flex items-center justify-center mb-3">
-                <img src={Logo1} alt="MOA Logo" className="h-14 sm:h-32 md:h-40 w-auto" style={{ objectFit: 'contain' }} />
+                {/* No width/height — static import supplies the real 1024x1536. */}
+                <Image src={Logo1} alt="MOA Logo" sizes="(max-width: 640px) 64px, 176px" className="h-14 sm:h-32 md:h-40 w-auto" style={{ objectFit: 'contain' }} />
               </div>
               {/* Book Now Form Section */}
               <motion.div

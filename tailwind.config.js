@@ -1,11 +1,28 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{html,js,jsx,ts,tsx}", "./public/index.html"],
+  content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
-        heading: ["Outfit", "sans-serif"],
+        // The system stack after the webfont mirrors what src/index.css had on
+        // `body` before the migration. next/font swaps Inter in once loaded, so
+        // this chain is what renders during the swap window — dropping it to a
+        // bare `sans-serif` would be a visible change on first paint.
+        sans: [
+          "var(--font-inter)",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Oxygen",
+          "Ubuntu",
+          "Cantarell",
+          "Fira Sans",
+          "Droid Sans",
+          "Helvetica Neue",
+          "sans-serif",
+        ],
+        heading: ["var(--font-outfit)", "sans-serif"],
       },
       colors: {
         "royal-purple": "#6d28d9",

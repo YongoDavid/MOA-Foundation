@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { ChevronUp } from "lucide-react"
@@ -22,8 +24,12 @@ export default function ScrollToTopButton({ threshold = 300, minContentRatio = 1
     return () => window.removeEventListener("resize", checkContent)
   }, [minContentRatio])
 
+  // Deliberate setState-in-effect: visibility derives from scroll position and
+  // measured document height, neither of which exists during render or on the
+  // server. Pre-existing pattern, unchanged by the Next.js migration.
   useEffect(() => {
     if (!enabled) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(false)
       return
     }

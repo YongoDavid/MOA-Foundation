@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Users, BookOpen, Globe, Heart, Lightbulb, Target, Star, Sparkles } from "lucide-react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
+import Image from "next/image";
 import Image4 from "../Images/MOA4.jpg";
 import Image5 from "../Images/MOA5.jpg";
 import Image6 from "../Images/MOA6.jpg";
@@ -201,10 +202,12 @@ const AboutSection = () => {
                     className="absolute inset-0"
                   >
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
-                    <img
-                      src={aboutImages[currentImageIndex].src || "/placeholder.svg"}
+                    <Image
+                      src={aboutImages[currentImageIndex].src}
                       alt={aboutImages[currentImageIndex].alt}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover"
                     />
                   </motion.div>
                 </AnimatePresence>

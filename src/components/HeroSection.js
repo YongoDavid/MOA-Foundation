@@ -4,6 +4,7 @@ import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 // import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Image0 from "../Images/MOA.jpg";
 import Image1 from "../Images/MOA1.jpg";
 import Image2 from "../Images/MOA2.jpg";
@@ -77,14 +78,21 @@ export default function HeroSection() {
           >
             {/* Reduced gradient opacity slightly for cleaner look, but kept dark enough for text */}
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30 z-10" />
-            <motion.img
+            <motion.div
               initial={{ scale: 1 }}
               animate={{ scale: 1.1 }}
               transition={{ duration: 20, ease: "linear", repeat: 0 }}
-              src={heroImages[currentImage].src || "/placeholder.svg"}
-              alt={heroImages[currentImage].alt}
-              className="w-full h-full object-cover object-center"
-            />
+              className="absolute inset-0"
+            >
+              <Image
+                src={heroImages[currentImage].src}
+                alt={heroImages[currentImage].alt}
+                fill
+                priority={currentImage === 0}
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+            </motion.div>
           </motion.div>
         </AnimatePresence>
 
