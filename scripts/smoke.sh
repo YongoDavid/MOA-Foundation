@@ -13,6 +13,30 @@ set -uo pipefail
 BASE="${1:-http://localhost:3010}"
 FAILURES=0
 
+# Wait for the server to be genuinely ready, rather than sleeping a guessed
+# number of seconds.
+#
+# Against a fresh `next dev` the first request triggers route compilation, and
+# the stylesheet it references can still be building — which produced
+# intermittent false failures on the CSS assertions (1 run in 4 from a cold
+# start). Bolting a retry onto each check patches symptoms one at a time; the
+# actual precondition is "the page and its stylesheet are both compiled", so
+# poll for exactly that. Against an already-warm or production server the first
+# probe succeeds and this costs one extra request.
+ready=0
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  probe=$(curl -fsS --max-time 30 "$BASE/" 2>/dev/null) || { sleep 2; continue; }
+  probe_css=$(grep -o '/_next/static/\(css\|chunks\)/[^"]*\.css' <<< "$probe" | head -1)
+  if [ -n "$probe_css" ] && curl -fsS --max-time 20 "$BASE$probe_css" 2>/dev/null | grep -q '.'; then
+    ready=1
+    break
+  fi
+  sleep 2
+done
+if [ "$ready" -ne 1 ]; then
+  echo "WARN: server did not report a compiled stylesheet within ~20s — results may be unreliable"
+fi
+
 html=$(curl -fsS --max-time 20 "$BASE/") || {
   echo "FATAL: could not fetch $BASE/ — is the server running?"
   exit 1
@@ -21,14 +45,26 @@ html=$(curl -fsS --max-time 20 "$BASE/") || {
 pass() { printf '  ok    %s\n' "$1"; }
 fail() { printf '  FAIL  %s\n' "$1"; FAILURES=$((FAILURES + 1)); }
 
+# NOTE ON `grep -q` AND `pipefail` — the reason these use here-strings.
+#
+# `printf '%s' "$big" | grep -q pat` is a trap under `set -o pipefail`.
+# grep -q exits the instant it matches, closing the pipe; printf, still
+# writing, takes SIGPIPE and exits 141; pipefail then makes the whole pipeline
+# non-zero even though the match SUCCEEDED. Whether printf has finished
+# writing first is a race, so the assertion passes or fails at random.
+#
+# This was silently corrupting results — failures blamed on "cold dev server
+# flakiness" were actually this. Here-strings involve no pipeline, so there is
+# no SIGPIPE and no pipefail interaction.
+
 # Assert a literal string is present in the served HTML.
 contains() {
-  if printf '%s' "$html" | grep -qF -- "$2"; then pass "$1"; else fail "$1 (missing: $2)"; fi
+  if grep -qF -- "$2" <<< "$html"; then pass "$1"; else fail "$1 (missing: $2)"; fi
 }
 
 # Assert a literal string is ABSENT from the served HTML.
 absent() {
-  if printf '%s' "$html" | grep -qF -- "$2"; then fail "$1 (found: $2)"; else pass "$1"; fi
+  if grep -qF -- "$2" <<< "$html"; then fail "$1 (found: $2)"; else pass "$1"; fi
 }
 
 # Assert the first URL in the HTML matching a pattern actually resolves to a
@@ -39,7 +75,7 @@ resolves() {
   local url status ctype
   # Cut at the first space so srcset descriptors ("... 1x, ... 2x") are not
   # swallowed, and unescape &amp; back to & so the query string is valid.
-  url=$(printf '%s' "$html" | grep -o "$2" | head -1 | sed 's/&amp;/\&/g')
+  url=$(grep -o "$2" <<< "$html" | head -1 | sed 's/&amp;/\&/g')
   if [ -z "$url" ]; then fail "$1 (no URL matching $2 in page)"; return; fi
   # One retry. Against a cold `next dev`, the first request for an optimized
   # image can race route compilation and fail transiently — observed once while
@@ -153,38 +189,43 @@ resolves "manifest resolves"            '/manifest\.json' "application/"
 echo "-- stylesheet"
 # Turbopack (the default bundler as of Next.js 16) emits CSS under
 # /_next/static/chunks/, not the classic webpack /_next/static/css/ path.
-# Accept either so this check tracks "is a stylesheet linked at all", not
-# "which bundler produced it".
-css_path=$(printf '%s' "$html" | grep -o '/_next/static/\(css\|chunks\)/[^"]*\.css' | head -1)
-if [ -z "$css_path" ]; then
+#
+# ALL linked stylesheets are concatenated before asserting, not just the first.
+# Once the blog routes landed the homepage began emitting more than one chunk,
+# and their order varies between runs — so `head -1` picked a different file
+# each time and the brand-token check failed roughly half the time. That looked
+# like flakiness; it was the assertion reading the wrong file.
+css_paths=$(grep -o '/_next/static/\(css\|chunks\)/[^"]*\.css' <<< "$html" | sort -u)
+if [ -z "$css_paths" ]; then
   fail "stylesheet linked"
 else
-  pass "stylesheet linked"
-  css=$(curl -fsS --max-time 20 "$BASE$css_path") || css=""
-  if printf '%s' "$css" | grep -q '6d28d9'; then
+  pass "stylesheet linked ($(grep -c . <<< "$css_paths") file(s))"
+  css=""
+  for cp in $css_paths; do
+    css="$css$(curl -fsS --max-time 20 "$BASE$cp" 2>/dev/null)"
+  done
+
+  if grep -q '6d28d9' <<< "$css"; then
     pass "brand token royal-purple compiled"
   else
     fail "brand token royal-purple compiled (Tailwind not processing config)"
   fi
+
   # Unprocessed directives in the STYLESHEET mean PostCSS is not wired up.
-  # This must test the CSS, not the HTML — Next never inlines source CSS
-  # text into markup, so checking the page body could never fail.
-  if printf '%s' "$css" | grep -q '@tailwind'; then
+  # This must test the CSS, not the HTML — Next never inlines source CSS text
+  # into markup, so checking the page body could never fail.
+  if grep -q '@tailwind' <<< "$css"; then
     fail "no raw tailwind directives (PostCSS did not process the layers)"
   else
     pass "no raw tailwind directives"
   fi
-  # Under CRA, preflight was emitted twice because index.css and App.css
-  # each imported the Tailwind layers. Exactly one copy is required — a
-  # regression to 2 is the specific bug this migration set out to fix, so
-  # this gates on equality, not presence.
-  # Dev-mode CSS (unminified) keeps a space after the colon; production
-  # builds strip it. Tolerate both.
-  # grep -c counts matching LINES, not occurrences. Production CSS is minified
-  # onto one line, so -c returned 1 whether preflight appeared once or five
-  # times — the single assertion gating the exact bug this migration set out to
-  # fix could not fail under SMOKE_PROD=1. grep -o | wc -l counts occurrences.
-  boxsizing=$(printf '%s' "$css" | grep -oE 'box-sizing:[[:space:]]*border-box' | wc -l | tr -d ' ')
+
+  # Under CRA, preflight was emitted twice because index.css and App.css each
+  # imported the Tailwind layers. Exactly one copy is required — a regression
+  # to 2 is the specific bug this migration set out to fix, so this gates on
+  # equality, not presence. grep -c counts LINES, and minified production CSS
+  # is one line, so occurrences must be counted with grep -o | wc -l.
+  boxsizing=$(grep -oE 'box-sizing:[[:space:]]*border-box' <<< "$css" | wc -l | tr -d ' ')
   if [ "$boxsizing" -eq 1 ]; then
     pass "preflight emitted exactly once"
   else
