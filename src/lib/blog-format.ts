@@ -52,3 +52,8 @@ export function mediaLabel(
   if (type === "story") return "Story · No photos"
   return null
 }
+
+/** "1 comment" / "3 comments" — avoids the "1 comments" a client will notice. */
+export function plural(count: number, singular: string, pluralForm?: string): string {
+  return `${count} ${count === 1 ? singular : (pluralForm ?? `${singular}s`)}`
+}

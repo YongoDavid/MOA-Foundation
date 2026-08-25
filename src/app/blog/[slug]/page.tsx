@@ -1,8 +1,9 @@
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { getPost, getPosts } from "@/lib/blog-fixtures"
+import { getComments, getPost, getPosts } from "@/lib/blog-fixtures"
 import PostBody from "@/components/blog/PostBody"
 import PostHeader from "@/components/blog/PostHeader"
+import CommentThread from "@/components/blog/CommentThread"
 
 type Params = { slug: string }
 
@@ -87,6 +88,8 @@ export default async function PostPage({
             ))}
           </div>
         ) : null}
+
+        <CommentThread postSlug={post.slug} comments={getComments(post.slug)} />
       </article>
 
       <div className="h-[46px]" />

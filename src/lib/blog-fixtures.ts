@@ -29,7 +29,7 @@ function media(img: StaticImageDataLike, alt: string): MediaItem {
   return { url: img, alt, width: img.width, height: img.height }
 }
 
-export const POSTS: Post[] = [
+const RAW_POSTS: Omit<Post, "commentCount">[] = [
   {
     slug: "embassy-of-kuwait-youth-education-partnership",
     title:
@@ -49,7 +49,6 @@ export const POSTS: Post[] = [
     mediaCount: 18,
     tags: ["partnerships", "scholarships", "abuja"],
     featured: true,
-    commentCount: 24,
     blocks: [
       {
         kind: "paragraph",
@@ -98,7 +97,6 @@ export const POSTS: Post[] = [
     mediaCount: 12,
     tags: ["mentorship", "cohort-4", "abuja"],
     featured: false,
-    commentCount: 12,
     blocks: [
       {
         kind: "paragraph",
@@ -131,7 +129,6 @@ export const POSTS: Post[] = [
     videoDuration: "2:41",
     tags: ["mentorship", "summit"],
     featured: false,
-    commentCount: 31,
     blocks: [
       {
         kind: "paragraph",
@@ -160,7 +157,6 @@ export const POSTS: Post[] = [
     mediaCount: 8,
     tags: ["education", "nasarawa", "enrolment"],
     featured: false,
-    commentCount: 7,
     blocks: [
       {
         kind: "paragraph",
@@ -192,7 +188,6 @@ export const POSTS: Post[] = [
     mediaCount: 9,
     tags: ["outreach", "kaduna"],
     featured: false,
-    commentCount: 5,
     blocks: [
       {
         kind: "paragraph",
@@ -220,7 +215,6 @@ export const POSTS: Post[] = [
     videoDuration: "5:12",
     tags: ["mentorship", "stories"],
     featured: false,
-    commentCount: 9,
     blocks: [
       {
         kind: "paragraph",
@@ -248,7 +242,6 @@ export const POSTS: Post[] = [
     readTime: 7,
     tags: ["education", "programme-design"],
     featured: false,
-    commentCount: 3,
     blocks: [
       {
         kind: "paragraph",
@@ -314,7 +307,62 @@ export const COMMENTS: Comment[] = [
     createdAt: "2026-07-29T11:15:00Z",
     likeCount: 2,
   },
+  {
+    id: "c5",
+    postSlug: "120-children-return-to-class-nasarawa",
+    parentId: "c4",
+    name: "Dr. E. Musa",
+    isStaff: true,
+    body: "It is, for families still meeting the criteria at the end of term. We review each case with the school.",
+    createdAt: "2026-07-29T13:02:00Z",
+    likeCount: 4,
+  },
+  {
+    id: "c6",
+    postSlug: "cohort-4-mentors-meet-mentees-abuja",
+    parentId: null,
+    name: "Tunde A.",
+    isStaff: false,
+    body: "I mentored in Cohort 2. Happy to speak to any new mentor who wants to know what the first month is actually like.",
+    createdAt: "2026-08-10T08:30:00Z",
+    likeCount: 7,
+  },
+  {
+    id: "c7",
+    postSlug: "leadership-summit-highlights",
+    parentId: null,
+    name: "Chidera E.",
+    isStaff: false,
+    body: "The panel on public speaking was the most useful session I have attended. Will the slides be shared?",
+    createdAt: "2026-08-03T17:45:00Z",
+    likeCount: 5,
+  },
+  {
+    id: "c8",
+    postSlug: "three-years-mentoring-secondary-schools",
+    parentId: null,
+    name: "Amaka O.",
+    isStaff: false,
+    body: "The point about consistency beating intensity matches what we see in our own programme. Thank you for publishing the things that did not work.",
+    createdAt: "2026-07-06T10:12:00Z",
+    likeCount: 9,
+  },
 ]
+
+/**
+ * Comment totals are DERIVED, not stored. An earlier revision hardcoded
+ * `commentCount: 24` on a post carrying three fixture comments, which made the
+ * card meta and the post heading contradict each other. Deriving it means the
+ * two can never drift.
+ */
+function withCounts(post: Omit<Post, "commentCount">): Post {
+  return {
+    ...post,
+    commentCount: COMMENTS.filter((c) => c.postSlug === post.slug).length,
+  }
+}
+
+export const POSTS: Post[] = RAW_POSTS.map(withCounts)
 
 /** Published posts, newest first. */
 export function getPosts(): Post[] {

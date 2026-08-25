@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import type { Post } from "@/lib/blog-types"
 import { CATEGORIES } from "@/lib/blog-types"
-import { formatDate, mediaLabel } from "@/lib/blog-format"
+import { formatDate, mediaLabel, plural } from "@/lib/blog-format"
 import PlayBadge from "./PlayBadge"
 
 // The three-item column beside the featured post, mockup 1a.
@@ -73,8 +73,8 @@ export default function RecentList({ posts }: { posts: Post[] }) {
                 className="mt-2 text-[11.5px] font-semibold leading-none"
                 style={{ color: "var(--blog-ink-400)" }}
               >
-                {formatDate(post.publishedAt, "long")} · {post.commentCount}{" "}
-                comments
+                {formatDate(post.publishedAt, "long")} ·{" "}
+                {plural(post.commentCount, "comment")}
               </div>
             </div>
           </article>

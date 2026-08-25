@@ -1,7 +1,7 @@
 import Link from "next/link"
 import type { Post } from "@/lib/blog-types"
 import { CATEGORIES } from "@/lib/blog-types"
-import { formatDate, initials } from "@/lib/blog-format"
+import { formatDate, initials, plural } from "@/lib/blog-format"
 import MediaBadge from "./MediaBadge"
 
 // Post header, mockup 1b: breadcrumb, chips, title, author row with
@@ -72,7 +72,7 @@ export default function PostHeader({ post }: { post: Post }) {
             >
               {formatDate(post.publishedAt, "long")} · {post.readTime} min read
               {" · "}
-              {post.commentCount} comments
+              {plural(post.commentCount, "comment")}
             </div>
           </div>
 
