@@ -233,6 +233,74 @@ else
   fi
 fi
 
+echo "-- blog routes"
+# The blog is server-rendered from fixtures. These fetch their own pages, so
+# they use a local variable rather than the shared $html.
+blog=$(curl -fsS --max-time 20 "$BASE/blog" 2>/dev/null) || blog=""
+if [ -z "$blog" ]; then
+  fail "/blog responds"
+else
+  pass "/blog responds"
+  # Strip React's comment markers first: {value} interpolation serialises as
+  # "+<!-- -->15", so a naive search for rendered text finds nothing.
+  blog_txt=$(sed 's/<!-- -->//g' <<< "$blog")
+  if grep -qF 'Stories &amp; Activities' <<< "$blog_txt"; then
+    pass "blog index heading server-rendered"
+  else
+    fail "blog index heading server-rendered"
+  fi
+  if grep -qF 'Courtesy visit to the Embassy of Kuwait' <<< "$blog_txt"; then
+    pass "featured post server-rendered"
+  else
+    fail "featured post server-rendered"
+  fi
+  if grep -qF 'Filter posts by category' <<< "$blog_txt"; then
+    pass "category filter present"
+  else
+    fail "category filter present"
+  fi
+fi
+
+post=$(curl -fsS --max-time 20 "$BASE/blog/embassy-of-kuwait-youth-education-partnership" 2>/dev/null) || post=""
+if [ -z "$post" ]; then
+  fail "single post responds"
+else
+  pass "single post responds"
+  post_txt=$(sed 's/<!-- -->//g' <<< "$post")
+  # Body copy in the initial HTML is the whole point of server rendering it.
+  if grep -qF 'Embassy of the State of Kuwait in Abuja' <<< "$post_txt"; then
+    pass "post body server-rendered"
+  else
+    fail "post body server-rendered"
+  fi
+  if grep -qF 'Be kind — our team removes abuse' <<< "$post_txt"; then
+    pass "comment composer present"
+  else
+    fail "comment composer present"
+  fi
+  # Spec §8: staff Delete must be ABSENT from the public DOM, not hidden.
+  # There is no auth in the prototype, so it must never appear.
+  if grep -qE '>[[:space:]]*Delete[[:space:]]*<' <<< "$post_txt"; then
+    fail "no staff Delete in public DOM (spec §8)"
+  else
+    pass "no staff Delete in public DOM (spec §8)"
+  fi
+fi
+
+cat_status=$(curl -o /dev/null -s -w '%{http_code}' --max-time 20 "$BASE/blog/category/mentorship")
+if [ "$cat_status" = "200" ]; then
+  pass "category route responds ($cat_status)"
+else
+  fail "category route responds (got $cat_status)"
+fi
+# An unknown category must 404, not render an empty list implying it exists.
+bad_status=$(curl -o /dev/null -s -w '%{http_code}' --max-time 20 "$BASE/blog/category/not-a-real-category")
+if [ "$bad_status" = "404" ]; then
+  pass "unknown category 404s ($bad_status)"
+else
+  fail "unknown category 404s (got $bad_status)"
+fi
+
 echo
 if [ "$FAILURES" -eq 0 ]; then
   echo "PASS — all checks green"

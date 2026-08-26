@@ -36,7 +36,7 @@ export default function RecentList({ posts }: { posts: Post[] }) {
             }
           >
             <div
-              className="relative h-[88px] w-[120px] flex-none overflow-hidden rounded-xl"
+              className="relative h-[76px] w-[96px] flex-none overflow-hidden rounded-[11px] md:h-[88px] md:w-[120px] md:rounded-xl"
               style={{ background: "var(--blog-media-empty)" }}
             >
               {post.cover ? (
@@ -44,7 +44,7 @@ export default function RecentList({ posts }: { posts: Post[] }) {
                   src={post.cover.url as string}
                   alt={post.cover.alt}
                   fill
-                  sizes="120px"
+                  sizes="(max-width: 768px) 96px, 120px"
                   className="object-cover"
                 />
               ) : null}
@@ -66,7 +66,7 @@ export default function RecentList({ posts }: { posts: Post[] }) {
               >
                 {eyebrow}
               </div>
-              <h3 className="text-[15px] font-bold leading-[1.35]">
+              <h3 className="text-[14px] font-bold leading-[1.35] md:text-[15px]">
                 <Link href={`/blog/${post.slug}`}>{post.title}</Link>
               </h3>
               <div

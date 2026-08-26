@@ -22,39 +22,57 @@ export default function FeaturedPost({ post }: { post: Post }) {
   })
 
   return (
-    <article
-      className="blog-card relative min-h-[320px] overflow-hidden rounded-[18px]"
-      style={{ background: "var(--blog-ink-900)" }}
-    >
-      {post.cover ? (
-        <Image
-          src={post.cover.url as string}
-          alt={post.cover.alt}
-          fill
-          priority
-          sizes="(max-width: 1024px) 100vw, 60vw"
-          className="object-cover"
-        />
-      ) : null}
-
-      {/* Scrim — decorative, must not intercept the card's click (spec §11). */}
+    // Mockup 1e: below md the hero restructures rather than merely shrinking —
+    // a 190px image with the title BENEATH it in ink, instead of white text
+    // overlaid on a scrim. One DOM structure, repositioned by breakpoint, so
+    // there is no duplicated heading for screen readers to read twice.
+    <article className="blog-card md:relative md:min-h-[320px] md:overflow-hidden md:rounded-[18px]">
       <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(15,22,38,0) 38%, rgba(15,22,38,.86) 100%)",
-        }}
-      />
+        className="relative h-[190px] overflow-hidden rounded-[14px] md:absolute md:inset-0 md:h-auto md:rounded-[18px]"
+        style={{ background: "var(--blog-ink-900)" }}
+      >
+        {post.cover ? (
+          <Image
+            src={post.cover.url as string}
+            alt={post.cover.alt}
+            fill
+            priority
+            sizes="(max-width: 1024px) 100vw, 60vw"
+            className="object-cover"
+          />
+        ) : null}
 
-      {post.type === "video" ? (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <PlayBadge size={66} />
-        </div>
-      ) : null}
+        {/* Scrim is only meaningful behind overlaid text, so desktop only. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 hidden md:block"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(15,22,38,0) 38%, rgba(15,22,38,.86) 100%)",
+          }}
+        />
 
-      <div className="pointer-events-none absolute inset-x-[26px] bottom-6">
-        <div className="mb-3 flex flex-wrap gap-2">
+        {/* On mobile the badge sits on the image; on desktop it joins the
+            overlaid text block below. */}
+        {badge ? (
+          <div className="absolute left-3 top-3 md:hidden">
+            <MediaBadge
+              kind={post.type}
+              count={post.mediaCount}
+              duration={post.videoDuration}
+            />
+          </div>
+        ) : null}
+
+        {post.type === "video" ? (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <PlayBadge size={66} />
+          </div>
+        ) : null}
+      </div>
+
+      <div className="mt-[13px] md:pointer-events-none md:absolute md:inset-x-[26px] md:bottom-6 md:mt-0">
+        <div className="mb-3 hidden flex-wrap gap-2 md:flex">
           {badge ? (
             <MediaBadge
               kind={post.type}
@@ -70,16 +88,15 @@ export default function FeaturedPost({ post }: { post: Post }) {
           </span>
         </div>
 
-        <h2 className="m-0 mb-[10px] max-w-[520px] text-[27px] font-extrabold leading-[1.2] tracking-[-.015em] text-white">
-          {/* pointer-events restored on the anchor itself so it stays focusable */}
-          <Link href={`/blog/${post.slug}`} className="pointer-events-auto">
+        <h2 className="m-0 mb-[9px] max-w-[520px] text-[19px] font-extrabold leading-[1.28] tracking-[-.01em] md:mb-[10px] md:text-[27px] md:leading-[1.2] md:tracking-[-.015em] md:text-white">
+          <Link href={`/blog/${post.slug}`} className="md:pointer-events-auto">
             {post.title}
           </Link>
         </h2>
 
         <div
-          className="text-[12px] font-semibold leading-none"
-          style={{ color: "rgba(255,255,255,.72)" }}
+          className="text-[11.5px] font-semibold leading-none md:text-[12px] md:!text-white/70"
+          style={{ color: "var(--blog-ink-400)" }}
         >
           {post.author} · {formatDate(post.publishedAt, "long")} ·{" "}
           {post.readTime} min read

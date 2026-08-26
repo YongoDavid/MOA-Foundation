@@ -107,3 +107,57 @@ an automated assertion nor, previously, a checklist item.
 - [x] Compare against the pre-migration site side by side. Fonts, colours,
       spacing and image framing are unchanged.
 - [x] Favicon shows the MOA logo in the browser tab.
+
+
+---
+
+# Blog prototype — manual checks
+
+Added 26 August 2026 with the blog prototype (Plan 2). `scripts/smoke.sh` now
+covers the blog's server-rendered output — routes, headings, body copy, the
+composer, the §8 Delete guard, and category 404s. Everything below is what it
+structurally cannot reach.
+
+## Interaction the smoke script cannot see
+- [ ] **Lightbox.** On a gallery post, click a photo. It opens; arrow keys move
+      between photos; Escape closes it; focus returns to the tile you clicked.
+      Tab cycles inside the dialog and never escapes to the page behind.
+- [ ] **Gallery overflow.** The fourth tile reads `+15` and opens the lightbox.
+- [ ] **Comments.** Post one. It appears instantly at the top. **Refresh — it
+      disappears.** That is correct prototype behaviour, and the violet note
+      above the thread says so.
+- [ ] **Comment validation.** Submit with an empty name: an inline error
+      appears and your text is NOT discarded.
+- [ ] **Category chips.** Each navigates to a real URL; the active chip is
+      violet-filled; the browser back button works.
+
+## Mobile (390px)
+- [ ] Featured post becomes a 190px image with the **title beneath it in dark
+      text**, not white text overlaid.
+- [ ] Recent items use 96×76 thumbnails.
+- [ ] Category chips scroll horizontally with no visible scrollbar.
+- [ ] Gutters are 18px, not 40px.
+- [ ] **Sticky composer** sits at the bottom of the comment thread; tapping it
+      focuses the real form. It clears the iOS home indicator.
+
+## The two palettes
+- [ ] On the homepage, scroll to "From Our Blog". It renders in violet
+      (`#6C0FD6`) and Plus Jakarta Sans, between sections in royal-purple and
+      Outfit. **This is the expected result of the 25 Aug decision** — judge
+      whether you want it. Reverting is an edit to `src/app/blog/blog.css`
+      alone.
+- [ ] The rest of the homepage is unchanged: no violet, no Jakarta.
+
+## Console
+- [ ] Load `/blog` and a post with DevTools open. **Zero errors**, and
+      specifically no hydration warnings. Comment timestamps are deliberately
+      absolute rather than "2 hours ago" precisely to avoid that.
+
+## Known prototype limitations — expected, not bugs
+- Comments do not persist.
+- Video shows a poster and play badge but **cannot play** — no media pipeline.
+- No editor; posts come from `src/lib/blog-fixtures.ts`.
+- No pagination control: the design defaults it off and the fixtures are one
+  page. A control that went nowhere would mislead.
+- No staff Delete: spec §8 requires it be absent from the DOM without auth,
+  and there is no auth here.

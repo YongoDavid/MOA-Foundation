@@ -23,7 +23,7 @@ export default function LatestPostsBlock() {
 
   return (
     <BlogScope>
-      <section className="bg-white px-10 pb-[60px] pt-14">
+      <section className="bg-white px-[18px] md:px-10 pb-[60px] pt-14">
         <div className="mx-auto mb-[38px] max-w-[600px] text-center">
           <div
             className="text-[11px] font-extrabold uppercase leading-none tracking-[.14em]"

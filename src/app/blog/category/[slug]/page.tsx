@@ -43,7 +43,7 @@ export default async function CategoryPage({
   return (
     <main>
       <header
-        className="px-10 pb-[30px] pt-10"
+        className="px-[18px] md:px-10 pb-[30px] pt-10"
         style={{
           background:
             "linear-gradient(180deg, var(--blog-violet-050) 0%, var(--blog-surface) 100%)",
@@ -65,7 +65,7 @@ export default async function CategoryPage({
         </div>
       </header>
 
-      <div className="mx-auto max-w-[1180px] px-10 pb-11 pt-8">
+      <div className="mx-auto max-w-[1180px] px-[18px] md:px-10 pb-11 pt-8">
         {posts.length === 0 ? (
           // Empty state, spec §10.
           <div className="py-16 text-center">

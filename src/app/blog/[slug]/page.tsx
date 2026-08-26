@@ -48,7 +48,7 @@ export default async function PostPage({
       <PostHeader post={post} />
 
       {post.cover ? (
-        <div className="mx-auto max-w-[1180px] px-10 pt-7">
+        <div className="mx-auto max-w-[1180px] px-[18px] md:px-10 pt-7">
           <div className="relative h-[420px] overflow-hidden rounded-[20px]">
             <Image
               src={post.cover.url as string}
@@ -72,7 +72,7 @@ export default async function PostPage({
         Single <=760px column, left-aligned in the 1180px shell.
         Acceptance criterion 3: no sidebar, no donate card, no related posts.
       */}
-      <article className="mx-auto max-w-[1180px] px-10 pt-[34px]">
+      <article className="mx-auto max-w-[1180px] px-[18px] md:px-10 pt-[34px]">
         <PostBody blocks={post.blocks} galleryTotal={post.mediaCount} />
 
         {post.tags.length > 0 ? (

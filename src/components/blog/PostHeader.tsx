@@ -16,7 +16,7 @@ export default function PostHeader({ post }: { post: Post }) {
     CATEGORIES.find((c) => c.slug === post.category)?.label ?? post.category
 
   return (
-    <header className="mx-auto max-w-[1180px] px-10">
+    <header className="mx-auto max-w-[1180px] px-[18px] md:px-10">
       <nav
         aria-label="Breadcrumb"
         className="pt-[30px] text-[12px] font-semibold leading-none"

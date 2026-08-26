@@ -34,6 +34,7 @@ export default function CommentThread({
   comments: Comment[]
 }) {
   const formRef = useRef<HTMLFormElement>(null)
+  const bodyRef = useRef<HTMLTextAreaElement>(null)
   const [expanded, setExpanded] = useState(false)
 
   const [optimistic, addOptimistic] = useOptimistic<Draft[], Draft>(
@@ -132,6 +133,7 @@ export default function CommentThread({
         />
 
         <textarea
+          ref={bodyRef}
           name="body"
           required
           maxLength={MAX_LENGTH}
@@ -196,6 +198,50 @@ export default function CommentThread({
             ))}
           </div>
         ))}
+      </div>
+
+      {/*
+        Mockup 1e: on mobile the composer collapses to a sticky bottom bar.
+        It focuses the real form rather than duplicating it — two forms would
+        mean two sets of fields with the same names, and a screen reader
+        announcing the composer twice.
+
+        `print:hidden` keeps it out of printed output, and the padding honours
+        env(safe-area-inset-bottom) so it clears the iOS home indicator.
+      */}
+      <div
+        className="sticky bottom-0 z-20 -mx-[18px] mt-8 flex items-center gap-[10px] bg-white px-[18px] pt-3 md:hidden print:hidden"
+        style={{
+          borderTop: "1px solid var(--blog-border)",
+          paddingBottom: "calc(12px + env(safe-area-inset-bottom))",
+        }}
+      >
+        <button
+          type="button"
+          onClick={() => {
+            bodyRef.current?.scrollIntoView({ block: "center" })
+            bodyRef.current?.focus()
+          }}
+          className="flex-1 rounded-full px-[14px] py-3 text-left text-[12.5px] font-medium"
+          style={{
+            background: "var(--blog-canvas)",
+            color: "var(--blog-ink-400)",
+          }}
+        >
+          Add a comment…
+        </button>
+        <button
+          type="button"
+          aria-label="Go to the comment form"
+          onClick={() => {
+            bodyRef.current?.scrollIntoView({ block: "center" })
+            bodyRef.current?.focus()
+          }}
+          className="flex h-10 w-10 flex-none items-center justify-center rounded-full text-[14px] font-bold text-white"
+          style={{ background: "var(--blog-violet-600)" }}
+        >
+          ↑
+        </button>
       </div>
 
       {hidden > 0 ? (

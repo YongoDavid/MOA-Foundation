@@ -24,7 +24,7 @@ export default function BlogIndexPage() {
   return (
     <main>
       <header
-        className="px-10 pb-[30px] pt-10"
+        className="px-[18px] md:px-10 pb-[30px] pt-10"
         style={{
           background:
             "linear-gradient(180deg, var(--blog-violet-050) 0%, var(--blog-surface) 100%)",
@@ -53,7 +53,7 @@ export default function BlogIndexPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-[1180px] px-10 pb-[34px]">
+      <div className="mx-auto max-w-[1180px] px-[18px] md:px-10 pb-[34px]">
         <div className="grid items-stretch gap-[26px] lg:grid-cols-[1.35fr_1fr]">
           {featured ? <FeaturedPost post={featured} /> : null}
           <RecentList posts={recent} />
@@ -61,7 +61,7 @@ export default function BlogIndexPage() {
       </div>
 
       {grid.length > 0 ? (
-        <div className="mx-auto max-w-[1180px] px-10 pb-11">
+        <div className="mx-auto max-w-[1180px] px-[18px] md:px-10 pb-11">
           <div
             className="grid gap-[26px]"
             style={{
