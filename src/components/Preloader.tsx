@@ -25,10 +25,11 @@ const MESSAGES = [
 ] as const
 
 /** Minimum on-screen time — below this it reads as a flicker, not a welcome. */
-const MIN_MS = 1500
+const MIN_MS = 3000
 /** Hard ceiling. A preloader that outstays this is just an obstacle. */
-const MAX_MS = 3600
-const MESSAGE_MS = 850
+const MAX_MS = 5200
+/** Four messages at this cadence fill roughly one pass over the 3s minimum. */
+const MESSAGE_MS = 900
 
 export default function Preloader() {
   const [hidden, setHidden] = useState(false)
@@ -92,11 +93,15 @@ export default function Preloader() {
             src={Logo1}
             alt=""
             priority
-            sizes="120px"
-            className="h-[110px] w-auto"
+            sizes="(max-width: 640px) 140px, 190px"
+            className="h-[140px] w-auto sm:h-[190px]"
             style={{ objectFit: "contain" }}
           />
         </div>
+
+        {/* Decorative — the pill already announces progress to screen readers
+            via the wrapper's role="status". */}
+        <div className="moa-preloader__spinner" aria-hidden="true" />
 
         <span className="moa-preloader__pill">{MESSAGES[messageIndex]}</span>
       </div>

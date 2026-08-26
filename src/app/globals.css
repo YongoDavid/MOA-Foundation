@@ -91,7 +91,7 @@ code {
 /* Double-thump heartbeat: two quick beats, then rest — a single smooth pulse
    reads as breathing rather than a heartbeat. */
 .moa-preloader__logo {
-  animation: moa-heartbeat 1.6s ease-in-out infinite;
+  animation: moa-heartbeat 2.6s ease-in-out infinite;
   transform-origin: center;
 }
 
@@ -104,8 +104,56 @@ code {
   100% { transform: scale(1); }
 }
 
+/* Dual counter-rotating rings.
+   The track is white — but white on a white page is invisible, so each ring
+   carries a faint violet edge to give the white something to read against.
+   The moving arcs are the site's royal-purple, the same token the pill text
+   and the rest of the homepage use. */
+.moa-preloader__spinner {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  margin-top: 26px;
+}
+
+.moa-preloader__spinner::before,
+.moa-preloader__spinner::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border-style: solid;
+}
+
+.moa-preloader__spinner::before {
+  inset: 0;
+  border-width: 4px;
+  border-color: #ffffff;
+  border-top-color: var(--color-royal-purple);
+  box-shadow:
+    0 0 0 1.5px rgba(109, 40, 217, 0.14),
+    inset 0 0 0 1.5px rgba(109, 40, 217, 0.14);
+  animation: moa-spin 1.15s linear infinite;
+}
+
+.moa-preloader__spinner::after {
+  inset: 11px;
+  border-width: 3px;
+  border-color: #ffffff;
+  border-bottom-color: rgba(109, 40, 217, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(109, 40, 217, 0.1),
+    inset 0 0 0 1px rgba(109, 40, 217, 0.1);
+  animation: moa-spin 1.7s linear infinite reverse;
+}
+
+@keyframes moa-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .moa-preloader__pill {
-  margin-top: 18px;
+  margin-top: 22px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -126,7 +174,9 @@ code {
    would hide the site permanently. Hide it outright instead — the page beneath
    is fully server-rendered and works fine on its own. */
 @media (prefers-reduced-motion: reduce) {
-  .moa-preloader__logo {
+  .moa-preloader__logo,
+  .moa-preloader__spinner::before,
+  .moa-preloader__spinner::after {
     animation: none;
   }
   .moa-preloader {
