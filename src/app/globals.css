@@ -59,3 +59,77 @@ code {
 .shadow-glow {
   box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
 }
+
+/* ── Landing preloader ─────────────────────────────────────────────────────
+   Heartbeat logo plus a rotating message pill. Rendered in the server HTML and
+   removed after mount, so there is no flash of the homepage first.
+   The pill styling below is the specification supplied by the project owner.  */
+
+.moa-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  opacity: 1;
+  transition: opacity 0.45s ease;
+}
+
+.moa-preloader.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.moa-preloader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Double-thump heartbeat: two quick beats, then rest — a single smooth pulse
+   reads as breathing rather than a heartbeat. */
+.moa-preloader__logo {
+  animation: moa-heartbeat 1.6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes moa-heartbeat {
+  0%   { transform: scale(1); }
+  14%  { transform: scale(1.09); }
+  28%  { transform: scale(1); }
+  42%  { transform: scale(1.06); }
+  56%  { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+.moa-preloader__pill {
+  margin-top: 18px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 6px 20px;
+  border-radius: 30px;
+  min-width: 170px;
+  text-align: center;
+  background: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  transition: color 0.6s ease, opacity 0.4s ease;
+  opacity: 1;
+  color: var(--color-royal-purple);
+}
+
+/* Without JavaScript the component can never remove itself, so the overlay
+   would hide the site permanently. Hide it outright instead — the page beneath
+   is fully server-rendered and works fine on its own. */
+@media (prefers-reduced-motion: reduce) {
+  .moa-preloader__logo {
+    animation: none;
+  }
+  .moa-preloader {
+    transition: none;
+  }
+}
