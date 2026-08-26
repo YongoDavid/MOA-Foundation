@@ -22,7 +22,9 @@ export default function Header() {
 
   const navItems = [
     { name: "ABOUT US", href: "#about" },
-    // { name: "BLOG", href: "#blog" },
+    // BLOG is a real route, not an in-page anchor. The mobile handler below
+    // must let it navigate rather than trying to smooth-scroll to it.
+    { name: "BLOG", href: "/blog" },
     { name: "PROGRAMS", href: "#programs" },
     // { name: "PROJECTS", href: "#projects" },
     // { name: "LOGIN", href: "#login" },
@@ -221,6 +223,16 @@ export default function Header() {
                       whileHover={{ x: 10 }}
                       className="font-heading font-medium text-dark-gray hover:text-royal-purple px-4 py-3 rounded-md hover:bg-royal-purple/10 transition-all duration-300"
                       onClick={(e) => {
+                        // Route links (anything not starting with "#") must
+                        // navigate normally. Calling preventDefault on them and
+                        // then querySelector("/blog") throws — "/blog" is not a
+                        // valid CSS selector — and the throw is swallowed by the
+                        // try/catch below, so the tap would silently do nothing.
+                        if (!item.href.startsWith("#")) {
+                          setIsMenuOpen(false)
+                          return
+                        }
+
                         // Prevent default for mobile so we can control behavior
                         e.preventDefault()
                         setIsMenuOpen(false)
