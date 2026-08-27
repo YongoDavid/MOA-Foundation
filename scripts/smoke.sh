@@ -108,7 +108,9 @@ contains "about heading"                "Future Leaders"
 contains "testimonials heading"         "Voices of Impact"
 contains "cta heading"                  "Get Involved"
 contains "newsletter heading"           "Stay Connected with Our Community"
-contains "foundation name"              "MOSES OF AFRICA MENTORING FOUNDATION"
+# The confirmed legal name (spec §11). The old site rendered three different
+# variants across header, footer and newsletter copy; there is now one.
+contains "foundation name"              "Moses Mentoring Foundation"
 contains "mission statement"            "MISSION STATEMENT:"
 
 echo "-- anchor targets the nav depends on"
@@ -117,10 +119,20 @@ contains "anchor #programs"             'id="programs"'
 contains "anchor #community"            'id="community"'
 contains "anchor #get-involved"         'id="get-involved"'
 contains "anchor #newsletter"           'id="newsletter"'
-contains "anchor #contact"              'id="contact"'
+# #contact was an in-page anchor to the old footer. Contact is a route now.
+contains "contact route linked"         'href="/contact"'
 
 echo "-- images"
-contains "logo alt text present"        'alt="MOA Logo"'
+# Spec §3 forbids the logo image in the header: the mark is a near-square
+# 813x951 badge that shrinks to illegibility in an 88px bar. The brass rule
+# and wordmark are the lockup. This asserts the ban holds.
+header_html=$(sed -n 's/.*\(<header[^>]*bg-paper[^>]*>\).*/\1/p' <<< "$html" | head -1)
+if grep -q '<img' <<< "$(sed 's/.*<header[^>]*bg-paper[^>]*>//; s/<\/header>.*//' <<< "$html")"; then
+  fail "no logo image in the header (spec §3)"
+else
+  pass "no logo image in the header (spec §3)"
+fi
+contains "footer logo present"          'alt="Moses Mentoring Foundation'
 # next/image rewrites srcs through the optimizer; a raw /static/media path
 # would mean the component is still using a bare <img>.
 contains "images routed via optimizer"  "/_next/image"
