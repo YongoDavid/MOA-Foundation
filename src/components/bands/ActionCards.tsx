@@ -26,8 +26,21 @@ export default function ActionCards({
   ground?: "paper" | "panel"
   bordered?: boolean
 }) {
+  // Column count follows the card count, so removing a card closes the row
+  // rather than leaving a hole where it used to be. /donate dropped to two
+  // when "Fundraise for us" came out; /contact still has three.
+  //
+  // Complete literal strings, never `lg:grid-cols-${n}` — Tailwind's scanner
+  // cannot see a class name assembled at runtime and would not emit it.
+  const cols =
+    cards.length === 1
+      ? "lg:grid-cols-1"
+      : cards.length === 2
+        ? "lg:grid-cols-2"
+        : "lg:grid-cols-3"
+
   const grid = (
-    <div className="grid gap-5 lg:grid-cols-3">
+    <div className={`grid gap-5 ${cols}`}>
       {cards.map((c) => (
         <article
           key={c.title}

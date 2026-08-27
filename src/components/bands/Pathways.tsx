@@ -24,7 +24,13 @@ export default function Pathways({
             image={menteeImage}
             alt={menteeAlt}
             title="Apply as a mentee"
-            body="Open to Africans aged 16 to 30. Applications for cohort five close 30 November."
+            // No age range and no deadline (client, 27 Aug 2026). The old
+            // copy said 16-30, which contradicted both the FAQ on
+            // /programs/apply ("wherever you live", no upper limit) and the
+            // application form, which accepts 10 to 99. A published deadline
+            // also goes stale the moment it passes and nobody remembers to
+            // edit it.
+            body="Open to all ages, wherever you live. If you are willing to put the work in, we would like to meet you."
             action={{ label: "Start an application", href: "/programs/apply" }}
           />
           <PathwayCard

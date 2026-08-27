@@ -466,6 +466,22 @@ done
 [ -z "$overflowable" ] && pass "heroes size to their content (min-h, not h)" \
   || fail "heroes size to their content (fixed height on:$overflowable)"
 
+# No application deadline anywhere (client, 27 Aug 2026). A published closing
+# date goes stale the moment it passes and nobody remembers to edit it — the
+# mentee card carried "applications for cohort five close 30 November" long
+# after that would have meant anything. Scoped to closing dates so the
+# legitimate "As of August 2026" on the evidence band still passes.
+MONTHS='January|February|March|April|May|June|July|August|September|October|November|December'
+deadlines=""
+for r in / /programs /programs/apply /programs/mentor; do
+  page=$(curl -fsS --max-time 20 "$BASE$r" 2>/dev/null | sed 's/<!-- -->//g')
+  if grep -qEi "clos(e|es|ing)[^.<]{0,24}($MONTHS)|($MONTHS)[^.<]{0,12}deadline|deadline[^.<]{0,24}($MONTHS)" <<< "$page"; then
+    deadlines="$deadlines [$r]"
+  fi
+done
+[ -z "$deadlines" ] && pass "no application deadline published" \
+  || fail "no application deadline published (found:$deadlines)"
+
 echo "-- /about"
 about=$(curl -fsS --max-time 20 "$BASE/about" 2>/dev/null | sed 's/<!-- -->//g') || about=""
 if [ -z "$about" ]; then

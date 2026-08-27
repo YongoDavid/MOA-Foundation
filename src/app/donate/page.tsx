@@ -14,11 +14,6 @@ export const metadata = {
 
 const OTHER_WAYS = [
   {
-    title: "Fundraise for us",
-    body: "Mark a birthday, a wedding or a workplace drive by raising toward a programme area.",
-    action: { label: "Tell us your plan", href: "/contact" },
-  },
-  {
     title: "In kind",
     body: "Books, learning materials, venue space or professional time given free.",
     action: { label: "Talk to us", href: "/contact" },
