@@ -414,6 +414,71 @@ done
 [ -z "$leaked" ] && pass "no programme logistics on the public site" \
   || fail "no programme logistics on the public site (found:$leaked)"
 
+echo "-- /donate and /contact"
+donate=$(curl -fsS --max-time 20 "$BASE/donate" 2>/dev/null | sed 's/<!-- -->//g') || donate=""
+contact=$(curl -fsS --max-time 20 "$BASE/contact" 2>/dev/null | sed 's/<!-- -->//g') || contact=""
+
+if [ -z "$donate" ]; then
+  fail "/donate responds"
+else
+  pass "/donate responds"
+  missing=""
+  for f in name email phone designation note; do
+    grep -qF "name=\"$f\"" <<< "$donate" || missing="$missing $f"
+  done
+  [ -z "$missing" ] && pass "donate: all 5 fields" \
+    || fail "donate: all 5 fields (missing:$missing)"
+
+  # The designation options must match the three areas the page just described.
+  # Both come from GIVING_AREAS in src/lib/content.ts; this catches anyone who
+  # re-hardcodes one of the two lists and lets them drift.
+  drift=""
+  for area in "Mentoring cycles" "Education access" "Outreach and advocacy"; do
+    grep -qF "value=\"$area\"" <<< "$donate" || drift="$drift [$area]"
+  done
+  [ -z "$drift" ] && pass "donate: designations match the stated areas" \
+    || fail "donate: designations match the stated areas (missing:$drift)"
+
+  grep -qF 'No payment is taken on this website' <<< "$donate" \
+    && pass "donate: the no-payment statement is present" \
+    || fail "donate: the no-payment statement is present"
+
+  # ...and that statement must stay TRUE. No card, CVV, expiry or amount field
+  # may appear while it is on the page. If a gateway is ever integrated, remove
+  # the sentence in the same change — a donate page that claims it takes no
+  # payment while collecting card details is the worst failure this site could
+  # ship, and it would look like a phishing form to anyone who noticed.
+  takes_payment=""
+  for f in card cardnumber cc-number cvv cvc expiry amount; do
+    grep -qiF "name=\"$f\"" <<< "$donate" && takes_payment="$takes_payment [$f]"
+  done
+  [ -z "$takes_payment" ] && pass "donate: takes no payment, as it states" \
+    || fail "donate: takes no payment, as it states (found:$takes_payment)"
+fi
+
+if [ -z "$contact" ]; then
+  fail "/contact responds"
+else
+  pass "/contact responds"
+  missing=""
+  for f in subject name email phone country message; do
+    grep -qF "name=\"$f\"" <<< "$contact" || missing="$missing $f"
+  done
+  [ -z "$missing" ] && pass "contact: all 6 fields" \
+    || fail "contact: all 6 fields (missing:$missing)"
+
+  # The old site printed the phone number as plain text in the footer and as a
+  # different, real number in the donation drawer. Both are now SITE constants,
+  # and on this page both must be tappable — a phone number you cannot tap on a
+  # phone is the single most annoying thing a contact page can do.
+  if grep -qF 'mailto:mosesofafrica@gmail.com' <<< "$contact" \
+     && grep -qF 'tel:+2348037315490' <<< "$contact"; then
+    pass "contact: email and phone are actionable links"
+  else
+    fail "contact: email and phone are actionable links"
+  fi
+fi
+
 echo "-- blog routes"
 # The blog is server-rendered from fixtures. These fetch their own pages, so
 # they use a local variable rather than the shared $html.

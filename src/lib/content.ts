@@ -82,3 +82,31 @@ export const FLAGS = {
   /** Both woven pull-quotes: vision list and pathways. */
   showQuotes: true,
 } as const
+
+/**
+ * What a gift can be directed to (/donate).
+ *
+ * ONE source for two places that must agree: the "where it goes" list and the
+ * designation options in DonateForm. Typed separately they drift, and then the
+ * form offers a purpose the page never explained.
+ */
+export const GIVING_AREAS = [
+  {
+    title: "Mentoring cycles",
+    body: "Venue, materials and travel support so a group can meet properly rather than improvise.",
+  },
+  {
+    title: "Education access",
+    body: "Learning materials, school fees and back-to-school support for children out of the classroom.",
+  },
+  {
+    title: "Outreach and advocacy",
+    body: "Community events, peace ambassador training and the reporting that keeps us accountable.",
+  },
+] as const
+
+/** Designation options: "wherever needed" first, then the three areas above. */
+export const DESIGNATIONS = [
+  "Wherever it is needed most",
+  ...GIVING_AREAS.map((a) => a.title),
+]

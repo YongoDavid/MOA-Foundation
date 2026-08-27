@@ -146,40 +146,70 @@ export function Select({
   )
 }
 
-/** Segmented radio group. Selected is gold; unselected is a hairline outline. */
+/**
+ * Segmented radio group.
+ *
+ * Two treatments, and they are not interchangeable:
+ *
+ * - `columns` 2 or 3 — short uppercase choices, centred. Selected fills gold.
+ * - `columns` 1 — a stacked list of full sentences (the donate designations).
+ *   Selected keeps the field fill and marks itself with a gold check instead
+ *   of filling gold, because a full-width gold bar per option reads as four
+ *   buttons rather than one choice, and sentence case centred is unreadable.
+ */
 export function Segmented({
   name,
   legend,
   options,
   columns = 2,
+  defaultValue,
   error,
 }: {
   name: string
   legend: string
   options: string[]
-  columns?: 2 | 3
+  columns?: 1 | 2 | 3
+  defaultValue?: string
   error?: string
 }) {
+  const stacked = columns === 1
+  const grid = stacked
+    ? "grid-cols-1"
+    : columns === 3
+      ? "sm:grid-cols-3"
+      : "sm:grid-cols-2"
+
   return (
     <fieldset className="m-0 border-0 p-0">
       <legend className="mb-2.5 font-body text-[10px] font-bold uppercase leading-none tracking-[.12em] text-white/50">
         {legend}
       </legend>
-      <div
-        className={`grid gap-2 ${columns === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
-      >
+      <div className={`grid gap-2 ${grid}`}>
         {options.map((o) => (
           <label
             key={o}
-            className="group relative flex min-h-[48px] cursor-pointer items-center justify-center border border-white/[.22] px-3 text-center font-body text-[11.5px] font-bold uppercase leading-tight text-white/75 transition-colors duration-150 has-[:checked]:border-gold-500 has-[:checked]:bg-gold-500 has-[:checked]:text-ink-900 lg:min-h-[44px]"
+            className={
+              stacked
+                ? "relative flex min-h-[48px] cursor-pointer items-center justify-between gap-3 border border-white/[.16] px-4 py-3.5 font-body text-[12.5px] font-semibold leading-snug text-white/[.72] transition-colors duration-150 has-[:checked]:bg-white/[.08] has-[:checked]:text-white lg:min-h-[44px]"
+                : "relative flex min-h-[48px] cursor-pointer items-center justify-center border border-white/[.22] px-3 text-center font-body text-[11.5px] font-bold uppercase leading-tight text-white/75 transition-colors duration-150 has-[:checked]:border-gold-500 has-[:checked]:bg-gold-500 has-[:checked]:text-ink-900 lg:min-h-[44px]"
+            }
           >
             <input
               type="radio"
               name={name}
               value={o}
-              className="absolute h-px w-px opacity-0 focus-visible:outline-none"
+              defaultChecked={defaultValue === o}
+              className="peer absolute h-px w-px opacity-0 focus-visible:outline-none"
             />
             {o}
+            {stacked ? (
+              <span
+                aria-hidden="true"
+                className="hidden flex-none font-body text-[13px] text-gold-500 peer-checked:inline"
+              >
+                ✓
+              </span>
+            ) : null}
           </label>
         ))}
       </div>
