@@ -1,4 +1,5 @@
 import { EVIDENCE } from "@/lib/tokens"
+import CountUp from "../data/CountUp"
 import DotMatrix from "../data/DotMatrix"
 
 // Spec §4 band 01 — `1fr 380px`. Dot matrix left, three stats right behind a
@@ -14,9 +15,11 @@ export default function Evidence() {
       <div className="mx-auto grid max-w-[1440px] items-start gap-10 lg:grid-cols-[1fr_380px] lg:gap-[72px]">
         <div>
           <div className="flex items-baseline gap-4 lg:gap-[18px]">
-            <span className="font-display text-[64px] font-black leading-[.82] text-umber-800 lg:text-[96px]">
-              {EVIDENCE.livesTouched}+
-            </span>
+            <CountUp
+              value={EVIDENCE.livesTouched}
+              suffix="+"
+              className="font-display text-[64px] font-black leading-[.82] text-umber-800 lg:text-[96px]"
+            />
             <span className="font-body text-[12px] font-bold uppercase leading-[1.4] tracking-[.1em] text-ink-900 lg:text-[13px]">
               Lives
               <br />
@@ -30,7 +33,7 @@ export default function Evidence() {
 
         <div className="border-l-2 border-ink-900 pl-5 lg:pl-[26px]">
           <Stat
-            value={`${EVIDENCE.mentors}+`}
+            value={<CountUp value={EVIDENCE.mentors} suffix="+" />}
             label="Active mentors"
             note="One solid segment of ten. The pale segment carries “and above”."
             divider
@@ -53,7 +56,7 @@ export default function Evidence() {
           />
 
           <Stat
-            value={String(EVIDENCE.sdgAddressed.length)}
+            value={<CountUp value={EVIDENCE.sdgAddressed.length} />}
             label={`Of ${EVIDENCE.sdgTotal} UN goals`}
             note="Charted in full below."
             last
@@ -72,7 +75,7 @@ function Stat({
   divider = false,
   last = false,
 }: {
-  value: string
+  value: React.ReactNode
   label: string
   note: string
   children?: React.ReactNode

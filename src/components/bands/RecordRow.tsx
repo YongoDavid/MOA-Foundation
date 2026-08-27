@@ -1,4 +1,5 @@
 import { EVIDENCE } from "@/lib/tokens"
+import CountUp from "../data/CountUp"
 
 // About band 03 — three stats in a bordered row on panel.
 //
@@ -6,9 +7,16 @@ import { EVIDENCE } from "@/lib/tokens"
 // explicit that section 6 is the single source; two hand-typed copies is how
 // "500+" survived on one page after being corrected on another.
 export default function RecordRow() {
+  // "Where we work" is a place, not a quantity — nothing to count up to.
   const stats = [
-    { value: `${EVIDENCE.livesTouched}+`, label: "Lives touched" },
-    { value: `${EVIDENCE.mentors}+`, label: "Active mentors" },
+    {
+      value: <CountUp value={EVIDENCE.livesTouched} suffix="+" />,
+      label: "Lives touched",
+    },
+    {
+      value: <CountUp value={EVIDENCE.mentors} suffix="+" />,
+      label: "Active mentors",
+    },
     { value: EVIDENCE.basedIn, label: "Where we work" },
   ]
 

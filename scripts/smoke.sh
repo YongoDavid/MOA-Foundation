@@ -409,6 +409,45 @@ else
   pass "no drop shadows in the stylesheet"
 fi
 
+# The mobile menu shipped permanently open. `hidden={!open}` looks like it
+# hides the panel, but the UA rule is `[hidden] { display: none }` and the
+# `flex` utility beside it is author-origin at equal specificity — author
+# wins, so the panel covered the page at every viewport and the close button
+# had nothing to do. Display is now toggled by CLASS. This asserts the closed
+# state: the attribute present, and no bare `flex` class to override it.
+menu=$(grep -o 'id="mobile-menu"[^>]*' <<< "$html" | head -1)
+if [ -z "$menu" ]; then
+  fail "mobile menu is present in the markup"
+else
+  pass "mobile menu is present in the markup"
+  menu_classes=$(grep -o 'class="[^"]*"' <<< "$menu" | sed 's/class="//;s/"$//')
+  has_flex=$(tr ' ' '\n' <<< "$menu_classes" | grep -cx 'flex')
+  has_hidden=$(tr ' ' '\n' <<< "$menu_classes" | grep -cx 'hidden')
+  if grep -q 'hidden=""' <<< "$menu" && [ "$has_hidden" -ge 1 ] && [ "$has_flex" -eq 0 ]; then
+    pass "mobile menu is closed on load (hidden attr + hidden class, no flex)"
+  else
+    fail "mobile menu is closed on load (attr=$(grep -c 'hidden=\"\"' <<< "$menu") hidden-class=$has_hidden flex-class=$has_flex)"
+  fi
+fi
+
+# The record figures animate on scroll. The SERVER must still render the real
+# numbers — someone with JavaScript off has to see 300, not 0, and these are
+# the figures the client corrected.
+zeroed=$(grep -oE 'tabular-nums[^>]*>0\+?<' <<< "$html" | wc -l | tr -d ' ')
+if [ "$zeroed" = "0" ]; then
+  pass "animated figures server-render their real values"
+else
+  fail "animated figures server-render their real values ($zeroed rendered as 0)"
+fi
+
+# The objectives header carried a "Full programme document" call to action
+# over its photograph, pointing at a document that does not exist.
+if grep -qi 'programme document' <<< "$html"; then
+  fail "no link to a programme document that does not exist"
+else
+  pass "no link to a programme document that does not exist"
+fi
+
 echo "-- /about"
 about=$(curl -fsS --max-time 20 "$BASE/about" 2>/dev/null | sed 's/<!-- -->//g') || about=""
 if [ -z "$about" ]; then

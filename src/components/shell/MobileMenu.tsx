@@ -30,10 +30,20 @@ export default function MobileMenu({
   }, [open, onClose])
 
   return (
+    // The `hidden` ATTRIBUTE alone does not hide this. Its UA rule is
+    // `[hidden] { display: none }`, and the `flex` utility that used to sit in
+    // this className is an author-origin rule of equal specificity — author
+    // beats UA, so the panel stayed displayed at every viewport with the menu
+    // "closed", covering the page and swallowing the close button's effect.
+    // Display must therefore be toggled by CLASS, not by the attribute.
+    // The attribute stays: it is what removes the panel from the
+    // accessibility tree and takes its links out of the tab order.
     <div
       id="mobile-menu"
       hidden={!open}
-      className="fixed inset-0 z-[9998] flex flex-col bg-ink-900 px-5 pb-8 pt-5 motion-safe:transition-transform motion-safe:duration-200 lg:hidden"
+      className={`fixed inset-0 z-[9998] flex-col bg-ink-900 px-5 pb-8 pt-5 motion-safe:transition-transform motion-safe:duration-200 lg:hidden ${
+        open ? "flex" : "hidden"
+      }`}
     >
       <div className="flex items-center justify-end">
         <button

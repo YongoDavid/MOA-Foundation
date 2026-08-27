@@ -72,7 +72,6 @@ export default function Home() {
           <SectionHeader
             eyebrow="05 — Aims & objectives"
             heading="Ten specific objectives"
-            note="Full programme document →"
             image={ObjectivesHeaderImage}
             alt="With embassy staff at the Embassy of the State of Kuwait in Abuja"
           />
