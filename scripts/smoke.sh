@@ -233,6 +233,32 @@ else
   fi
 fi
 
+echo "-- redesign typefaces (spec v2.0 §2)"
+# Big Shoulders and Manrope replace Outfit, Inter and Plus Jakarta Sans.
+# Asserted on the compiled CSS because next/font emits @font-face there, not
+# in the markup. The three retired families are NOT asserted absent yet — the
+# old components still use them until Task 11 deletes them.
+if grep -q 'Big Shoulders' <<< "$css"; then
+  pass "Big Shoulders Display loaded"
+else
+  fail "Big Shoulders Display loaded"
+fi
+if grep -q 'Manrope' <<< "$css"; then
+  pass "Manrope loaded"
+else
+  fail "Manrope loaded"
+fi
+# Square is the system default (spec §2 Layout). rounded-full survives for
+# rings and avatars; every other radius token resolves to 0.
+# The rule spans lines in dev-mode CSS and grep is line-based, so flatten
+# first. Tailwind's own 2xl radius is 1rem; ours must be 0.
+css_flat=$(tr -d '\n' <<< "$css")
+if grep -qE '\.rounded-2xl[^{}]*\{[^}]*border-radius: *0' <<< "$css_flat"; then
+  pass "square radius is the default"
+else
+  fail "square radius is the default (rounded-2xl should be 0)"
+fi
+
 echo "-- blog routes"
 # The blog is server-rendered from fixtures. These fetch their own pages, so
 # they use a local variable rather than the shared $html.

@@ -1,4 +1,4 @@
-import { Inter, Outfit } from "next/font/google"
+import { Inter, Outfit, Big_Shoulders, Manrope } from "next/font/google"
 import Preloader from "@/components/Preloader"
 import "./globals.css"
 
@@ -11,6 +11,23 @@ const inter = Inter({
 const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-outfit",
+  display: "swap",
+})
+
+// Redesign typefaces (spec v2.0 §2). Two families, no third.
+// Big Shoulders Display carries every heading, numeral and uppercase label;
+// Manrope carries body, meta and interface text.
+const display = Big_Shoulders({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800", "900"],
+  variable: "--font-display",
+  display: "swap",
+})
+
+const body = Manrope({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-body",
   display: "swap",
 })
 
@@ -61,7 +78,9 @@ export default function RootLayout({ children }) {
           <style>{`.moa-preloader{display:none !important}`}</style>
         </noscript>
       </head>
-      <body className={`${inter.variable} ${outfit.variable} font-sans`}>
+      <body
+        className={`${inter.variable} ${outfit.variable} ${display.variable} ${body.variable} font-sans`}
+      >
         <Preloader />
         {children}
       </body>
