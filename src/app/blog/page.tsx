@@ -32,7 +32,7 @@ export default function BlogIndexPage() {
 
   return (
     <>
-      <section className="relative h-[240px] bg-ink-900 lg:h-[200px]">
+      <section className="relative flex min-h-[240px] items-end bg-ink-900 lg:min-h-[200px]">
         <Image
           src={HeaderImage}
           alt="With embassy staff at the Embassy of the State of Kuwait in Abuja"
@@ -51,7 +51,7 @@ export default function BlogIndexPage() {
           className="pointer-events-none absolute inset-0 hidden lg:block"
           style={{ background: SCRIM.sectionHeader }}
         />
-        <div className="absolute inset-x-5 bottom-6 mx-auto flex max-w-[1180px] flex-col gap-4 lg:inset-x-10 lg:bottom-7 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+        <div className="relative z-[1] mx-auto flex w-full max-w-[1180px] flex-col gap-4 px-5 pb-6 pt-12 lg:flex-row lg:items-end lg:justify-between lg:gap-16 lg:px-10 lg:pb-7">
           <div>
             <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-gold-500">
               From the field

@@ -123,7 +123,7 @@ export default function ContactPage() {
       </section>
 
       <section className="bg-paper px-5 pt-12 lg:px-14 lg:pt-[70px]">
-        <div className="relative mx-auto h-[300px] max-w-[1440px] overflow-hidden bg-green-950 lg:h-[340px]">
+        <div className="relative mx-auto flex min-h-[300px] max-w-[1440px] overflow-hidden bg-green-950 lg:min-h-[340px]">
           <Image
             src={VisitImage}
             alt="The Foundation delegation at the Embassy of the State of Kuwait in Abuja"
@@ -144,7 +144,7 @@ export default function ContactPage() {
             // caps the scrim set on purpose — reuse beats a sixth near-copy.
             style={{ background: SCRIM.sectionHeader }}
           />
-          <div className="absolute inset-y-0 left-5 flex max-w-[480px] flex-col justify-center pr-5 lg:left-11 lg:pr-0">
+          <div className="relative z-[1] flex w-full max-w-[520px] flex-col justify-center px-5 py-12 lg:px-11 lg:py-0">
             <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-gold-500">
               Visit us
             </p>

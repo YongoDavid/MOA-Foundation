@@ -24,7 +24,10 @@ export default function SectionHeader({
   alt: string
 }) {
   return (
-    <div className="relative h-[150px] bg-ink-900 md:h-[180px] lg:h-[210px]">
+    // min-h + in-flow content, for the same reason as Hero: an absolutely
+    // positioned overlay cannot make its box taller, so a longer heading
+    // silently spills out over the neighbouring sections.
+    <div className="relative flex min-h-[150px] items-end bg-ink-900 md:min-h-[180px] lg:min-h-[210px]">
       <Image
         src={image}
         alt={alt}
@@ -42,7 +45,7 @@ export default function SectionHeader({
         className="pointer-events-none absolute inset-0 hidden lg:block"
         style={{ background: SCRIM.sectionHeader }}
       />
-      <div className="pointer-events-none absolute inset-x-5 bottom-6 flex items-end justify-between gap-6 lg:inset-x-14 lg:bottom-8">
+      <div className="pointer-events-none relative z-[1] flex w-full items-end justify-between gap-6 px-5 pb-6 pt-10 lg:px-14 lg:pb-8">
         <div>
           <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-gold-500">
             {eyebrow}

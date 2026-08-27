@@ -30,13 +30,26 @@ export default function Hero({
   /** Homepage carries a 30px gold rule before the eyebrow; inner pages do not. */
   eyebrowRule?: boolean
 }) {
+  // MIN-height, not height, and the text sits in normal flow rather than
+  // absolutely positioned inside the box.
+  //
+  // It used to be `h-[300px]` with the copy in an `absolute inset-y-0` layer.
+  // Absolutely positioned children contribute nothing to their parent's
+  // height, so any hero whose copy grew past the fixed box simply spilled out
+  // of it — above and below, over the sections either side. /programs/mentor
+  // did exactly that at 390px: a four-line headline, a five-line lead and two
+  // rows of buttons needed ~414px inside a 300px box.
+  //
+  // With min-h the section grows to fit instead. `justify-center` still
+  // centres the copy whenever there is spare room, so nothing changes on the
+  // wider viewports where there always is.
   const h =
     height === "home"
-      ? "h-[380px] md:h-[500px] lg:h-[600px]"
-      : "h-[300px] md:h-[380px] lg:h-[440px]"
+      ? "min-h-[380px] md:min-h-[500px] lg:min-h-[600px]"
+      : "min-h-[300px] md:min-h-[380px] lg:min-h-[440px]"
 
   return (
-    <section className={`relative bg-ink-900 ${h}`}>
+    <section className={`relative flex bg-ink-900 ${h}`}>
       <Image src={image} alt={alt} fill priority sizes="100vw" className="object-cover" />
       <div
         aria-hidden="true"
@@ -49,7 +62,8 @@ export default function Hero({
         style={{ background: SCRIM.hero }}
       />
 
-      <div className="absolute inset-y-0 left-5 flex max-w-[720px] flex-col justify-center pr-5 lg:left-14 lg:pr-0">
+      <div className="relative z-[1] flex w-full flex-col justify-center px-5 py-14 lg:px-14 lg:py-0">
+       <div className="max-w-[720px]">
         <p
           className={`m-0 flex items-center gap-3 font-body uppercase leading-none ${
             eyebrowRule
@@ -95,6 +109,7 @@ export default function Hero({
             ))}
           </div>
         ) : null}
+       </div>
       </div>
 
       {repeatTagline ? (

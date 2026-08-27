@@ -5,7 +5,27 @@ export default {
     extend: {
       fontFamily: {
         // Redesign (spec v2.0 §2). Two families, no third.
-        display: ["var(--font-display)", "Impact", "Haettenschweiler", "sans-serif"],
+        // Big Shoulders is the only face Next cannot build a metric-adjusted
+        // fallback for — `next build` says so on every run. Manrope gets a
+        // generated "Manrope Fallback"; the display face does not, so whatever
+        // is listed here is what renders during the swap.
+        //
+        // The old stack was Impact -> Haettenschweiler -> sans-serif, and
+        // NEITHER of the first two exists on iOS or Android. Every heading on
+        // a phone therefore fell straight through to a normal-width sans and
+        // then snapped to a condensed one when the webfont arrived — the
+        // largest reflow on the page, on the largest text. The condensed faces
+        // that actually ship on each platform now come first.
+        display: [
+          "var(--font-display)",
+          "Impact",                   // Windows, macOS
+          "Haettenschweiler",         // Windows
+          "Arial Narrow",             // Windows, macOS
+          "Roboto Condensed",         // Android
+          "Avenir Next Condensed",    // iOS, macOS
+          "HelveticaNeue-CondensedBold",
+          "sans-serif",
+        ],
         body: ["var(--font-body)", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
 
       },

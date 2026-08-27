@@ -448,6 +448,24 @@ else
   pass "no link to a programme document that does not exist"
 fi
 
+# Heroes and photographic headers must use MIN-height with their copy in
+# normal flow. With a fixed `h-[...]` and the copy in an `absolute inset-y-0`
+# layer, the copy contributes nothing to the box and simply spills out of it
+# over the sections either side. /programs/mentor did exactly that at 390px —
+# ~414px of content in a 300px box.
+overflowable=""
+for r in / /about /programs /programs/apply /programs/mentor /donate /contact /blog; do
+  page=$(curl -fsS --max-time 20 "$BASE$r" 2>/dev/null)
+  # a fixed-height box that also contains an absolutely positioned inset-y-0
+  # text layer is the shape that fails
+  if grep -qE 'class="relative (flex )?bg-ink-900 h-\[[0-9]+px\]' <<< "$page" \
+     || grep -qE 'class="relative h-\[[0-9]+px\] bg-ink-900' <<< "$page"; then
+    overflowable="$overflowable [$r]"
+  fi
+done
+[ -z "$overflowable" ] && pass "heroes size to their content (min-h, not h)" \
+  || fail "heroes size to their content (fixed height on:$overflowable)"
+
 echo "-- /about"
 about=$(curl -fsS --max-time 20 "$BASE/about" 2>/dev/null | sed 's/<!-- -->//g') || about=""
 if [ -z "$about" ]; then

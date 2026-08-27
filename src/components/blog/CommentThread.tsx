@@ -296,10 +296,10 @@ function CommentRow({
             {comment.createdAt ? formatDate(comment.createdAt, "long") : "Just now"}
           </span>
         </div>
-        <p
-          className="m-0 text-[14.5px] font-medium leading-[1.65]"
-          style={{ color: "#2B2630" }}
-        >
+        {/* Comment bodies are the only visitor-authored text on the site.
+            break-words so a single pasted URL cannot push the page sideways
+            on a phone. */}
+        <p className="m-0 break-words font-body text-[14.5px] font-medium leading-[1.65] text-ink-700">
           {comment.body}
         </p>
         <div
