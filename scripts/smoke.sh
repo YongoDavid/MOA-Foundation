@@ -37,10 +37,19 @@ if [ "$ready" -ne 1 ]; then
   echo "WARN: server did not report a compiled stylesheet within ~20s — results may be unreliable"
 fi
 
-html=$(curl -fsS --max-time 20 "$BASE/") || {
+html_raw=$(curl -fsS --max-time 20 "$BASE/") || {
   echo "FATAL: could not fetch $BASE/ — is the server running?"
   exit 1
 }
+
+# Strip React's comment markers before matching anything.
+#
+# Interpolated JSX serialises with them between text nodes: {300}+ becomes
+# "300<!-- -->+", and "{solid} solid marks" becomes "30<!-- --> solid marks".
+# Every text assertion below would otherwise need to know that, so it is done
+# once here. No assertion depends on the markers. This has caught me out four
+# separate times.
+html=$(sed 's/<!-- -->//g' <<< "$html_raw")
 
 pass() { printf '  ok    %s\n' "$1"; }
 fail() { printf '  FAIL  %s\n' "$1"; FAILURES=$((FAILURES + 1)); }
@@ -102,10 +111,15 @@ echo "-- sections server-rendered"
 # Copy strings taken verbatim from the components. Apostrophes are avoided
 # deliberately: the source mixes U+2019 (HeroSection) and U+0027
 # (AboutSection), and "&" is HTML-escaped in the served markup.
-contains "hero headline"                "Emerging Leaders for"
+# The redesigned hero splits the headline across spans, so the old contiguous
+# match no longer exists. React escapes the apostrophe to &#x27;.
+contains "hero headline"                "Emerging Leaders"
+contains "hero gold accent"             "Excellence."
+contains "mandate verbatim"             "To inspire guide and equip African youths"
 contains "programs heading"             "Aims"
 contains "about heading"                "Future Leaders"
-contains "testimonials heading"         "Voices of Impact"
+# Testimonials removed: the redesign has no carousels (spec §10) and the
+# section is not in the new information architecture.
 contains "cta heading"                  "Get Involved"
 contains "newsletter heading"           "Stay Connected with Our Community"
 # The confirmed legal name (spec §11). The old site rendered three different
@@ -116,7 +130,6 @@ contains "mission statement"            "MISSION STATEMENT:"
 echo "-- anchor targets the nav depends on"
 contains "anchor #about"                'id="about"'
 contains "anchor #programs"             'id="programs"'
-contains "anchor #community"            'id="community"'
 contains "anchor #get-involved"         'id="get-involved"'
 contains "anchor #newsletter"           'id="newsletter"'
 # #contact was an in-page anchor to the old footer. Contact is a route now.
@@ -244,6 +257,15 @@ else
     fail "preflight emitted exactly once (found $boxsizing copies; expected 1)"
   fi
 fi
+
+echo "-- evidence figures (client-corrected, spec §6)"
+contains "300+ lives touched"           "300+"
+contains "10+ active mentors"           "10+"
+contains "where we work is a place"     "NIGERIA"
+contains "dot matrix caption required"  "solid marks, 10 mentees each"
+# "10+ countries reached" was removed deliberately: international reach is a
+# future claim, not a current one. It must never come back.
+absent   "no country count"             "countries reached"
 
 echo "-- redesign typefaces (spec v2.0 §2)"
 # Big Shoulders and Manrope replace Outfit, Inter and Plus Jakarta Sans.

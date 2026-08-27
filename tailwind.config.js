@@ -33,6 +33,11 @@ export default {
         full: "9999px",
       },
 
+      // The dot matrix is a 16-column grid (spec §6); Tailwind stops at 12.
+      gridTemplateColumns: {
+        16: "repeat(16, minmax(0, 1fr))",
+      },
+
       colors: {
         // ── Redesign palette, spec v2.0 §2 Table 4 ──────────────────────
         // Nineteen tokens. Do not add a twentieth.
