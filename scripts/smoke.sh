@@ -466,6 +466,20 @@ done
 [ -z "$overflowable" ] && pass "heroes size to their content (min-h, not h)" \
   || fail "heroes size to their content (fixed height on:$overflowable)"
 
+# No age limit in any eligibility statement (client, 27 Aug 2026). The mentee
+# card claimed 16-30 while the FAQ named no limit and the form accepted 10-99.
+# "under 18" is deliberately NOT matched — that line is about guardian
+# consent, not eligibility, and it stays.
+agecap=""
+for r in / /programs /programs/apply /contact; do
+  page=$(curl -fsS --max-time 20 "$BASE$r" 2>/dev/null | sed 's/<!-- -->//g')
+  if grep -qEi 'aged [0-9]|ages? of [0-9]|between [0-9]+ and [0-9]+|[0-9]+ *(to|-|–) *[0-9]+ *(year|yr)' <<< "$page"; then
+    agecap="$agecap [$r]"
+  fi
+done
+[ -z "$agecap" ] && pass "no age limit in eligibility copy" \
+  || fail "no age limit in eligibility copy (found:$agecap)"
+
 # No application deadline anywhere (client, 27 Aug 2026). A published closing
 # date goes stale the moment it passes and nobody remembers to edit it — the
 # mentee card carried "applications for cohort five close 30 November" long

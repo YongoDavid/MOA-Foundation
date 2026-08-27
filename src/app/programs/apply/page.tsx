@@ -16,7 +16,7 @@ export const metadata = {
 const FAQS = [
   {
     q: "Who can apply?",
-    a: "Young Africans, wherever you live. If you are under 18 we will ask for a parent or guardian to confirm.",
+    a: "Anyone, wherever you live — there is no age limit. If you are under 18 we will ask for a parent or guardian to confirm.",
   },
   {
     q: "Does it cost anything?",

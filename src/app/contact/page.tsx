@@ -27,7 +27,7 @@ const DETAILS = [
 const NEXT_STEPS = [
   {
     title: "Apply as a mentee",
-    body: "Open to young Africans wherever you are.",
+    body: "Open to all ages, wherever you live.",
     action: { label: "Start an application", href: "/programs/apply" },
   },
   {

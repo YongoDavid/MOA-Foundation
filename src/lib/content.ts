@@ -4,6 +4,20 @@
 // in code. They appear on both the homepage and /about; both read from here so
 // the two can never drift apart.
 
+/**
+ * ELIGIBILITY vs MISSION — read before editing either.
+ *
+ * The Foundation's mandate, vision and objectives below are the approved,
+ * verbatim text and describe mentoring AFRICAN YOUTHS. They are not edited
+ * here for any reason.
+ *
+ * Who may APPLY is a separate question, and the client settled it on
+ * 27 August 2026: no age limit. So every eligibility statement on the site —
+ * the mentee card, the /contact card, the /programs lead and the "Who can
+ * apply?" FAQ — is age-neutral, while the mission copy keeps the Foundation's
+ * own framing. Do not "fix" the mismatch by putting an age range back into an
+ * eligibility line.
+ */
 export const MANDATE =
   "To inspire guide and equip African youths with the right knowledge, skills, ethics and moral values required to discover their full potentials, develop their skills and talents to become valuable in the global market being the best version of themselves. We aim at creating opportunities for mentorship, education and leadership that nurture responsible citizens and visionary leaders who will drive sustainable economic, social and political development across the continent and beyond."
 

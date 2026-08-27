@@ -21,7 +21,7 @@ export default function ProgramsPage() {
         eyebrowRule={false}
         headline={"Four areas of\n"}
         accent="work."
-        lead="Everything the Foundation does sits under one of four headings. Each runs on its own cycle, and each is open to young Africans by application."
+        lead="Everything the Foundation does sits under one of four headings. Each runs on its own cycle, and each is open by application, whatever your age."
         image={HeroImage}
         alt="With embassy staff at the Embassy of the State of Kuwait in Abuja"
         height="page"
