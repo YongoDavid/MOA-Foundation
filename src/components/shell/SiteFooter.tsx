@@ -1,11 +1,13 @@
 import Image from "next/image"
 import Link from "next/link"
 import { FOOTER_COLUMNS, SITE } from "@/lib/site"
-// TEMPORARY: the redesign's mmf-logo.png (813x951) could not be retrieved —
-// the design tool caps file reads at 256 KiB and the PNG exceeds it, so every
-// fetch arrives truncated and unreadable by the image pipeline. Falling back
-// to the existing mark until the real file is placed at
-// src/Images/mmf-logo.png, then change this one import back.
+// Logo1.jpg is the Foundation's mark — confirmed by the client 27 Aug 2026.
+// There is no separate mmf-logo.png to wait for; this is the file.
+//
+// It is PORTRAIT (1024x1536, aspect 0.67), unlike the near-square lockup the
+// mockup drew at 300px wide. Sized by HEIGHT here for that reason: 300px wide
+// would render 450px tall and give the footer a logo taller than the three
+// link columns beside it.
 import Logo from "../../Images/Logo1.jpg"
 
 // Spec §3 — ink-900. Two rows above the baseline row.
@@ -23,8 +25,8 @@ export default function SiteFooter() {
           <Image
             src={Logo}
             alt={`${SITE.legalName} — ${SITE.subtitle}`}
-            sizes="(max-width: 1024px) 190px, 300px"
-            className="h-auto w-[190px] lg:w-[300px]"
+            sizes="(max-width: 1024px) 100px, 130px"
+            className="h-[150px] w-auto lg:h-[190px]"
             priority={false}
           />
           <p className="m-0 font-display text-[24px] font-extrabold uppercase leading-[1.05] text-white lg:text-right lg:text-[30px]">

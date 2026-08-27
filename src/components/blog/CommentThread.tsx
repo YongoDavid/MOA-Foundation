@@ -145,8 +145,7 @@ export default function CommentThread({
 
         {error ? (
           <p
-            className="mt-2 text-[12px] font-semibold"
-            style={{ color: "#A03A2A" }}
+            className="mt-2 font-body text-[12px] font-semibold text-danger"
             role="alert"
           >
             {error}

@@ -20,10 +20,19 @@ function categoryLabel(slug: string): string {
 export default function PostCard({
   post,
   variant = "media",
+  headingLevel = 3,
 }: {
   post: Post
   variant?: "media" | "story"
+  /**
+   * The card title's heading level. 3 on the blog index, where the featured
+   * post already owns the h2. 2 on the category pages, where the cards sit
+   * directly under the page h1 — leaving them at h3 skips a level, and
+   * heading-level navigation is how screen-reader users scan a list.
+   */
+  headingLevel?: 2 | 3
 }) {
+  const Heading = (`h${headingLevel}` as const) satisfies "h2" | "h3"
   const href = `/blog/${post.slug}`
   const suffix = mediaLabel(post.type, {
     count: post.mediaCount,
@@ -40,9 +49,9 @@ export default function PostCard({
           <p className="m-0 mb-3.5 font-body text-[10px] font-bold uppercase leading-none tracking-[.14em] text-gold-500">
             Story · No photographs
           </p>
-          <h3 className="m-0 font-display text-[28px] font-extrabold uppercase leading-[1.02] text-white">
+          <Heading className="m-0 font-display text-[28px] font-extrabold uppercase leading-[1.02] text-white">
             <Link href={href}>{post.title}</Link>
-          </h3>
+          </Heading>
           <p className="m-0 mt-3.5 font-body text-[13px] font-medium leading-[1.62] text-white/[.76]">
             {post.excerpt}
           </p>
@@ -102,9 +111,9 @@ export default function PostCard({
           ) : null}
         </div>
 
-        <h3 className="font-display uppercase text-[24px] font-extrabold leading-[1.05]">
-          <Link href={href}>{post.title}</Link>
-        </h3>
+        <Heading className="font-display uppercase text-[24px] font-extrabold leading-[1.05]">
+            <Link href={href}>{post.title}</Link>
+          </Heading>
 
         <p
           className="mt-[10px] text-[13px] font-medium leading-[1.6]"

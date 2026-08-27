@@ -376,6 +376,39 @@ else
   fail "no rounded corners anywhere in the stylesheet (found: $(tr '\n' ' ' <<< "$stray"))"
 fi
 
+# Manual-QA findings, 27 Aug 2026 — both were real and both are cheap to keep.
+echo "-- structure"
+
+# 1. Heading levels must not skip. The four blog category pages went h1 -> h3
+#    because the cards under the page title were h3; heading-level navigation
+#    is how a screen-reader user scans a list, and the gap breaks it.
+skipped=""
+for r in / /about /programs /programs/apply /programs/mentor /donate /contact \
+         /gallery /blog /blog/category/partnerships /blog/category/summits \
+         /blog/embassy-of-kuwait-youth-education-partnership; do
+  levels=$(curl -fsS --max-time 20 "$BASE$r" 2>/dev/null | sed 's/<!-- -->//g' \
+           | grep -oE '<h[1-6]' | grep -oE '[1-6]' | tr '\n' ' ')
+  prev=0
+  for l in $levels; do
+    if [ "$prev" -ne 0 ] && [ "$l" -gt $((prev + 1)) ]; then
+      skipped="$skipped [$r: h$prev->h$l]"
+      break
+    fi
+    prev=$l
+  done
+done
+[ -z "$skipped" ] && pass "no page skips a heading level" \
+  || fail "no page skips a heading level ($skipped)"
+
+# 2. No drop shadows (spec §2). Tailwind's scanner reads raw file text
+#    INCLUDING comments, so the bare utility name written in prose is enough to
+#    emit the utility. That is exactly how a .shadow rule got into the bundle.
+if grep -oE 'box-shadow: *[^;]*' <<< "$css" | grep -qv 'none'; then
+  fail "no drop shadows in the stylesheet"
+else
+  pass "no drop shadows in the stylesheet"
+fi
+
 echo "-- /about"
 about=$(curl -fsS --max-time 20 "$BASE/about" 2>/dev/null | sed 's/<!-- -->//g') || about=""
 if [ -z "$about" ]; then

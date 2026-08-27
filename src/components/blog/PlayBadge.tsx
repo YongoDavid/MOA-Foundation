@@ -2,14 +2,21 @@
 // none per spec §11 — the surrounding card or player owns the interaction.
 //
 // Sizes and the CSS-triangle geometry are lifted from the mockups. The 66px
-// variant is the one centred on the post player: white fill, violet triangle,
-// drop shadow. The smaller ones sit bottom-right on thumbnails.
+// variant is the one centred on the post player; the smaller ones sit
+// bottom-right on thumbnails.
+//
+// No drop shadows (spec §2). The 66px variant carried one until 27 Aug 2026.
+//
+// Careful with the wording here. Tailwind's scanner reads raw file text
+// INCLUDING comments, so the bare utility name written out in prose is enough
+// to make it emit that utility into the bundle even when no element uses it.
+// This comment used to do exactly that.
 
 type Size = 26 | 30 | 44 | 66
 
 const GEOMETRY: Record<
   Size,
-  { bg: string; arrow: string; w: number; h: number; ml: number; shadow?: string }
+  { bg: string; arrow: string; w: number; h: number; ml: number }
 > = {
   26: { bg: "rgba(20,16,24,.6)", arrow: "#fff", w: 8, h: 5, ml: 3 },
   30: { bg: "rgba(20,16,24,.62)", arrow: "#fff", w: 9, h: 6, ml: 3 },
@@ -20,7 +27,6 @@ const GEOMETRY: Record<
     w: 19,
     h: 12,
     ml: 5,
-    shadow: "0 8px 30px rgba(20,16,24,.3)",
   },
 }
 
@@ -34,7 +40,6 @@ export default function PlayBadge({ size = 44 }: { size?: Size }) {
         width: size,
         height: size,
         background: g.bg,
-        boxShadow: g.shadow,
       }}
     >
       {/* CSS triangle — the mockups use this rather than an icon font. */}

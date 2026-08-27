@@ -85,6 +85,9 @@ export default async function CategoryPage({
                 key={post.slug}
                 post={post}
                 variant={post.type === "story" ? "story" : "media"}
+                // Cards sit directly under this page's h1, so they are h2 here
+                // — at h3 the document skips a heading level.
+                headingLevel={2}
               />
             ))}
           </div>
