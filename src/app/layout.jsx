@@ -1,4 +1,5 @@
 import { Inter, Outfit } from "next/font/google"
+import Preloader from "@/components/Preloader"
 import "./globals.css"
 
 const inter = Inter({
@@ -52,7 +53,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        {/* Without JS the preloader can never dismiss itself and would hide
+            the site permanently. The page beneath is fully server-rendered, so
+            hiding the overlay outright is the correct no-JS behaviour. */}
+        <noscript>
+          <style>{`.moa-preloader{display:none !important}`}</style>
+        </noscript>
+      </head>
       <body className={`${inter.variable} ${outfit.variable} font-sans`}>
+        <Preloader />
         {children}
       </body>
     </html>

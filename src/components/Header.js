@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { Menu, X, Grid3X3 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
@@ -11,6 +12,15 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [isBookNowOpen, setIsBookNowOpen] = useState(false)
+  const pathname = usePathname()
+  const onHome = pathname === "/"
+
+  // In-page anchors only work on the page that contains those sections. From
+  // /blog, "#about" scrolls nowhere — so off the homepage they become
+  // root-relative ("/#about"), which navigates home and then jumps to the
+  // section. On the homepage they stay bare anchors so the existing
+  // smooth-scroll behaviour is untouched.
+  const sectionHref = (hash) => (onHome ? hash : `/${hash}`)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,12 +31,14 @@ export default function Header() {
   }, [])
 
   const navItems = [
-    { name: "ABOUT US", href: "#about" },
-    // { name: "BLOG", href: "#blog" },
-    { name: "PROGRAMS", href: "#programs" },
+    { name: "ABOUT US", href: sectionHref("#about") },
+    // BLOG is a real route, not an in-page anchor. The mobile handler below
+    // must let it navigate rather than trying to smooth-scroll to it.
+    { name: "BLOG", href: "/blog" },
+    { name: "PROGRAMS", href: sectionHref("#programs") },
     // { name: "PROJECTS", href: "#projects" },
     // { name: "LOGIN", href: "#login" },
-    { name: "CONTACT", href: "#contact" },
+    { name: "CONTACT", href: sectionHref("#contact") },
     // { name: "REGISTER", href: "#register" },
     // { name: "GALLERY", href: "#gallery" },
     { name: "DONATION", href: "#donation" },
@@ -221,6 +233,16 @@ export default function Header() {
                       whileHover={{ x: 10 }}
                       className="font-heading font-medium text-dark-gray hover:text-royal-purple px-4 py-3 rounded-md hover:bg-royal-purple/10 transition-all duration-300"
                       onClick={(e) => {
+                        // Route links (anything not starting with "#") must
+                        // navigate normally. Calling preventDefault on them and
+                        // then querySelector("/blog") throws — "/blog" is not a
+                        // valid CSS selector — and the throw is swallowed by the
+                        // try/catch below, so the tap would silently do nothing.
+                        if (!item.href.startsWith("#")) {
+                          setIsMenuOpen(false)
+                          return
+                        }
+
                         // Prevent default for mobile so we can control behavior
                         e.preventDefault()
                         setIsMenuOpen(false)

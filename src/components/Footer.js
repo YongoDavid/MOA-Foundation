@@ -17,12 +17,13 @@ const Footer = () => {
   ];
 
   const quickLinks = [
-    { name: "About Us", href: "#about" },
-    { name: "Aim & Objectives", href: "#programs" },
-    { name: "Community", href: "#community" },
+    { name: "About Us", href: "/#about" },
+    { name: "Blog", href: "/blog" },
+    { name: "Aim & Objectives", href: "/#programs" },
+    { name: "Community", href: "/#community" },
     // { name: "Resources", href: "#resources" },
     // { name: "Events", href: "#events" },
-    { name: "Contact", href: "#contact" },
+    { name: "Contact", href: "/#contact" },
   ];
 
   const programs = [
@@ -145,7 +146,7 @@ const Footer = () => {
                 Become part of MOA community today.
               </p>
               <a
-                href="#get-involved"
+                href="/#get-involved"
                 className="inline-flex items-center font-heading font-semibold text-bright-orange hover:text-white transition-colors duration-300"
               >
                 Get Started →

@@ -13,6 +13,30 @@ set -uo pipefail
 BASE="${1:-http://localhost:3010}"
 FAILURES=0
 
+# Wait for the server to be genuinely ready, rather than sleeping a guessed
+# number of seconds.
+#
+# Against a fresh `next dev` the first request triggers route compilation, and
+# the stylesheet it references can still be building — which produced
+# intermittent false failures on the CSS assertions (1 run in 4 from a cold
+# start). Bolting a retry onto each check patches symptoms one at a time; the
+# actual precondition is "the page and its stylesheet are both compiled", so
+# poll for exactly that. Against an already-warm or production server the first
+# probe succeeds and this costs one extra request.
+ready=0
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  probe=$(curl -fsS --max-time 30 "$BASE/" 2>/dev/null) || { sleep 2; continue; }
+  probe_css=$(grep -o '/_next/static/\(css\|chunks\)/[^"]*\.css' <<< "$probe" | head -1)
+  if [ -n "$probe_css" ] && curl -fsS --max-time 20 "$BASE$probe_css" 2>/dev/null | grep -q '.'; then
+    ready=1
+    break
+  fi
+  sleep 2
+done
+if [ "$ready" -ne 1 ]; then
+  echo "WARN: server did not report a compiled stylesheet within ~20s — results may be unreliable"
+fi
+
 html=$(curl -fsS --max-time 20 "$BASE/") || {
   echo "FATAL: could not fetch $BASE/ — is the server running?"
   exit 1
@@ -21,14 +45,26 @@ html=$(curl -fsS --max-time 20 "$BASE/") || {
 pass() { printf '  ok    %s\n' "$1"; }
 fail() { printf '  FAIL  %s\n' "$1"; FAILURES=$((FAILURES + 1)); }
 
+# NOTE ON `grep -q` AND `pipefail` — the reason these use here-strings.
+#
+# `printf '%s' "$big" | grep -q pat` is a trap under `set -o pipefail`.
+# grep -q exits the instant it matches, closing the pipe; printf, still
+# writing, takes SIGPIPE and exits 141; pipefail then makes the whole pipeline
+# non-zero even though the match SUCCEEDED. Whether printf has finished
+# writing first is a race, so the assertion passes or fails at random.
+#
+# This was silently corrupting results — failures blamed on "cold dev server
+# flakiness" were actually this. Here-strings involve no pipeline, so there is
+# no SIGPIPE and no pipefail interaction.
+
 # Assert a literal string is present in the served HTML.
 contains() {
-  if printf '%s' "$html" | grep -qF -- "$2"; then pass "$1"; else fail "$1 (missing: $2)"; fi
+  if grep -qF -- "$2" <<< "$html"; then pass "$1"; else fail "$1 (missing: $2)"; fi
 }
 
 # Assert a literal string is ABSENT from the served HTML.
 absent() {
-  if printf '%s' "$html" | grep -qF -- "$2"; then fail "$1 (found: $2)"; else pass "$1"; fi
+  if grep -qF -- "$2" <<< "$html"; then fail "$1 (found: $2)"; else pass "$1"; fi
 }
 
 # Assert the first URL in the HTML matching a pattern actually resolves to a
@@ -39,9 +75,19 @@ resolves() {
   local url status ctype
   # Cut at the first space so srcset descriptors ("... 1x, ... 2x") are not
   # swallowed, and unescape &amp; back to & so the query string is valid.
-  url=$(printf '%s' "$html" | grep -o "$2" | head -1 | sed 's/&amp;/\&/g')
+  url=$(grep -o "$2" <<< "$html" | head -1 | sed 's/&amp;/\&/g')
   if [ -z "$url" ]; then fail "$1 (no URL matching $2 in page)"; return; fi
+  # One retry. Against a cold `next dev`, the first request for an optimized
+  # image can race route compilation and fail transiently — observed once while
+  # adding the blog routes. A single retry absorbs that without masking a
+  # genuinely broken optimizer, which fails both attempts. A flaky assertion
+  # teaches people to re-run rather than investigate, which is nearly as
+  # corrosive as one that cannot fail.
   status=$(curl -o /dev/null -s -w '%{http_code}' --max-time 20 "$BASE$url")
+  if [ "$status" != "200" ]; then
+    sleep 2
+    status=$(curl -o /dev/null -s -w '%{http_code}' --max-time 20 "$BASE$url")
+  fi
   ctype=$(curl -o /dev/null -s -w '%{content_type}' --max-time 20 "$BASE$url")
   if [ "$status" = "200" ] && case "$ctype" in "$3"*) true ;; *) false ;; esac; then
     pass "$1 ($status $ctype)"
@@ -125,12 +171,16 @@ echo "-- regression guards with no other coverage"
 # would be invisible to every other layer of this safety net.
 absent   "no external font requests"    "fonts.googleapis.com"
 absent   "no external font host"        "fonts.gstatic.com"
-# Hard project constraint: the blog spec's palette must never enter this site.
-# Zero automated coverage before now.
-absent   "no spec-palette violet"       "#6C0FD6"
-absent   "no spec-palette teal"         "#14A38B"
-absent   "no spec-palette amber"        "#F97C1C"
-absent   "no Plus Jakarta Sans"         "Plus Jakarta Sans"
+# RETIRED 25 August 2026. Four assertions here previously required that
+# #6C0FD6, #14A38B, #F97C1C and "Plus Jakarta Sans" never appear, enforcing the
+# 20 August decision to render the blog in the site's own tokens. That decision
+# was reversed: the blog prototype is built to the mockup palette so it matches
+# what the client has already been shown. The assertions were deleted rather
+# than left failing — a permanently red check is how a safety net stops being
+# trusted. Reverting the palette means restoring these four lines.
+#
+# `brand token royal-purple compiled` below is deliberately kept: the homepage
+# still uses site tokens, so it now guards the two palettes coexisting.
 
 echo "-- file-convention assets actually resolve"
 resolves "favicon resolves"             '/icon[^" ]*\.jpg[^" ]*' "image/"
@@ -139,43 +189,116 @@ resolves "manifest resolves"            '/manifest\.json' "application/"
 echo "-- stylesheet"
 # Turbopack (the default bundler as of Next.js 16) emits CSS under
 # /_next/static/chunks/, not the classic webpack /_next/static/css/ path.
-# Accept either so this check tracks "is a stylesheet linked at all", not
-# "which bundler produced it".
-css_path=$(printf '%s' "$html" | grep -o '/_next/static/\(css\|chunks\)/[^"]*\.css' | head -1)
-if [ -z "$css_path" ]; then
+#
+# ALL linked stylesheets are concatenated before asserting, not just the first.
+# Once the blog routes landed the homepage began emitting more than one chunk,
+# and their order varies between runs — so `head -1` picked a different file
+# each time and the brand-token check failed roughly half the time. That looked
+# like flakiness; it was the assertion reading the wrong file.
+css_paths=$(grep -o '/_next/static/\(css\|chunks\)/[^"]*\.css' <<< "$html" | sort -u)
+if [ -z "$css_paths" ]; then
   fail "stylesheet linked"
 else
-  pass "stylesheet linked"
-  css=$(curl -fsS --max-time 20 "$BASE$css_path") || css=""
-  if printf '%s' "$css" | grep -q '6d28d9'; then
+  pass "stylesheet linked ($(grep -c . <<< "$css_paths") file(s))"
+  css=""
+  for cp in $css_paths; do
+    css="$css$(curl -fsS --max-time 20 "$BASE$cp" 2>/dev/null)"
+  done
+
+  if grep -q '6d28d9' <<< "$css"; then
     pass "brand token royal-purple compiled"
   else
     fail "brand token royal-purple compiled (Tailwind not processing config)"
   fi
+
   # Unprocessed directives in the STYLESHEET mean PostCSS is not wired up.
-  # This must test the CSS, not the HTML — Next never inlines source CSS
-  # text into markup, so checking the page body could never fail.
-  if printf '%s' "$css" | grep -q '@tailwind'; then
+  # This must test the CSS, not the HTML — Next never inlines source CSS text
+  # into markup, so checking the page body could never fail.
+  if grep -q '@tailwind' <<< "$css"; then
     fail "no raw tailwind directives (PostCSS did not process the layers)"
   else
     pass "no raw tailwind directives"
   fi
-  # Under CRA, preflight was emitted twice because index.css and App.css
-  # each imported the Tailwind layers. Exactly one copy is required — a
-  # regression to 2 is the specific bug this migration set out to fix, so
-  # this gates on equality, not presence.
-  # Dev-mode CSS (unminified) keeps a space after the colon; production
-  # builds strip it. Tolerate both.
-  # grep -c counts matching LINES, not occurrences. Production CSS is minified
-  # onto one line, so -c returned 1 whether preflight appeared once or five
-  # times — the single assertion gating the exact bug this migration set out to
-  # fix could not fail under SMOKE_PROD=1. grep -o | wc -l counts occurrences.
-  boxsizing=$(printf '%s' "$css" | grep -oE 'box-sizing:[[:space:]]*border-box' | wc -l | tr -d ' ')
+
+  # Under CRA, preflight was emitted twice because index.css and App.css each
+  # imported the Tailwind layers. Exactly one copy is required — a regression
+  # to 2 is the specific bug this migration set out to fix, so this gates on
+  # equality, not presence. grep -c counts LINES, and minified production CSS
+  # is one line, so occurrences must be counted with grep -o | wc -l.
+  boxsizing=$(grep -oE 'box-sizing:[[:space:]]*border-box' <<< "$css" | wc -l | tr -d ' ')
   if [ "$boxsizing" -eq 1 ]; then
     pass "preflight emitted exactly once"
   else
     fail "preflight emitted exactly once (found $boxsizing copies; expected 1)"
   fi
+fi
+
+echo "-- blog routes"
+# The blog is server-rendered from fixtures. These fetch their own pages, so
+# they use a local variable rather than the shared $html.
+blog=$(curl -fsS --max-time 20 "$BASE/blog" 2>/dev/null) || blog=""
+if [ -z "$blog" ]; then
+  fail "/blog responds"
+else
+  pass "/blog responds"
+  # Strip React's comment markers first: {value} interpolation serialises as
+  # "+<!-- -->15", so a naive search for rendered text finds nothing.
+  blog_txt=$(sed 's/<!-- -->//g' <<< "$blog")
+  if grep -qF 'Stories &amp; Activities' <<< "$blog_txt"; then
+    pass "blog index heading server-rendered"
+  else
+    fail "blog index heading server-rendered"
+  fi
+  if grep -qF 'Courtesy visit to the Embassy of Kuwait' <<< "$blog_txt"; then
+    pass "featured post server-rendered"
+  else
+    fail "featured post server-rendered"
+  fi
+  if grep -qF 'Filter posts by category' <<< "$blog_txt"; then
+    pass "category filter present"
+  else
+    fail "category filter present"
+  fi
+fi
+
+post=$(curl -fsS --max-time 20 "$BASE/blog/embassy-of-kuwait-youth-education-partnership" 2>/dev/null) || post=""
+if [ -z "$post" ]; then
+  fail "single post responds"
+else
+  pass "single post responds"
+  post_txt=$(sed 's/<!-- -->//g' <<< "$post")
+  # Body copy in the initial HTML is the whole point of server rendering it.
+  if grep -qF 'Embassy of the State of Kuwait in Abuja' <<< "$post_txt"; then
+    pass "post body server-rendered"
+  else
+    fail "post body server-rendered"
+  fi
+  if grep -qF 'Be kind — our team removes abuse' <<< "$post_txt"; then
+    pass "comment composer present"
+  else
+    fail "comment composer present"
+  fi
+  # Spec §8: staff Delete must be ABSENT from the public DOM, not hidden.
+  # There is no auth in the prototype, so it must never appear.
+  if grep -qE '>[[:space:]]*Delete[[:space:]]*<' <<< "$post_txt"; then
+    fail "no staff Delete in public DOM (spec §8)"
+  else
+    pass "no staff Delete in public DOM (spec §8)"
+  fi
+fi
+
+cat_status=$(curl -o /dev/null -s -w '%{http_code}' --max-time 20 "$BASE/blog/category/mentorship")
+if [ "$cat_status" = "200" ]; then
+  pass "category route responds ($cat_status)"
+else
+  fail "category route responds (got $cat_status)"
+fi
+# An unknown category must 404, not render an empty list implying it exists.
+bad_status=$(curl -o /dev/null -s -w '%{http_code}' --max-time 20 "$BASE/blog/category/not-a-real-category")
+if [ "$bad_status" = "404" ]; then
+  pass "unknown category 404s ($bad_status)"
+else
+  fail "unknown category 404s (got $bad_status)"
 fi
 
 echo

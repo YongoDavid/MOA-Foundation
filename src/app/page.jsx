@@ -9,6 +9,7 @@ import NewsletterSection from "@/components/NewsletterSection"
 import Footer from "@/components/Footer"
 import ScrollToTopButton from "@/components/ScrollToTopButton"
 import CTASection from "@/components/CTASection"
+import LatestPostsBlock from "@/components/blog/LatestPostsBlock"
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
         <ProgramsSection />
         <AboutSection />
         <TestimonialsCarousel />
+        <LatestPostsBlock />
         <CTASection />
         <NewsletterSection />
       </main>
