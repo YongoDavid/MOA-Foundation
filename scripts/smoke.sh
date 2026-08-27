@@ -367,6 +367,53 @@ else
     || fail "programs: enquiry action on each band"
 fi
 
+echo "-- /programs/apply and /programs/mentor"
+apply=$(curl -fsS --max-time 20 "$BASE/programs/apply" 2>/dev/null | sed 's/<!-- -->//g') || apply=""
+mentor=$(curl -fsS --max-time 20 "$BASE/programs/mentor" 2>/dev/null | sed 's/<!-- -->//g') || mentor=""
+
+if [ -z "$apply" ]; then
+  fail "/programs/apply responds"
+else
+  pass "/programs/apply responds"
+  missing=""
+  for f in name age email phone country city programme motivation referral consent; do
+    grep -qF "name=\"$f\"" <<< "$apply" || missing="$missing $f"
+  done
+  [ -z "$missing" ] && pass "apply: all 10 mentee fields" \
+    || fail "apply: all 10 mentee fields (missing:$missing)"
+  grep -qF 'not yet being received' <<< "$apply" \
+    && pass "apply: submission stub is disclosed" \
+    || fail "apply: submission stub is disclosed"
+fi
+
+if [ -z "$mentor" ]; then
+  fail "/programs/mentor responds"
+else
+  pass "/programs/mentor responds"
+  missing=""
+  for f in name email country field availability motivation consent; do
+    grep -qF "name=\"$f\"" <<< "$mentor" || missing="$missing $f"
+  done
+  [ -z "$missing" ] && pass "mentor: all 7 enquiry fields" \
+    || fail "mentor: all 7 enquiry fields (missing:$missing)"
+  # The "what we do not require" column is the persuasive half of this page —
+  # most people who would be good at it rule themselves out. Do not demote it.
+  grep -qF 'What we do not require' <<< "$mentor" \
+    && pass "mentor: the persuasive column survives" \
+    || fail "mentor: the persuasive column survives"
+fi
+
+# Programme logistics were removed from the public site at the client's
+# request — cycle length, session frequency, group size, ratios, per-place
+# cost. They must not creep back from an older mockup.
+both="$apply$mentor"
+leaked=""
+for term in "cycle length" "session frequency" "group size" "per place" "mentee-per-mentor"; do
+  grep -qiF "$term" <<< "$both" && leaked="$leaked [$term]"
+done
+[ -z "$leaked" ] && pass "no programme logistics on the public site" \
+  || fail "no programme logistics on the public site (found:$leaked)"
+
 echo "-- blog routes"
 # The blog is server-rendered from fixtures. These fetch their own pages, so
 # they use a local variable rather than the shared $html.
