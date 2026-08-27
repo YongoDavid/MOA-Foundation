@@ -1,5 +1,8 @@
 import { Inter, Outfit, Big_Shoulders, Manrope } from "next/font/google"
 import Preloader from "@/components/Preloader"
+import UtilityStrip from "@/components/shell/UtilityStrip"
+import SiteHeader from "@/components/shell/SiteHeader"
+import SiteFooter from "@/components/shell/SiteFooter"
 import "./globals.css"
 
 const inter = Inter({
@@ -82,7 +85,17 @@ export default function RootLayout({ children }) {
         className={`${inter.variable} ${outfit.variable} ${display.variable} ${body.variable} font-sans`}
       >
         <Preloader />
-        {children}
+        {/* Skip link must be the first focusable element (spec §12). */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[10000] focus:bg-ink-900 focus:px-4 focus:py-3 focus:font-body focus:text-[12px] focus:font-bold focus:uppercase focus:tracking-[.09em] focus:text-white"
+        >
+          Skip to main content
+        </a>
+        <UtilityStrip />
+        <SiteHeader />
+        <main id="main">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   )
