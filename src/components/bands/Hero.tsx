@@ -13,6 +13,7 @@ export default function Hero({
   alt,
   height = "home",
   repeatTagline = false,
+  eyebrowRule = true,
 }: {
   eyebrow: string
   /** Rendered before `accent`; use \n for the line break. */
@@ -26,6 +27,8 @@ export default function Hero({
   height?: "home" | "page"
   /** Homepage only — the tagline repeated bottom-right. */
   repeatTagline?: boolean
+  /** Homepage carries a 30px gold rule before the eyebrow; inner pages do not. */
+  eyebrowRule?: boolean
 }) {
   const h =
     height === "home"
@@ -47,8 +50,16 @@ export default function Hero({
       />
 
       <div className="absolute inset-y-0 left-5 flex max-w-[720px] flex-col justify-center pr-5 lg:left-14 lg:pr-0">
-        <p className="m-0 flex items-center gap-3 font-body text-[10px] font-bold uppercase leading-none tracking-[.18em] text-gold-500 lg:text-[10.5px]">
-          <span aria-hidden="true" className="h-px w-[30px] bg-gold-500" />
+        <p
+          className={`m-0 flex items-center gap-3 font-body uppercase leading-none ${
+            eyebrowRule
+              ? "text-[10px] font-bold tracking-[.18em] text-gold-500 lg:text-[10.5px]"
+              : "text-[11px] font-semibold tracking-[.14em] text-white/60"
+          }`}
+        >
+          {eyebrowRule ? (
+            <span aria-hidden="true" className="h-px w-[30px] bg-gold-500" />
+          ) : null}
           {eyebrow}
         </p>
 

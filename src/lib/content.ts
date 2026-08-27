@@ -43,6 +43,28 @@ export const OBJECTIVES = [
   "Encouraging creativity and forward-thinking solutions.",
 ] as const
 
+/**
+ * Five values (spec Table 1: MMF About is authoritative for these).
+ *
+ * CHANGED BY THE REDESIGN. The previous site listed Integrity, Excellence,
+ * Innovation, Empowerment and Community as bare words. The About mockup keeps
+ * the first two, replaces the last three with Service, Peace and
+ * Accountability, and gives each a sub-line. Flagged to the client 27 Aug.
+ */
+export const VALUES = [
+  {
+    name: "Integrity",
+    note: "We would rather report a shortfall than dress it up.",
+  },
+  { name: "Excellence", note: "Don't just belong, stand out." },
+  {
+    name: "Service",
+    note: "Leadership is a duty owed to a community, not a position held over it.",
+  },
+  { name: "Peace", note: "A discipline to be practised, not a slogan to be repeated." },
+  { name: "Accountability", note: "Every gift and every cohort is reported on." },
+] as const
+
 /** Five bodies whose frameworks the programme follows. Named as text, not logos —
  *  written permission for marks was never confirmed. */
 export const ALIGNMENT = [

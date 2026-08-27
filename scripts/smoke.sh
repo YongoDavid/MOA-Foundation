@@ -325,6 +325,48 @@ else
   fail "square radius is the default (rounded-2xl should be 0)"
 fi
 
+echo "-- /about"
+about=$(curl -fsS --max-time 20 "$BASE/about" 2>/dev/null | sed 's/<!-- -->//g') || about=""
+if [ -z "$about" ]; then
+  fail "/about responds"
+else
+  pass "/about responds"
+  grep -qF 'To inspire guide and equip African youths' <<< "$about" \
+    && pass "about: mission verbatim" || fail "about: mission verbatim"
+  grep -qF 'To build a continent where every young African' <<< "$about" \
+    && pass "about: vision verbatim" || fail "about: vision verbatim"
+  grep -qF 'Accountability' <<< "$about" \
+    && pass "about: five values" || fail "about: five values"
+  # The record must read from the same source as the homepage — two hand-typed
+  # copies is how 500+ survived on one page after correction on another.
+  grep -qF 'NIGERIA' <<< "$about" \
+    && pass "about: record shares the homepage figures" \
+    || fail "about: record shares the homepage figures"
+  grep -qF 'countries reached' <<< "$about" \
+    && fail "about: no country count" || pass "about: no country count"
+fi
+
+echo "-- /programs"
+progs=$(curl -fsS --max-time 20 "$BASE/programs" 2>/dev/null | sed 's/<!-- -->//g') || progs=""
+if [ -z "$progs" ]; then
+  fail "/programs responds"
+else
+  pass "/programs responds"
+  for name in Leadership Education Enterprise advocacy; do
+    grep -qF "$name" <<< "$progs" \
+      && pass "programs: $name band" || fail "programs: $name band"
+  done
+  # Band 03 has no photograph — none of the client images depicts enterprise
+  # work, so it is a typographic panel. An unrelated image must never be
+  # substituted (spec §5).
+  grep -qF 'Encouraging creativity and forward-thinking' <<< "$progs" \
+    && pass "programs: band 03 is a typographic panel" \
+    || fail "programs: band 03 is a typographic panel"
+  grep -qF 'Ask about this programme' <<< "$progs" \
+    && pass "programs: enquiry action on each band" \
+    || fail "programs: enquiry action on each band"
+fi
+
 echo "-- blog routes"
 # The blog is server-rendered from fixtures. These fetch their own pages, so
 # they use a local variable rather than the shared $html.

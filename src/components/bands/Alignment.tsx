@@ -11,15 +11,34 @@ import { ALIGNMENT } from "@/lib/content"
 // the mockup's muted taupe for the ordinal. Kept local, not promoted.
 const INDEX_MUTED = "#A79A8A"
 
-export default function Alignment() {
+export default function Alignment({
+  eyebrow,
+  heading,
+}: {
+  /** About supplies a heading block; the homepage relies on its section header. */
+  eyebrow?: string
+  heading?: string
+} = {}) {
   return (
     <section className="bg-paper px-5 py-12 lg:px-14 lg:py-[70px]">
       <div className="mx-auto grid max-w-[1440px] items-start gap-8 lg:grid-cols-[300px_1fr] lg:gap-16">
-        <p className="m-0 font-body text-[13.5px] font-medium leading-[1.65] text-ink-600">
-          Our programme design and reporting follow the frameworks of the bodies
-          below. Logos are used only with written permission, so we name them
-          plainly.
-        </p>
+        <div>
+          {eyebrow ? (
+            <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-umber-800">
+              {eyebrow}
+            </p>
+          ) : null}
+          {heading ? (
+            <h2 className="m-0 mb-[18px] mt-4 font-display text-[30px] font-extrabold uppercase leading-[.98] text-ink-900 lg:text-[40px]">
+              {heading}
+            </h2>
+          ) : null}
+          <p className="m-0 font-body text-[13.5px] font-medium leading-[1.65] text-ink-600">
+            Our programme design and reporting follow the frameworks of the
+            bodies below. Logos are used only with written permission, so we
+            name them plainly.
+          </p>
+        </div>
 
         <ul className="m-0 grid list-none grid-cols-1 border-t border-ink-900/[.16] p-0 sm:grid-cols-2">
           {ALIGNMENT.map((body, i) => {
