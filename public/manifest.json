@@ -1,6 +1,6 @@
 {
-  "short_name": "MOA Foundation",
-  "name": "Moses of Africa Mentoring Foundation",
+  "short_name": "MMF",
+  "name": "Moses Mentoring Foundation",
   "icons": [
     {
       "src": "/icon.jpg",
@@ -10,6 +10,6 @@
   ],
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#6d28d9",
-  "background_color": "#ffffff"
+  "theme_color": "#0D3B26",
+  "background_color": "#FBF8F3"
 }

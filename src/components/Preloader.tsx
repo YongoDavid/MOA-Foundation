@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Logo1 from "../Images/Logo1.jpg"
+import { SITE } from "@/lib/site"
 
 // Landing-page preloader: heartbeat logo plus rotating encouragement.
 //
@@ -85,7 +86,7 @@ export default function Preloader() {
       className={`moa-preloader${leaving ? " is-leaving" : ""}`}
       role="status"
       aria-live="polite"
-      aria-label="Loading the Moses of Africa Mentoring Foundation website"
+      aria-label={`Loading the ${SITE.legalName} website`}
     >
       <div className="moa-preloader__inner">
         <div className="moa-preloader__logo">

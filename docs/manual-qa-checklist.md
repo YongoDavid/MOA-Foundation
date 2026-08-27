@@ -117,6 +117,8 @@ For **each** of `/programs/apply`, `/programs/mentor`, `/donate`, `/contact`:
 - [ ] No image is squashed, stretched or letterboxed.
 - [ ] Every hero and band photograph loads; none collapse to zero height.
 - [ ] Favicon appears in the tab.
+- [ ] The tab title reads **"Moses Mentoring Foundation"** on `/`, and
+      "<Page> · Moses Mentoring Foundation" elsewhere.
 
 ## 10. Cross-cutting: the redesign actually landed
 
@@ -136,6 +138,3 @@ For **each** of `/programs/apply`, `/programs/mentor`, `/donate`, `/contact`:
 5. **`src/Images/mmf-logo.png` is missing**; the footer falls back to
    `Logo1.jpg`. Needs the real file placed by hand.
 6. **All social links are `href="#"`.**
-7. **The organisation's name is used two ways** — "Moses Mentoring Foundation"
-   on every page, "Moses of Africa Mentoring Foundation" in the metadata and
-   the domain. Needs a client decision, then unifying.

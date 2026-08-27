@@ -23,7 +23,7 @@ export async function generateMetadata({
   if (!meta) return {}
   return {
     title: `${meta.label} — Stories & Activities`,
-    description: `Posts from the ${meta.label.toLowerCase()} programme at the Moses of Africa Mentoring Foundation.`,
+    description: `Posts from the ${meta.label.toLowerCase()} programme at the Moses Mentoring Foundation.`,
   }
 }
 

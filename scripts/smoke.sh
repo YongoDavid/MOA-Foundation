@@ -171,9 +171,9 @@ echo "-- document metadata"
 # substring search: the identical phrase already appears in the rendered
 # About-section body copy, so an unanchored search would pass even with the
 # <head> metadata deleted entirely (verified with a negative control).
-contains "title tag"                    "<title>Moses of Africa Mentoring Foundation</title>"
+contains "title tag"                    "<title>Moses Mentoring Foundation</title>"
 contains "description meta"             'name="description"'
-contains "description meta mentions mentorship" 'name="description" content="Moses of Africa Mentoring Foundation identifies and empowers young talent through mentorship'
+contains "description meta mentions mentorship" 'name="description" content="Moses Mentoring Foundation identifies and empowers young talent through mentorship'
 contains "canonical link"               'rel="canonical"'
 contains "canonical on prod domain"     'rel="canonical" href="https://mosesofafricafoundation.org'
 contains "og:title"                     'property="og:title"'
@@ -214,6 +214,24 @@ absent   "no external font host"        "fonts.gstatic.com"
 # tokens were deleted with the twelve components that used them. The canary
 # below now watches a REDESIGN token — its job was never royal-purple
 # specifically, it was "is Tailwind reading tailwind.config.js at all".
+
+# The legal name is "Moses Mentoring Foundation" (client, 27 Aug 2026). The
+# metadata said "Moses of Africa Mentoring Foundation" while every page
+# rendered the shorter form — for a month, in the tab title and the OG card.
+# Both now read from SITE.legalName.
+#
+# The domain keeps "mosesofafricafoundation.org" and that is correct — it is
+# the address, not the name. It needs no exclusion here: the search term has
+# spaces and a hostname does not, so a URL can never match it. An earlier
+# version of this check stripped URLs first; the strip was proven to change
+# nothing and was removed rather than left implying a protection it did not
+# provide.
+name_drift=$(grep -oi 'Moses of Africa' <<< "$html" | wc -l | tr -d ' ')
+if [ "$name_drift" = "0" ]; then
+  pass "legal name is consistent (no 'Moses of Africa' in the markup)"
+else
+  fail "legal name is consistent (found $name_drift use(s) of the old name)"
+fi
 
 echo "-- file-convention assets actually resolve"
 resolves "favicon resolves"             '/icon[^" ]*\.jpg[^" ]*' "image/"

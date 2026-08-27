@@ -1,5 +1,6 @@
 import { Big_Shoulders, Manrope } from "next/font/google"
 import Preloader from "@/components/Preloader"
+import { SITE } from "@/lib/site"
 import UtilityStrip from "@/components/shell/UtilityStrip"
 import SiteHeader from "@/components/shell/SiteHeader"
 import SiteFooter from "@/components/shell/SiteFooter"
@@ -33,26 +34,30 @@ export const metadata = {
   // public/index.html carried the only <link rel="manifest"> and was deleted
   // with CRA, so without this the rewritten manifest is referenced by nothing.
   manifest: "/manifest.json",
+  // Legal name confirmed by the client 27 Aug 2026: "Moses Mentoring
+  // Foundation". It reads from SITE so the tab title, the OG card and the
+  // wordmark in the header can never disagree again — they did for a month.
+  // The DOMAIN keeps "mosesofafrica" and that is correct; it is the address,
+  // not the name.
   title: {
-    default: "Moses of Africa Mentoring Foundation",
-    template: "%s · Moses of Africa Mentoring Foundation",
+    default: SITE.legalName,
+    template: `%s · ${SITE.legalName}`,
   },
-  description:
-    "Moses of Africa Mentoring Foundation identifies and empowers young talent through mentorship, education, and leadership development across Africa.",
+  description: `${SITE.legalName} identifies and empowers young talent through mentorship, education, and leadership development across Africa.`,
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
-    siteName: "Moses of Africa Mentoring Foundation",
-    title: "Moses of Africa Mentoring Foundation",
+    siteName: SITE.legalName,
+    title: SITE.legalName,
     description:
       "Don't Just Belong, Stand Out. Mentorship, education and leadership development for Africa's emerging leaders.",
     locale: "en_NG",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Moses of Africa Mentoring Foundation",
+    title: SITE.legalName,
     description:
       "Mentorship, education and leadership development for Africa's emerging leaders.",
   },
