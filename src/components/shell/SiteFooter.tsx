@@ -43,11 +43,20 @@ export default function SiteFooter() {
             <p className="m-0 max-w-[300px] font-body text-[13px] font-medium leading-[1.65] text-white/60">
               {SITE.address}
             </p>
-            <p className="mt-3 font-body text-[13px] font-semibold leading-[1.8] text-gold-500">
-              <a href={`tel:${SITE.phone.replace(/\s/g, "")}`}>{SITE.phone}</a>
-              <br />
-              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-            </p>
+            <div className="mt-3 flex flex-col font-body text-[13px] font-semibold text-gold-500">
+              <a
+                href={`tel:${SITE.phone.replace(/\s/g, "")}`}
+                className="flex min-h-[44px] items-center lg:min-h-0 lg:leading-[1.8]"
+              >
+                {SITE.phone}
+              </a>
+              <a
+                href={`mailto:${SITE.email}`}
+                className="flex min-h-[44px] items-center lg:min-h-0 lg:leading-[1.8]"
+              >
+                {SITE.email}
+              </a>
+            </div>
           </div>
 
           {FOOTER_COLUMNS.map((col) => (
@@ -55,12 +64,12 @@ export default function SiteFooter() {
               <h2 className="mb-[18px] font-body text-[10px] font-bold uppercase leading-none tracking-[.16em] text-white/45">
                 {col.heading}
               </h2>
-              <ul className="m-0 flex list-none flex-col gap-[11px] p-0">
+              <ul className="m-0 flex list-none flex-col gap-0 p-0 lg:gap-[11px]">
                 {col.links.map((l) => (
                   <li key={l.label}>
                     <Link
                       href={l.href}
-                      className="font-body text-[13px] font-medium leading-none text-white/[.82] transition-colors duration-150 hover:text-white"
+                      className="flex min-h-[44px] items-center font-body text-[13px] font-medium leading-none text-white/[.82] transition-colors duration-150 hover:text-white lg:min-h-0"
                     >
                       {l.label}
                     </Link>
@@ -74,12 +83,12 @@ export default function SiteFooter() {
             <h2 className="mb-[18px] font-body text-[10px] font-bold uppercase leading-none tracking-[.16em] text-white/45">
               Follow
             </h2>
-            <ul className="m-0 flex list-none flex-col gap-[11px] p-0">
+            <ul className="m-0 flex list-none flex-col gap-0 p-0 lg:gap-[11px]">
               {SITE.social.map((s) => (
                 <li key={s.label}>
                   <a
                     href={s.url}
-                    className="font-body text-[13px] font-medium leading-none text-white/[.82] transition-colors duration-150 hover:text-white"
+                    className="flex min-h-[44px] items-center font-body text-[13px] font-medium leading-none text-white/[.82] transition-colors duration-150 hover:text-white lg:min-h-0"
                   >
                     {s.label}
                   </a>

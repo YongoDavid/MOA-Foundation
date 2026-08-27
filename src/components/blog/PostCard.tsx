@@ -7,7 +7,7 @@ import PlayBadge from "./PlayBadge"
 
 // Grid card, mockup 1a. Two variants (spec §4):
 //   media — image on top, category eyebrow, title, excerpt, author row
-//   story — no image, teal tint, larger title, "Read →" footer
+//   story — no image, green ground, larger title, "Read →" footer
 //
 // Accessibility (spec §11): the title carries the ONLY anchor, stretched over
 // the card by the .card-stretch::after rule in globals.css. Nesting a second link

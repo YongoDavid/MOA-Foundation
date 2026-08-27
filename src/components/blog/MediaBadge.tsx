@@ -5,7 +5,7 @@ import { mediaLabel } from "@/lib/blog-format"
 // Two treatments from the mockups:
 //   solid — on a photo (featured hero, mobile featured): filled, white text
 //   tint  — on white (post header chips): pale fill, coloured text
-// Gallery is teal, video is amber (spec §3).
+// Gallery is umber, video is gold.
 
 type Props = {
   kind: "gallery" | "video" | "story"

@@ -221,7 +221,7 @@ export default function CommentThread({
             bodyRef.current?.scrollIntoView({ block: "center" })
             bodyRef.current?.focus()
           }}
-          className="flex-1 px-[14px] py-3 text-left text-[12.5px] font-medium"
+          className="min-h-[48px] flex-1 px-[14px] py-3 text-left text-[12.5px] font-medium"
           style={{
             background: "#F3EEE4",
             color: "#857C86",
@@ -236,7 +236,7 @@ export default function CommentThread({
             bodyRef.current?.scrollIntoView({ block: "center" })
             bodyRef.current?.focus()
           }}
-          className="flex h-10 w-10 flex-none items-center justify-center bg-ink-900 font-body text-[14px] font-bold text-white"
+          className="flex h-12 w-12 flex-none items-center justify-center bg-ink-900 font-body text-[14px] font-bold text-white"
         >
           ↑
         </button>
@@ -246,7 +246,7 @@ export default function CommentThread({
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="mt-[26px] w-full p-[13px] text-center text-[12.5px] font-bold leading-none"
+          className="mt-[26px] min-h-[48px] w-full p-[13px] text-center text-[12.5px] font-bold leading-none"
           style={{
             border: "1px solid rgba(20,16,24,.18)",
             color: "#B4762A",

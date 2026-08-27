@@ -26,7 +26,7 @@ export default function RecentPosts() {
           </div>
           <Link
             href="/blog"
-            className="font-body text-[11px] font-bold uppercase leading-none tracking-[.1em] text-umber-600 transition-colors duration-150 hover:text-umber-800"
+            className="inline-flex min-h-[44px] items-center font-body text-[11px] font-bold uppercase leading-none tracking-[.1em] text-umber-600 transition-colors duration-150 hover:text-umber-800"
           >
             All posts →
           </Link>

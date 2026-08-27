@@ -74,11 +74,11 @@ export default function SiteHeader() {
             aria-label="Open menu"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
-            className="flex h-[26px] w-[26px] flex-col justify-center gap-[5px] lg:hidden"
+            className="-mr-3 flex h-12 w-12 flex-col items-end justify-center gap-[5px] lg:hidden"
           >
-            <span aria-hidden="true" className="block h-[2px] w-full bg-ink-900" />
-            <span aria-hidden="true" className="block h-[2px] w-full bg-ink-900" />
-            <span aria-hidden="true" className="block h-[2px] w-full bg-ink-900" />
+            <span aria-hidden="true" className="block h-[2px] w-[26px] bg-ink-900" />
+            <span aria-hidden="true" className="block h-[2px] w-[26px] bg-ink-900" />
+            <span aria-hidden="true" className="block h-[2px] w-[26px] bg-ink-900" />
           </button>
         </div>
       </header>

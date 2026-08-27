@@ -62,7 +62,7 @@ export default function SdgGrid() {
       <li className="flex aspect-square items-end border border-ink-900/20 p-2 lg:p-3">
         <Link
           href="/about"
-          className="font-body text-[8.5px] font-bold uppercase leading-[1.4] tracking-[.08em] text-umber-600 lg:text-[10px]"
+          className="flex h-full w-full items-end font-body text-[8.5px] font-bold uppercase leading-[1.4] tracking-[.08em] text-umber-600 lg:text-[10px]"
         >
           See the
           <br />

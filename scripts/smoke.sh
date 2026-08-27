@@ -210,8 +210,10 @@ absent   "no external font host"        "fonts.gstatic.com"
 # than left failing — a permanently red check is how a safety net stops being
 # trusted. Reverting the palette means restoring these four lines.
 #
-# `brand token royal-purple compiled` below is deliberately kept: the homepage
-# still uses site tokens, so it now guards the two palettes coexisting.
+# 27 Aug 2026: the blog was reskinned onto the site palette and the legacy
+# tokens were deleted with the twelve components that used them. The canary
+# below now watches a REDESIGN token — its job was never royal-purple
+# specifically, it was "is Tailwind reading tailwind.config.js at all".
 
 echo "-- file-convention assets actually resolve"
 resolves "favicon resolves"             '/icon[^" ]*\.jpg[^" ]*' "image/"
@@ -236,10 +238,19 @@ else
     css="$css$(curl -fsS --max-time 20 "$BASE$cp" 2>/dev/null)"
   done
 
-  if grep -q '6d28d9' <<< "$css"; then
-    pass "brand token royal-purple compiled"
+  # Tailwind emits custom colours as space-separated rgb triplets, not hex:
+  # green-900 #0D3B26 -> "13 59 38". Matching hex here would never pass.
+  if grep -q '13 59 38' <<< "$css"; then
+    pass "brand token green-900 compiled"
   else
-    fail "brand token royal-purple compiled (Tailwind not processing config)"
+    fail "brand token green-900 compiled (Tailwind not processing config)"
+  fi
+
+  # The retired palette must not come back with a stray import.
+  if grep -qE '109, ?40, ?217|6d28d9|20 184 166' <<< "$css"; then
+    fail "no retired purple/teal tokens in the stylesheet"
+  else
+    pass "no retired purple/teal tokens in the stylesheet"
   fi
 
   # Unprocessed directives in the STYLESHEET mean PostCSS is not wired up.
@@ -317,12 +328,34 @@ fi
 # Square is the system default (spec §2 Layout). rounded-full survives for
 # rings and avatars; every other radius token resolves to 0.
 # The rule spans lines in dev-mode CSS and grep is line-based, so flatten
-# first. Tailwind's own 2xl radius is 1rem; ours must be 0.
+# first.
+#
+# This used to test `.rounded-2xl`. Once the legacy components were deleted no
+# source file used that class any more, so Tailwind stopped emitting it and the
+# assertion failed against a perfectly square site — testing a class nothing
+# uses proves nothing either way. It now tests the two facts that matter:
+# the preloader spinner is still a circle, and no rule anywhere carries a
+# rounded corner.
+#
+# Nothing uses the `rounded-full` UTILITY any more either — the only circles
+# left are the spinner rings, drawn with border-radius:50% in plain CSS. So
+# the circle check reads the rule that actually exists rather than a Tailwind
+# class that is no longer emitted.
 css_flat=$(tr -d '\n' <<< "$css")
-if grep -qE '\.rounded-2xl[^{}]*\{[^}]*border-radius: *0' <<< "$css_flat"; then
-  pass "square radius is the default"
+if grep -qE '\.moa-preloader__spinner:{1,2}(before|after)[^{}]*\{[^}]*border-radius: *50%' <<< "$css_flat"; then
+  pass "preloader rings are still circles"
 else
-  fail "square radius is the default (rounded-2xl should be 0)"
+  fail "preloader rings are still circles"
+fi
+
+# Any border-radius with a non-zero, non-9999px value means a rounded corner
+# got back in — either a new arbitrary value or a restored config entry.
+stray=$(grep -oE 'border-radius: *[^;0][^;]*' <<< "$css_flat" \
+        | grep -vE '9999px|50%|0px|: *0' | sort -u | head -5)
+if [ -z "$stray" ]; then
+  pass "no rounded corners anywhere in the stylesheet"
+else
+  fail "no rounded corners anywhere in the stylesheet (found: $(tr '\n' ' ' <<< "$stray"))"
 fi
 
 echo "-- /about"

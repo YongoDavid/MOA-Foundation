@@ -40,7 +40,7 @@ export default function MobileMenu({
           type="button"
           onClick={onClose}
           aria-label="Close menu"
-          className="relative h-8 w-8"
+          className="relative -mr-3 h-12 w-12"
         >
           {/* Gold cross from two rotated 2px spans (spec §3). */}
           <span className="absolute left-1/2 top-1/2 block h-[2px] w-6 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-gold-500" />
@@ -85,13 +85,23 @@ export default function MobileMenu({
       </div>
 
       <div className="mt-7 border-t border-white/[.14] pt-6">
-        <div className="flex flex-col gap-1 font-body text-[13px] font-semibold text-gold-500">
-          <a href={`tel:${SITE.phone.replace(/\s/g, "")}`}>{SITE.phone}</a>
-          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        <div className="flex flex-col font-body text-[13px] font-semibold text-gold-500">
+          <a
+            href={`tel:${SITE.phone.replace(/\s/g, "")}`}
+            className="flex min-h-[44px] items-center"
+          >
+            {SITE.phone}
+          </a>
+          <a
+            href={`mailto:${SITE.email}`}
+            className="flex min-h-[44px] items-center"
+          >
+            {SITE.email}
+          </a>
         </div>
-        <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 font-body text-[10px] font-bold uppercase tracking-[.14em] text-white/60">
+        <div className="mt-2 flex flex-wrap gap-x-6 font-body text-[10px] font-bold uppercase tracking-[.14em] text-white/60">
           {SITE.social.map((s) => (
-            <a key={s.label} href={s.url}>
+            <a key={s.label} href={s.url} className="flex min-h-[44px] items-center">
               {s.label}
             </a>
           ))}

@@ -8,13 +8,6 @@ export default {
         display: ["var(--font-display)", "Impact", "Haettenschweiler", "sans-serif"],
         body: ["var(--font-body)", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
 
-        // LEGACY — Outfit/Inter. Removed in Task 11 with the old components.
-        sans: [
-          "var(--font-inter)", "-apple-system", "BlinkMacSystemFont", "Segoe UI",
-          "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-          "Helvetica Neue", "sans-serif",
-        ],
-        heading: ["var(--font-outfit)", "sans-serif"],
       },
 
       // Square is the system default (spec §2 Layout): "No border-radius on
@@ -59,18 +52,6 @@ export default {
         "sand-300": "#DFD6C6",
         "sand-400": "#C4B79E",
         danger: "#A03A2A",
-
-        // ── LEGACY. Retired by spec v2.0; removed in Task 11 once the old
-        // components that reference them are deleted. Keeping them until then
-        // is what lets the site stay coherent mid-rebuild.
-        "royal-purple": "#6d28d9",
-        teal: "#14b8a6",
-        "bright-orange": "#fb923c",
-        "light-gray": "#e5e7eb",
-        "dark-gray": "#1f2937",
-        "medium-gray": "#6b7280",
-        "dark-navy": "#0f172a",
-        "orange-accent": "#fb6b35",
       },
     },
   },

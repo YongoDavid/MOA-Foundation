@@ -1,163 +1,141 @@
-# Manual QA Checklist — Next.js migration
+# Manual QA Checklist — Direction A redesign
 
-`scripts/smoke.sh` and `next build` cover server-rendered output and build
-integrity. They cannot cover hydration warnings or interaction. Run this
-list in a real browser before merging, at desktop width and at 390px.
+`scripts/smoke.sh` (112 assertions) and `next build` cover server-rendered
+output and build integrity. They cannot cover hydration warnings, interaction,
+or anything that only exists once JavaScript runs. **Run this in a real
+browser before merging**, at 1440px and at 390px.
 
-> **Signed off 24 August 2026** by the project owner, in their own browser
-> against a local server on `:3010`. The hydration console check and the
-> particle animation were verified explicitly on request; the remainder was
-> confirmed as "good to go from my end".
->
-> Two caveats worth keeping honest, for whoever reads this next:
-> 1. The three items under **Gaps nothing automated can cover** are subtle —
->    they need a deliberate look rather than general use. If anything later
->    seems off with CTA icon colours, first-paint font, or a blank carousel
->    frame, re-check those three first; they were not individually narrated
->    back.
-> 2. Ticking this list is not a regression guard. It records one observation
->    on one day. Nothing here re-runs in CI, so a future change can break any
->    of it silently — that is the standing cost of having no test framework.
+> **This list is not a regression guard.** It records one person's observation
+> on one day. Nothing here re-runs in CI, so a later change can break any of it
+> silently. That is the standing cost of having no test framework, which is a
+> deliberate project decision — not an oversight to fix by adding one.
 
-## Console (the highest-value check — and the ONLY evidence for the Task 5 fix)
-- [x] Open DevTools console, hard-reload `/`. **Zero errors.**
-- [x] Specifically: no "Hydration failed", no "server rendered HTML didn't match".
-- [x] Scroll to the bottom of the page. Still zero errors.
-- [x] At desktop width, watch the dark newsletter panel near the page bottom:
-      ~20 faint white dots should drift and fade continuously. They appear a
-      moment after load, not instantly. **Zero dots, or a console hydration
-      warning, means the Task 5 fix regressed.**
-
-**Verified 24 August 2026: console clean, dots present.** This section cannot
-be automated — a hydration mismatch is a browser-console warning that
-`next build` does not surface and `curl` cannot see, and this project has no
-test framework by design.
-
-The `NewsletterSection` fix (commit `b6ebb4b`) was already correct by
-construction: `useState([])` makes the array empty on both the server render
-and the first client render, so there is nothing to mismatch, and the dots
-arrive on a later render React never compares. The server-side signature was
-confirmed independently — the particle container is served as
-`<div class="absolute inset-0 overflow-hidden hidden sm:block"></div>`, empty,
-with zero particle nodes. The console read closes the loop: correct by
-construction *and* observed.
-
-Re-check this section after any change to `NewsletterSection`, to the
-`createPortal` mount guard in `book-now-modal.js`, or to anything that moves
-work between server and client render.
-
-## Donation modal
-- [x] Header grid icon opens the drawer; heading reads "Donate Here".
-- [x] Desktop nav "DONATION" opens the same drawer (it is not an anchor).
-- [x] Mobile menu "Donate Now" opens it and closes the menu.
-- [x] Escape closes it. Clicking the backdrop closes it.
-- [x] While open, the page behind does not scroll.
-- [x] The name field is focused shortly after opening.
-
-## Programs tabs
-- [x] "Specific Objectives" shows a two-column bullet list.
-- [x] "SDG Alignment" shows six SDG cards.
-- [x] "Core Values" shows five cards.
-- [x] The violet pill animates between tabs.
-
-## Carousels
-- [x] Hero advances on its own roughly every 5s.
-- [x] Hero arrows (desktop) and dots both work.
-- [x] About-section carousel advances and its arrows work.
-- [x] Testimonials advance on their own; drag-swipe works on touch.
-
-## Navigation
-- [x] Desktop "ABOUT US" / "PROGRAMS" / "CONTACT" scroll to the right sections,
-      not hidden behind the sticky header.
-- [x] Mobile menu links smooth-scroll with the header offset applied.
-- [x] Scroll progress bar fills as the page scrolls.
-- [x] At 390px, the scroll-to-top button appears after ~300px and returns to top.
-
-## Logo sizing (a real bug once shipped here)
-- [x] Header logo sits snug against the wordmark — **no empty gap to its right**.
-- [x] Logo is not squashed or stretched; it is a portrait image (1024×1536).
-- [x] Logo shrinks smoothly when the header condenses on scroll.
-- [x] Logo in the donation drawer is the same shape as the header's, just larger.
-
-Why this is called out: hardcoded `width`/`height` props on `next/image` override
-the true dimensions of a static import. They were once set to 2:1 in the header
-and 1:1 in the drawer for a file that is actually 2:3, which letterboxed the logo
-inside an oversized box. The props are now omitted so Next infers the real size —
-if anyone re-adds them, this is what breaks.
-
-## Gaps nothing automated can cover
-These three were identified in the final branch review as changes with neither
-an automated assertion nor, previously, a checklist item.
-
-- [x] **CTA card icon colours.** The three "Get Involved" cards must show a
-      purple, a teal and an orange icon. `CTASection.js` composes those class
-      names at runtime (`text-${card.color}`), which Tailwind's scanner cannot
-      see — they only work because `globals.css` hand-writes them. Delete those
-      rules and smoke still passes green while the icons lose their colour.
-- [x] **First-paint font.** Hard-reload with a cold cache and watch the very
-      first frame: text should appear in the system UI font, then swap to Inter
-      — not in generic Helvetica/Arial. This is the only check on the fallback
-      chain that commit ff3aa96 exists to protect.
-- [x] **Carousel images on first pass.** Step through the hero and about
-      carousels once each. Only the first hero slide is `priority`; the rest
-      lazy-load, so a slide can show a blank frame the old `<img>` never did.
-      "Advances every 5s" would tick true even with every frame blank.
-
-## Visual parity
-- [x] Compare against the pre-migration site side by side. Fonts, colours,
-      spacing and image framing are unchanged.
-- [x] Favicon shows the MOA logo in the browser tab.
-
+The two previous rounds (Next.js migration, 24 Aug 2026; blog prototype) were
+signed off by the project owner and their items are folded in below where they
+still apply. Everything here is **unrun** against the redesign.
 
 ---
 
-# Blog prototype — manual checks
+## 1. Console — the highest-value check
 
-Added 26 August 2026 with the blog prototype (Plan 2). `scripts/smoke.sh` now
-covers the blog's server-rendered output — routes, headings, body copy, the
-composer, the §8 Delete guard, and category 404s. Everything below is what it
-structurally cannot reach.
+Hydration mismatches are this codebase's recurring bug: three separate
+instances so far (random particles, locale dates, the preloader). They are
+browser-console warnings that `next build` does not surface and `curl` cannot
+see. **This section is the only evidence that exists for any of those fixes.**
 
-## Interaction the smoke script cannot see
-- [ ] **Lightbox.** On a gallery post, click a photo. It opens; arrow keys move
-      between photos; Escape closes it; focus returns to the tile you clicked.
-      Tab cycles inside the dialog and never escapes to the page behind.
-- [ ] **Gallery overflow.** The fourth tile reads `+15` and opens the lightbox.
+- [ ] DevTools open, hard-reload each of the eleven routes. **Zero errors.**
+- [ ] Specifically: no "Hydration failed", no "server rendered HTML didn't match".
+- [ ] Scroll each page to the bottom. Still zero.
+
+## 2. Preloader (restyled Task 11)
+
+- [ ] On first load the overlay is **paper (#FBF8F3)**, not white-blue.
+- [ ] The logo pulses in a double-thump heartbeat, not a single smooth breath.
+- [ ] Outer ring: faint green track, **gold** moving arc. Inner ring counter-
+      rotates with a **green** arc. No purple anywhere.
+- [ ] The message pill is a **square green block with paper text** — not a
+      rounded white pill.
+- [ ] It dismisses after ~3s, and always within 5.2s even on a slow load.
+- [ ] With `prefers-reduced-motion: reduce` it dismisses almost immediately and
+      nothing animates.
+- [ ] With JavaScript disabled the overlay is **absent** and the site is usable.
+
+## 3. Navigation and shell
+
+- [ ] Every header nav item reaches its route; the current one shows the umber
+      underline.
+- [ ] `/programs/apply` and `/programs/mentor` both mark **PROGRAMS** current.
+- [ ] Footer links all resolve — none 404, none are `#` except the socials.
+- [ ] Skip link: press Tab from a fresh load. "Skip to main content" appears
+      first and jumps to the content.
+- [ ] Focus is visible on every interactive element, on both light and dark
+      grounds.
+
+## 4. Forms — all four
+
+For **each** of `/programs/apply`, `/programs/mentor`, `/donate`, `/contact`:
+
+- [ ] Submit empty. Inline errors appear on every required field; the page does
+      not navigate.
+- [ ] Errors are announced to a screen reader and tied to their input.
+- [ ] Fill correctly and submit. **The form is replaced** by the panel that
+      says nothing was sent, and gives the email and phone.
+- [ ] That panel's email and phone are tappable links.
+- [ ] Segmented controls: selecting one deselects the others; keyboard arrows
+      move between them.
+- [ ] `/donate` shows "No payment is taken on this website" and asks for **no
+      card details at all**.
+
+## 5. Gallery
+
+- [ ] All six filters work and the current one is underlined.
+- [ ] "Load more photographs" reveals the rest; the counter updates.
+- [ ] Switching filter **resets** to the first page.
+- [ ] With JavaScript disabled, filters still work — they are plain links.
+- [ ] `/gallery?category=Summits` deep-links correctly.
+- [ ] No horizontal page scroll at 390px.
+- [ ] The feature tile spans two columns and two rows; no gaps in the grid.
+
+## 6. Blog
+
+- [ ] **Lightbox.** Click a gallery photo. It opens, arrow keys move between
+      **all** photos in the set (not just the three visible tiles), Escape
+      closes, focus returns to the tile that opened it.
 - [ ] **Comments.** Post one. It appears instantly at the top. **Refresh — it
-      disappears.** That is correct prototype behaviour, and the violet note
-      above the thread says so.
-- [ ] **Comment validation.** Submit with an empty name: an inline error
-      appears and your text is NOT discarded.
-- [ ] **Category chips.** Each navigates to a real URL; the active chip is
-      violet-filled; the browser back button works.
+      is gone.** Expected: fixtures, no backend.
+- [ ] Empty name on a comment gives an inline error.
+- [ ] The staff "FOUNDATION" badge is **green**, and Delete never appears.
+- [ ] Category tabs navigate to real URLs; the current one is underlined.
+- [ ] Post body, quote and tags all render in the site palette.
 
-## Mobile (390px)
-- [ ] Featured post becomes a 190px image with the **title beneath it in dark
-      text**, not white text overlaid.
-- [ ] Recent items use 96×76 thumbnails.
-- [ ] Category chips scroll horizontally with no visible scrollbar.
-- [ ] Gutters are 18px, not 40px.
-- [ ] **Sticky composer** sits at the bottom of the comment thread; tapping it
-      focuses the real form. It clears the iOS home indicator.
+## 7. Mobile (390px) — every route
 
-## The two palettes
-- [ ] On the homepage, scroll to "From Our Blog". It renders in violet
-      (`#6C0FD6`) and Plus Jakarta Sans, between sections in royal-purple and
-      Outfit. **This is the expected result of the 25 Aug decision** — judge
-      whether you want it. Reverting is an edit to `src/app/blog/blog.css`
-      alone.
-- [ ] The rest of the homepage is unchanged: no violet, no Jakarta.
+- [ ] Hamburger opens the full-screen ink menu; Escape and the gold cross close it.
+- [ ] Body scroll is locked while the menu is open.
+- [ ] **Every tap target is at least 44–48px.** Check specifically: hamburger,
+      menu close, footer link columns, footer socials, menu phone/email, SDG
+      grid "full report" link, blog comment composer.
+- [ ] Two-column bands stack; the four-column footer becomes two.
+- [ ] No horizontal scroll on any route. Check the SDG grid and the gallery.
+- [ ] Filter bars scroll horizontally with **no visible scrollbar**.
 
-## Console
-- [ ] Load `/blog` and a post with DevTools open. **Zero errors**, and
-      specifically no hydration warnings. Comment timestamps are deliberately
-      absolute rather than "2 hours ago" precisely to avoid that.
+## 8. Typography and shape
 
-## Known prototype limitations — expected, not bugs
-- Comments do not persist.
-- Video shows a poster and play badge but **cannot play** — no media pipeline.
-- No editor; posts come from `src/lib/blog-fixtures.ts`.
-- No pagination control: the design defaults it off and the fixtures are one
-  page. A control that went nowhere would mislead.
-- No staff Delete: spec §8 requires it be absent from the DOM without auth,
-  and there is no auth here.
+- [ ] Headings render in **Big Shoulders** — condensed, uppercase. If they look
+      like ordinary sans-serif, the font failed to load.
+- [ ] Body copy is **Manrope**.
+- [ ] Hard-reload with a cold cache: watch the first paint. The fallback should
+      not reflow jarringly into the webfont.
+- [ ] **No rounded corners anywhere** — cards, buttons, inputs, images, badges.
+      The only circles are the preloader rings.
+- [ ] **No drop shadows.**
+
+## 9. Images
+
+- [ ] Header logo sits snug against the wordmark — **no empty gap to its right**.
+      (This shipped as a real bug once.)
+- [ ] No image is squashed, stretched or letterboxed.
+- [ ] Every hero and band photograph loads; none collapse to zero height.
+- [ ] Favicon appears in the tab.
+
+## 10. Cross-cutting: the redesign actually landed
+
+- [ ] **No purple or teal anywhere on any route**, including the blog.
+- [ ] The blog looks like the same website as the homepage — same palette, same
+      typefaces, same square corners, same header and footer.
+
+---
+
+## Known limitations — expected, not bugs
+
+1. **No form submits.** All four validate and then say so. No backend by
+   client decision.
+2. **Comments do not persist.** A refresh clears them.
+3. **Blog body copy for posts 2–7 is placeholder.** Post 1 is approved copy.
+4. **No year filter on `/gallery`** — no photograph has a capture date.
+5. **`src/Images/mmf-logo.png` is missing**; the footer falls back to
+   `Logo1.jpg`. Needs the real file placed by hand.
+6. **All social links are `href="#"`.**
+7. **The organisation's name is used two ways** — "Moses Mentoring Foundation"
+   on every page, "Moses of Africa Mentoring Foundation" in the metadata and
+   the domain. Needs a client decision, then unifying.

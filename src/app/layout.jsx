@@ -1,21 +1,9 @@
-import { Inter, Outfit, Big_Shoulders, Manrope } from "next/font/google"
+import { Big_Shoulders, Manrope } from "next/font/google"
 import Preloader from "@/components/Preloader"
 import UtilityStrip from "@/components/shell/UtilityStrip"
 import SiteHeader from "@/components/shell/SiteHeader"
 import SiteFooter from "@/components/shell/SiteFooter"
 import "./globals.css"
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-})
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  display: "swap",
-})
 
 // Redesign typefaces (spec v2.0 §2). Two families, no third.
 // Big Shoulders Display carries every heading, numeral and uppercase label;
@@ -82,7 +70,7 @@ export default function RootLayout({ children }) {
         </noscript>
       </head>
       <body
-        className={`${inter.variable} ${outfit.variable} ${display.variable} ${body.variable} font-body`}
+        className={`${display.variable} ${body.variable} font-body`}
       >
         <Preloader />
         {/* Skip link must be the first focusable element (spec §12). */}
