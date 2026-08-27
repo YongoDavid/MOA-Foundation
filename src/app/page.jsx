@@ -5,19 +5,24 @@ import Evidence from "@/components/bands/Evidence"
 import SdgBand from "@/components/bands/SdgBand"
 import Alignment from "@/components/bands/Alignment"
 import VisionSplit from "@/components/bands/VisionSplit"
-
-// LEGACY bands, still in the old palette. Replaced in Tasks 4–5.
-import ProgramsSection from "@/components/ProgramsSection"
-import AboutSection from "@/components/AboutSection"
-import NewsletterSection from "@/components/NewsletterSection"
-import CTASection from "@/components/CTASection"
-import LatestPostsBlock from "@/components/blog/LatestPostsBlock"
+import Objectives from "@/components/bands/Objectives"
+import Pathways from "@/components/bands/Pathways"
+import RecentPosts from "@/components/bands/RecentPosts"
+import NewsletterBand from "@/components/bands/NewsletterBand"
+import { FLAGS } from "@/lib/content"
 
 import HeroImage from "../Images/57462f6c-354a-4a34-8c42-b311b14f5d66.jpg"
 import EvidenceHeaderImage from "../Images/MOA8.jpg"
 import AlignmentHeaderImage from "../Images/MOA4.jpg"
 import VisionImage from "../Images/MOA7.jpg"
+import ObjectivesHeaderImage from "../Images/MOA6.jpg"
+import PathwaysHeaderImage from "../Images/MOA9.jpg"
+import MenteeImage from "../Images/MOA.jpg"
+import MentorImage from "../Images/MOA10.jpg"
 
+// Nine bands alternating paper, dark and photographic header. The alternation
+// is the fix for the old site's nine-sections-at-identical-weight problem
+// (spec §4) — preserve it.
 export default function Home() {
   return (
     <>
@@ -61,12 +66,36 @@ export default function Home() {
         alt="At a Women in Politics and Governance event in Abuja"
       />
 
-      {/* ── Everything below is the old design, replaced in Task 5. ── */}
-      <ProgramsSection />
-      <AboutSection />
-      <LatestPostsBlock />
-      <CTASection />
-      <NewsletterSection />
+      {/* Band 05 and its photographic header hide together (spec §4). */}
+      {FLAGS.showObjectives ? (
+        <>
+          <SectionHeader
+            eyebrow="05 — Aims & objectives"
+            heading="Ten specific objectives"
+            note="Full programme document →"
+            image={ObjectivesHeaderImage}
+            alt="With embassy staff at the Embassy of the State of Kuwait in Abuja"
+          />
+          <Objectives />
+        </>
+      ) : null}
+
+      <SectionHeader
+        eyebrow="06 — Take part"
+        heading="Three ways in"
+        image={PathwaysHeaderImage}
+        alt="At the Nigeria Police Force headquarters in Abuja"
+      />
+      <Pathways
+        menteeImage={MenteeImage}
+        menteeAlt="At a courtesy visit to the Embassy of Vietnam in Abuja"
+        mentorImage={MentorImage}
+        mentorAlt="With a senior police officer at a courtesy visit in Abuja"
+      />
+
+      <RecentPosts />
+
+      <NewsletterBand />
     </>
   )
 }

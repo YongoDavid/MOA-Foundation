@@ -107,33 +107,39 @@ resolves() {
 
 echo "Smoke checking $BASE"
 
-echo "-- sections server-rendered"
-# Copy strings taken verbatim from the components. Apostrophes are avoided
-# deliberately: the source mixes U+2019 (HeroSection) and U+0027
-# (AboutSection), and "&" is HTML-escaped in the served markup.
-# The redesigned hero splits the headline across spans, so the old contiguous
-# match no longer exists. React escapes the apostrophe to &#x27;.
+echo "-- homepage bands (spec §4, nine in document order)"
 contains "hero headline"                "Emerging Leaders"
 contains "hero gold accent"             "Excellence."
+contains "band: mandate"                "Our mandate"
 contains "mandate verbatim"             "To inspire guide and equip African youths"
-contains "programs heading"             "Aims"
-contains "about heading"                "Future Leaders"
-# Testimonials removed: the redesign has no carousels (spec §10) and the
-# section is not in the new information architecture.
-contains "cta heading"                  "Get Involved"
-contains "newsletter heading"           "Stay Connected with Our Community"
-# The confirmed legal name (spec §11). The old site rendered three different
-# variants across header, footer and newsletter copy; there is now one.
-contains "foundation name"              "Moses Mentoring Foundation"
-contains "mission statement"            "MISSION STATEMENT:"
+contains "band 01: evidence"            "01 — The evidence"
+contains "band 02: SDG alignment"       "02 — SDG alignment"
+contains "band 03: who we work with"    "03 — Who we work with"
+contains "band 04: our vision"          "04 — Our vision"
+contains "band 05: aims & objectives"   "05 — Aims"
+contains "band 06: take part"           "06 — Take part"
+contains "band 07: from the field"      "07 — From the field"
+contains "band: newsletter"             "Our quarterly report"
 
-echo "-- anchor targets the nav depends on"
-contains "anchor #about"                'id="about"'
-contains "anchor #programs"             'id="programs"'
-contains "anchor #get-involved"         'id="get-involved"'
-contains "anchor #newsletter"           'id="newsletter"'
-# #contact was an in-page anchor to the old footer. Contact is a route now.
-contains "contact route linked"         'href="/contact"'
+echo "-- objectives ship visible with real copy"
+# The spec's stop-block says to hide band 05 pending copy; that note predates
+# the v3 mockup, whose ten objectives are those already published on the
+# previous site. Client confirmed 27 Aug the band ships visible.
+contains "objective 01"                 "Harnessing youth potential"
+contains "objective 10"                 "Encouraging creativity and forward-thinking"
+
+echo "-- three pathways"
+contains "pathway: mentee"              "Apply as a mentee"
+contains "pathway: mentor"              "Mentor a cohort"
+contains "pathway: donate"              "Fund a place in the next cohort"
+
+echo "-- retired palette is gone from the homepage"
+# Every homepage band is redesigned; none of the old tokens may survive here.
+# The blog keeps its own palette until Task 10, and smoke only fetches /.
+absent   "no royal-purple"              "royal-purple"
+absent   "no bright-orange"             "bright-orange"
+absent   "no dark-navy"                 "dark-navy"
+absent   "no medium-gray"               "medium-gray"
 
 echo "-- images"
 # Spec §3 forbids the logo image in the header: the mark is a near-square
