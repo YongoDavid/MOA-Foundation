@@ -9,19 +9,19 @@ export default function PullQuote({
 }) {
   return (
     <figure
-      className="my-0 rounded-2xl px-[26px] py-6"
-      style={{ background: "var(--blog-violet-050)" }}
+      className="my-0 px-[26px] py-6"
+      style={{ background: "#F3EEE4" }}
     >
       <blockquote
         className="m-0 text-[19px] font-semibold leading-[1.6] tracking-[-.01em]"
-        style={{ color: "var(--blog-violet-900)" }}
+        style={{ color: "#14261D" }}
       >
         {text}
       </blockquote>
       {attribution ? (
         <figcaption
           className="mt-3 text-[12px] font-bold uppercase leading-none tracking-[.06em]"
-          style={{ color: "var(--blog-violet-600)" }}
+          style={{ color: "#B4762A" }}
         >
           {attribution}
         </figcaption>

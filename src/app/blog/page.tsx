@@ -1,17 +1,26 @@
+import Image from "next/image"
 import { getFeatured, getPosts } from "@/lib/blog-fixtures"
 import CategoryChips from "@/components/blog/CategoryChips"
 import FeaturedPost from "@/components/blog/FeaturedPost"
 import PostCard from "@/components/blog/PostCard"
 import RecentList from "@/components/blog/RecentList"
+import { SCRIM } from "@/lib/tokens"
+
+import HeaderImage from "@/Images/MOA6.jpg"
 
 export const metadata = {
   title: "Stories & Activities",
   description:
     "Events, outreaches and mentoring sessions from across the continent, written by our team as they happen.",
+  alternates: { canonical: "/blog" },
 }
 
-// Mockup 1a. Server component — the index must be crawlable, so nothing here
-// fetches on the client.
+// Blog index, reskinned to Direction A. Server component — the index must be
+// crawlable, so nothing here fetches on the client.
+//
+// No <main> of its own: the root layout already provides <main id="main">, and
+// nesting a second one is invalid HTML that gives screen readers two competing
+// landmarks. Same in [slug] and the category route.
 export default function BlogIndexPage() {
   const posts = getPosts()
   const featured = getFeatured()
@@ -22,62 +31,71 @@ export default function BlogIndexPage() {
   const grid = rest.slice(3)
 
   return (
-    <main>
-      <header
-        className="px-[18px] md:px-10 pb-[30px] pt-10"
-        style={{
-          background:
-            "linear-gradient(180deg, var(--blog-violet-050) 0%, var(--blog-surface) 100%)",
-        }}
-      >
-        <div className="mx-auto max-w-[1180px]">
-          <div
-            className="text-[11px] font-extrabold uppercase leading-none tracking-[.14em]"
-            style={{ color: "var(--blog-violet-600)" }}
-          >
-            From the field
+    <>
+      <section className="relative h-[240px] bg-ink-900 lg:h-[200px]">
+        <Image
+          src={HeaderImage}
+          alt="With embassy staff at the Embassy of the State of Kuwait in Abuja"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 lg:hidden"
+          style={{ background: SCRIM.mobile }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 hidden lg:block"
+          style={{ background: SCRIM.sectionHeader }}
+        />
+        <div className="absolute inset-x-5 bottom-6 mx-auto flex max-w-[1180px] flex-col gap-4 lg:inset-x-10 lg:bottom-7 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+          <div>
+            <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-gold-500">
+              From the field
+            </p>
+            <h1 className="m-0 mt-3 font-display text-[38px] font-extrabold uppercase leading-[.95] text-white lg:text-[50px]">
+              Stories &amp; activities
+            </h1>
           </div>
-          <h1 className="mb-2 mt-3 text-[28px] font-extrabold leading-[1.1] tracking-[-.02em] md:text-[44px] md:leading-[1.08]">
-            Stories &amp; Activities
-          </h1>
-          <p
-            className="m-0 max-w-[620px] text-[15px] font-medium leading-[1.6]"
-            style={{ color: "var(--blog-ink-500)" }}
-          >
-            Events, outreaches and mentoring sessions from across the continent,
-            written by our team as they happen.
+          <p className="m-0 max-w-[320px] font-body text-[13px] font-medium leading-[1.6] text-white/[.72] lg:text-right">
+            Events, outreaches and mentoring sessions, written by our team as
+            they happen.
           </p>
-          <div className="mt-[26px]">
-            <CategoryChips />
+        </div>
+      </section>
+
+      <CategoryChips />
+
+      <div className="bg-paper">
+        <div className="mx-auto max-w-[1180px] px-5 pb-[30px] pt-8 lg:px-10 lg:pt-[34px]">
+          <div className="grid items-stretch gap-[26px] lg:grid-cols-[1.35fr_1fr]">
+            {featured ? <FeaturedPost post={featured} /> : null}
+            <RecentList posts={recent} />
           </div>
         </div>
-      </header>
 
-      <div className="mx-auto max-w-[1180px] px-[18px] md:px-10 pb-[34px]">
-        <div className="grid items-stretch gap-[26px] lg:grid-cols-[1.35fr_1fr]">
-          {featured ? <FeaturedPost post={featured} /> : null}
-          <RecentList posts={recent} />
-        </div>
+        {grid.length > 0 ? (
+          <div className="mx-auto max-w-[1180px] px-5 pb-11 lg:px-10">
+            <div
+              className="grid gap-6"
+              style={{
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              }}
+            >
+              {grid.map((post) => (
+                <PostCard
+                  key={post.slug}
+                  post={post}
+                  variant={post.type === "story" ? "story" : "media"}
+                />
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
-
-      {grid.length > 0 ? (
-        <div className="mx-auto max-w-[1180px] px-[18px] md:px-10 pb-11">
-          <div
-            className="grid gap-[26px]"
-            style={{
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            }}
-          >
-            {grid.map((post) => (
-              <PostCard
-                key={post.slug}
-                post={post}
-                variant={post.type === "story" ? "story" : "media"}
-              />
-            ))}
-          </div>
-        </div>
-      ) : null}
 
       {/*
         No pagination control. The design document defines `showPagination`
@@ -85,6 +103,6 @@ export default function BlogIndexPage() {
         rendered "1 2 3 Next" that goes nowhere would mislead in a client demo.
         Add it when there is real paged data behind it.
       */}
-    </main>
+    </>
   )
 }

@@ -41,51 +41,41 @@ export default async function CategoryPage({
   const posts = getPostsByCategory(slug)
 
   return (
-    <main>
-      <header
-        className="px-[18px] md:px-10 pb-[30px] pt-10"
-        style={{
-          background:
-            "linear-gradient(180deg, var(--blog-violet-050) 0%, var(--blog-surface) 100%)",
-        }}
-      >
+    <>
+      <header className="bg-paper px-5 pb-8 pt-10 lg:px-10">
         <div className="mx-auto max-w-[1180px]">
-          <div
-            className="text-[11px] font-extrabold uppercase leading-none tracking-[.14em]"
-            style={{ color: "var(--blog-violet-600)" }}
-          >
+          <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-umber-800">
             From the field
-          </div>
-          <h1 className="mb-2 mt-3 text-[28px] font-extrabold leading-[1.1] tracking-[-.02em] md:text-[44px] md:leading-[1.08]">
+          </p>
+          <h1 className="m-0 mt-3.5 font-display text-[40px] font-extrabold uppercase leading-[.98] text-ink-900 lg:text-[50px]">
             {meta.label}
           </h1>
-          <div className="mt-[26px]">
-            <CategoryChips active={slug as Category} />
-          </div>
         </div>
       </header>
 
-      <div className="mx-auto max-w-[1180px] px-[18px] md:px-10 pb-11 pt-8">
+      <CategoryChips active={slug as Category} />
+
+      <div className="mx-auto max-w-[1180px] px-5 pb-11 pt-8 lg:px-10">
         {posts.length === 0 ? (
           // Empty state, spec §10.
           <div className="py-16 text-center">
             <p
               className="m-0 text-[15px] font-medium"
-              style={{ color: "var(--blog-ink-500)" }}
+              style={{ color: "#5C5460" }}
             >
               No posts in this category yet.
             </p>
             <Link
               href="/blog"
               className="mt-3 inline-block text-[13px] font-bold"
-              style={{ color: "var(--blog-violet-600)" }}
+              style={{ color: "#B4762A" }}
             >
               ← All posts
             </Link>
           </div>
         ) : (
           <div
-            className="grid gap-[26px]"
+            className="grid gap-6"
             style={{
               gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             }}
@@ -100,6 +90,6 @@ export default async function CategoryPage({
           </div>
         )}
       </div>
-    </main>
+    </>
   )
 }

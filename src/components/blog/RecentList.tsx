@@ -25,19 +25,19 @@ export default function RecentList({ posts }: { posts: Post[] }) {
         return (
           <article
             key={post.slug}
-            className="blog-card flex gap-4"
+            className="card-stretch flex gap-4"
             style={
               isLast
                 ? undefined
                 : {
                     paddingBottom: 16,
-                    borderBottom: "1px solid var(--blog-hairline)",
+                    borderBottom: "1px solid rgba(20,16,24,.14)",
                   }
             }
           >
             <div
-              className="relative h-[76px] w-[96px] flex-none overflow-hidden rounded-[11px] md:h-[88px] md:w-[120px] md:rounded-xl"
-              style={{ background: "var(--blog-media-empty)" }}
+              className="relative h-[76px] w-[96px] flex-none overflow-hidden md:h-[88px] md:w-[120px] md:"
+              style={{ background: "#E2DBCC" }}
             >
               {post.cover ? (
                 <Image
@@ -60,18 +60,18 @@ export default function RecentList({ posts }: { posts: Post[] }) {
                 className="mb-[7px] text-[10px] font-bold uppercase leading-none tracking-[.1em]"
                 style={{
                   color: isVideo
-                    ? "var(--blog-amber-500)"
-                    : "var(--blog-violet-600)",
+                    ? "#C99A45"
+                    : "#B4762A",
                 }}
               >
                 {eyebrow}
               </div>
-              <h3 className="text-[14px] font-bold leading-[1.35] md:text-[15px]">
+              <h3 className="font-display uppercase text-[19px] font-extrabold leading-[1.06] md:text-[19px]">
                 <Link href={`/blog/${post.slug}`}>{post.title}</Link>
               </h3>
               <div
                 className="mt-2 text-[11.5px] font-semibold leading-none"
-                style={{ color: "var(--blog-ink-400)" }}
+                style={{ color: "#857C86" }}
               >
                 {formatDate(post.publishedAt, "long")} ·{" "}
                 {plural(post.commentCount, "comment")}

@@ -26,18 +26,18 @@ export default function MediaBadge({
   if (!label) return null
 
   const isVideo = kind === "video"
-  const accent = isVideo ? "var(--blog-amber-500)" : "var(--blog-teal-500)"
+  const accent = isVideo ? "#C99A45" : "#5B4A2E"
   const style =
     variant === "solid"
       ? { background: accent, color: "#fff" }
       : {
-          background: isVideo ? "#FEF1E6" : "var(--blog-teal-050)",
+          background: isVideo ? "#F3EEE4" : "#F3EEE4",
           color: accent,
         }
 
   return (
     <span
-      className={`inline-block rounded-md px-[11px] py-[6px] text-[10px] font-bold uppercase leading-none tracking-[.1em] ${className}`}
+      className={`inline-block px-[11px] py-[6px] text-[10px] font-bold uppercase leading-none tracking-[.1em] ${className}`}
       style={style}
     >
       {label}

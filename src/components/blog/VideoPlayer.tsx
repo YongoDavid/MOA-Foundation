@@ -23,7 +23,7 @@ export default function VideoPlayer({
 }) {
   return (
     <figure className="m-0">
-      <div className="relative h-[340px] overflow-hidden rounded-[18px]">
+      <div className="relative h-[340px] overflow-hidden ">
         <Image
           src={poster.url as string}
           alt={poster.alt}
@@ -41,16 +41,16 @@ export default function VideoPlayer({
           className="pointer-events-none absolute inset-x-0 bottom-0 flex h-11 items-center gap-3 px-4"
           style={{
             background:
-              "linear-gradient(180deg, rgba(15,22,38,0), rgba(15,22,38,.7))",
+              "linear-gradient(180deg, rgba(20,16,24,0), rgba(20,16,24,.7))",
           }}
         >
           <div
-            className="h-1 flex-1 rounded-sm"
+            className="h-1 flex-1 "
             style={{ background: "rgba(255,255,255,.3)" }}
           >
             <div
-              className="h-full rounded-sm"
-              style={{ width: "22%", background: "var(--blog-amber-500)" }}
+              className="h-full "
+              style={{ width: "22%", background: "#C99A45" }}
             />
           </div>
           <span className="text-[11px] font-semibold leading-none text-white">
@@ -61,7 +61,7 @@ export default function VideoPlayer({
       {caption ? (
         <figcaption
           className="mt-[10px] text-[12px] font-medium leading-[1.5]"
-          style={{ color: "var(--blog-ink-400)" }}
+          style={{ color: "#857C86" }}
         >
           {caption}
         </figcaption>

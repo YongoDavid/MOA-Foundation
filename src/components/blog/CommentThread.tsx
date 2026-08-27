@@ -81,16 +81,16 @@ export default function CommentThread({
   return (
     <section
       className="mt-10 max-w-[760px] pt-8"
-      style={{ borderTop: "1px solid var(--blog-hairline)" }}
+      style={{ borderTop: "1px solid rgba(20,16,24,.14)" }}
       aria-label="Comments"
     >
       <div className="mb-[22px] flex items-baseline gap-3">
-        <h2 className="m-0 text-[22px] font-extrabold leading-[1.2] tracking-[-.015em]">
+        <h2 className="font-display uppercase m-0 text-[32px] font-extrabold leading-none">
           {optimistic.length} {optimistic.length === 1 ? "comment" : "comments"}
         </h2>
         <span
           className="text-[12px] font-semibold leading-none"
-          style={{ color: "var(--blog-ink-400)" }}
+          style={{ color: "#857C86" }}
         >
           Newest first
         </span>
@@ -99,8 +99,8 @@ export default function CommentThread({
       <form
         ref={formRef}
         action={submit}
-        className="mb-7 rounded-2xl p-[18px]"
-        style={{ border: "1px solid var(--blog-input)" }}
+        className="mb-7 p-[18px]"
+        style={{ border: "1px solid rgba(20,16,24,.18)" }}
       >
         <div className="mb-[10px] grid gap-[10px] sm:grid-cols-2">
           <input
@@ -109,16 +109,16 @@ export default function CommentThread({
             maxLength={80}
             placeholder="Your name"
             aria-label="Your name"
-            className="rounded-[10px] px-[14px] py-3 text-[13px] font-medium outline-none"
-            style={{ background: "var(--blog-canvas)" }}
+            className="px-[14px] py-3 text-[13px] font-medium outline-none"
+            style={{ background: "#F3EEE4" }}
           />
           <input
             name="email"
             type="email"
             placeholder="Email (optional, not published)"
             aria-label="Email, optional and never published"
-            className="rounded-[10px] px-[14px] py-3 text-[13px] font-medium outline-none"
-            style={{ background: "var(--blog-canvas)" }}
+            className="px-[14px] py-3 text-[13px] font-medium outline-none"
+            style={{ background: "#F3EEE4" }}
           />
         </div>
 
@@ -139,14 +139,14 @@ export default function CommentThread({
           maxLength={MAX_LENGTH}
           placeholder="Share a thought about this post…"
           aria-label="Your comment"
-          className="min-h-[62px] w-full resize-y rounded-[10px] p-[14px] text-[13.5px] font-medium leading-[1.5] outline-none"
-          style={{ background: "var(--blog-canvas)" }}
+          className="min-h-[62px] w-full resize-y p-[14px] text-[13.5px] font-medium leading-[1.5] outline-none"
+          style={{ background: "#F3EEE4" }}
         />
 
         {error ? (
           <p
             className="mt-2 text-[12px] font-semibold"
-            style={{ color: "var(--blog-danger)" }}
+            style={{ color: "#A03A2A" }}
             role="alert"
           >
             {error}
@@ -156,15 +156,14 @@ export default function CommentThread({
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
           <span
             className="text-[11.5px] font-medium leading-[1.4]"
-            style={{ color: "var(--blog-ink-400)" }}
+            style={{ color: "#857C86" }}
           >
             Comments appear immediately. Be kind — our team removes abuse.
           </span>
           <button
             type="submit"
             disabled={pending}
-            className="rounded-[9px] px-[22px] py-[11px] text-[12.5px] font-bold leading-none text-white disabled:opacity-60"
-            style={{ background: "var(--blog-violet-600)" }}
+            className="min-h-[44px] bg-ink-900 px-6 py-[13px] font-body text-[11.5px] font-bold uppercase leading-none tracking-[.09em] text-white transition-colors duration-150 hover:bg-green-900 disabled:opacity-60"
           >
             {pending ? "Posting…" : "Post comment"}
           </button>
@@ -173,10 +172,10 @@ export default function CommentThread({
 
       {/* Prototype honesty: say it here rather than let a client find out. */}
       <p
-        className="mb-6 rounded-[10px] px-3 py-2 text-[11.5px] font-semibold"
+        className="mb-6 px-3 py-2 text-[11.5px] font-semibold"
         style={{
-          background: "var(--blog-violet-050)",
-          color: "var(--blog-violet-900)",
+          background: "#F3EEE4",
+          color: "#14261D",
         }}
       >
         Prototype — comments post instantly but are not saved. Refreshing clears
@@ -191,7 +190,7 @@ export default function CommentThread({
               <div
                 key={r.id}
                 className="ml-[54px] mt-[22px] pl-[18px]"
-                style={{ borderLeft: "2px solid var(--blog-violet-050)" }}
+                style={{ borderLeft: "2px solid #E2DBCC" }}
               >
                 <CommentRow comment={r} compact />
               </div>
@@ -212,7 +211,7 @@ export default function CommentThread({
       <div
         className="sticky bottom-0 z-20 -mx-[18px] mt-8 flex items-center gap-[10px] bg-white px-[18px] pt-3 md:hidden print:hidden"
         style={{
-          borderTop: "1px solid var(--blog-border)",
+          borderTop: "1px solid rgba(20,16,24,.16)",
           paddingBottom: "calc(12px + env(safe-area-inset-bottom))",
         }}
       >
@@ -222,10 +221,10 @@ export default function CommentThread({
             bodyRef.current?.scrollIntoView({ block: "center" })
             bodyRef.current?.focus()
           }}
-          className="flex-1 rounded-full px-[14px] py-3 text-left text-[12.5px] font-medium"
+          className="flex-1 px-[14px] py-3 text-left text-[12.5px] font-medium"
           style={{
-            background: "var(--blog-canvas)",
-            color: "var(--blog-ink-400)",
+            background: "#F3EEE4",
+            color: "#857C86",
           }}
         >
           Add a comment…
@@ -237,8 +236,7 @@ export default function CommentThread({
             bodyRef.current?.scrollIntoView({ block: "center" })
             bodyRef.current?.focus()
           }}
-          className="flex h-10 w-10 flex-none items-center justify-center rounded-full text-[14px] font-bold text-white"
-          style={{ background: "var(--blog-violet-600)" }}
+          className="flex h-10 w-10 flex-none items-center justify-center bg-ink-900 font-body text-[14px] font-bold text-white"
         >
           ↑
         </button>
@@ -248,10 +246,10 @@ export default function CommentThread({
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="mt-[26px] w-full rounded-[10px] p-[13px] text-center text-[12.5px] font-bold leading-none"
+          className="mt-[26px] w-full p-[13px] text-center text-[12.5px] font-bold leading-none"
           style={{
-            border: "1px solid var(--blog-input)",
-            color: "var(--blog-violet-600)",
+            border: "1px solid rgba(20,16,24,.18)",
+            color: "#B4762A",
           }}
         >
           Load {hidden} more {hidden === 1 ? "comment" : "comments"}
@@ -275,8 +273,8 @@ function CommentRow({
       style={comment.pending ? { opacity: 0.6 } : undefined}
     >
       <span
-        className={`flex flex-none items-center justify-center rounded-full font-bold leading-none ${size}`}
-        style={{ background: "var(--blog-media-empty)", color: "#7A6E96" }}
+        className={`flex flex-none items-center justify-center font-bold leading-none ${size}`}
+        style={{ background: "#E2DBCC", color: "#7A6F5E" }}
       >
         {initials(comment.name)}
       </span>
@@ -287,28 +285,27 @@ function CommentRow({
           </span>
           {comment.isStaff ? (
             <span
-              className="rounded-[5px] px-2 py-1 text-[9.5px] font-bold uppercase leading-none tracking-[.08em] text-white"
-              style={{ background: "var(--blog-violet-600)" }}
+              className="bg-green-900 px-2 py-1 font-body text-[9px] font-bold uppercase leading-none tracking-[.1em] text-white"
             >
               Foundation
             </span>
           ) : null}
           <span
             className="text-[11.5px] font-semibold leading-none"
-            style={{ color: "var(--blog-ink-400)" }}
+            style={{ color: "#857C86" }}
           >
             {comment.createdAt ? formatDate(comment.createdAt, "long") : "Just now"}
           </span>
         </div>
         <p
           className="m-0 text-[14.5px] font-medium leading-[1.65]"
-          style={{ color: "var(--blog-ink-700)" }}
+          style={{ color: "#2B2630" }}
         >
           {comment.body}
         </p>
         <div
           className="mt-[9px] flex gap-4 text-[11.5px] font-bold leading-none"
-          style={{ color: "var(--blog-ink-400)" }}
+          style={{ color: "#857C86" }}
         >
           <span>Reply</span>
           <span>♡ {comment.likeCount}</span>

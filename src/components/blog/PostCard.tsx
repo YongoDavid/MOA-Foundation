@@ -10,7 +10,7 @@ import PlayBadge from "./PlayBadge"
 //   story — no image, teal tint, larger title, "Read →" footer
 //
 // Accessibility (spec §11): the title carries the ONLY anchor, stretched over
-// the card by the .blog-card::after rule in blog.css. Nesting a second link
+// the card by the .card-stretch::after rule in globals.css. Nesting a second link
 // inside a card is what that pattern exists to avoid.
 
 function categoryLabel(slug: string): string {
@@ -31,40 +31,27 @@ export default function PostCard({
   })
 
   if (variant === "story") {
+    // The story card is the one card with no photograph, so it carries the
+    // green ground instead — the reskin uses colour where the others use an
+    // image, rather than leaving a conspicuously empty tile in the grid.
     return (
-      <article
-        className="blog-card flex flex-col overflow-hidden rounded-2xl"
-        style={{
-          background: "var(--blog-teal-tint)",
-          border: "1px solid var(--blog-border)",
-          boxShadow: "0 2px 14px rgba(15,22,38,.05)",
-        }}
-      >
-        <div className="px-5 pt-5">
-          <div
-            className="mb-3 text-[10px] font-bold uppercase leading-none tracking-[.1em]"
-            style={{ color: "var(--blog-teal-500)" }}
-          >
-            Story · No photos
-          </div>
-          <h3 className="text-[19px] font-extrabold leading-[1.28] tracking-[-.01em]">
+      <article className="card-stretch flex flex-col bg-green-900">
+        <div className="px-[22px] pt-[22px]">
+          <p className="m-0 mb-3.5 font-body text-[10px] font-bold uppercase leading-none tracking-[.14em] text-gold-500">
+            Story · No photographs
+          </p>
+          <h3 className="m-0 font-display text-[28px] font-extrabold uppercase leading-[1.02] text-white">
             <Link href={href}>{post.title}</Link>
           </h3>
-          <p
-            className="mt-3 text-[13px] font-medium leading-[1.62]"
-            style={{ color: "#41566B" }}
-          >
+          <p className="m-0 mt-3.5 font-body text-[13px] font-medium leading-[1.62] text-white/[.76]">
             {post.excerpt}
           </p>
         </div>
-        <div
-          className="mt-auto flex items-center justify-between p-5 text-[11.5px] font-semibold leading-none"
-          style={{ color: "var(--blog-ink-500)" }}
-        >
+        <div className="mt-auto flex items-center justify-between p-[22px] font-body text-[11px] font-semibold uppercase leading-none tracking-[.06em] text-white/60">
           <span>
             {post.author} · {formatDate(post.publishedAt, "medium")}
           </span>
-          <span style={{ color: "var(--blog-teal-500)" }}>Read →</span>
+          <span className="text-gold-500">Read →</span>
         </div>
       </article>
     )
@@ -72,16 +59,15 @@ export default function PostCard({
 
   return (
     <article
-      className="blog-card overflow-hidden rounded-2xl"
+      className="card-stretch overflow-hidden"
       style={{
-        background: "var(--blog-surface)",
-        border: "1px solid var(--blog-border)",
-        boxShadow: "0 2px 14px rgba(15,22,38,.05)",
+        background: "#FBF8F3",
+        border: "1px solid rgba(20,16,24,.16)",
       }}
     >
       <div
         className="relative h-[170px]"
-        style={{ background: "var(--blog-media-empty)" }}
+        style={{ background: "#E2DBCC" }}
       >
         {post.cover ? (
           <Image
@@ -105,35 +91,35 @@ export default function PostCard({
             style={{
               color:
                 post.type === "video"
-                  ? "var(--blog-amber-500)"
-                  : "var(--blog-violet-600)",
+                  ? "#C99A45"
+                  : "#B4762A",
             }}
           >
             {categoryLabel(post.category)}
           </span>
           {suffix ? (
-            <span style={{ color: "var(--blog-ink-400)" }}>{suffix}</span>
+            <span style={{ color: "#857C86" }}>{suffix}</span>
           ) : null}
         </div>
 
-        <h3 className="text-[16.5px] font-bold leading-[1.32]">
+        <h3 className="font-display uppercase text-[24px] font-extrabold leading-[1.05]">
           <Link href={href}>{post.title}</Link>
         </h3>
 
         <p
           className="mt-[10px] text-[13px] font-medium leading-[1.6]"
-          style={{ color: "var(--blog-ink-500)" }}
+          style={{ color: "#5C5460" }}
         >
           {post.excerpt}
         </p>
 
         <div
           className="mt-4 flex items-center gap-[9px] text-[11.5px] font-semibold leading-none"
-          style={{ color: "var(--blog-ink-400)" }}
+          style={{ color: "#857C86" }}
         >
           <span
-            className="flex h-6 w-6 flex-none items-center justify-center rounded-full text-[9px] font-bold leading-none"
-            style={{ background: "var(--blog-media-empty)", color: "#7A6E96" }}
+            className="flex h-6 w-6 flex-none items-center justify-center text-[9px] font-bold leading-none"
+            style={{ background: "#E2DBCC", color: "#7A6F5E" }}
           >
             {initials(post.author)}
           </span>

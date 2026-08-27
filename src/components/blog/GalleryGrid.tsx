@@ -6,11 +6,16 @@ import type { MediaItem } from "@/lib/blog-types"
 import Lightbox from "./Lightbox"
 
 // Gallery block, mockup 1b. Spec §4: 2x2 grid, the first tile spans both rows,
-// 150px rows. The overflow tile is an opaque #4B4066 panel showing "+N".
+// 150px rows. The overflow tile is an opaque umber panel showing "+N".
 //
-// `total` is the real photo count for the post (e.g. 18) and is deliberately
-// independent of how many MediaItems the fixtures actually carry — the repo
-// does not hold 18 unique embassy photos. The "+N" is computed from it.
+// `total` is the post's real photo count. Fixtures now derive `mediaCount`
+// from the gallery set itself, so the badge, the "+N" tile and the lightbox
+// all agree — an earlier revision advertised 18 photographs over a set of
+// three, and the "+15" tile opened a lightbox containing three.
+//
+// The lightbox receives the FULL set, not the three visible tiles. It used to
+// receive `visible`, so "+N" opened a gallery that could not reach the photos
+// it had just promised.
 
 export default function GalleryGrid({
   images,
@@ -42,7 +47,7 @@ export default function GalleryGrid({
             type="button"
             onClick={() => setOpen(i)}
             aria-label={`Open photo ${i + 1} of ${realTotal}: ${img.alt}`}
-            className="relative overflow-hidden rounded-[14px]"
+            className="relative overflow-hidden "
             style={i === 0 ? { gridRow: "span 2" } : undefined}
           >
             <Image
@@ -58,13 +63,13 @@ export default function GalleryGrid({
         {overflow > 0 ? (
           <button
             type="button"
-            onClick={() => setOpen(visible.length - 1)}
+            onClick={() => setOpen(visible.length)}
             aria-label={`Open the full gallery, ${realTotal} photos`}
-            className="relative overflow-hidden rounded-[14px]"
+            className="relative overflow-hidden "
           >
             <span
               className="absolute inset-0 flex items-center justify-center text-[17px] font-extrabold leading-none text-white"
-              style={{ background: "var(--blog-overflow)" }}
+              style={{ background: "rgba(91,74,46,.86)" }}
             >
               +{overflow}
             </span>
@@ -74,14 +79,14 @@ export default function GalleryGrid({
 
       <p
         className="mb-[30px] text-[12px] font-medium leading-[1.5]"
-        style={{ color: "var(--blog-ink-400)" }}
+        style={{ color: "#857C86" }}
       >
         Tap any photo to open the full gallery.
       </p>
 
       {open !== null ? (
         <Lightbox
-          images={visible}
+          images={images}
           index={open}
           onClose={() => setOpen(null)}
           onNavigate={setOpen}

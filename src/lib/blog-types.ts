@@ -9,8 +9,15 @@
 /** Drives card treatment: which badge, which layout, whether there's a cover. */
 export type PostType = "gallery" | "video" | "story"
 
-/** Fixed union, confirmed 25 August 2026 — not a table, not `string`. */
-export type Category = "mentorship" | "education" | "outreach" | "partnerships"
+/**
+ * Fixed union — not a table, not `string`.
+ *
+ * Re-set 27 August 2026 to the blog-reskin set, which matches how the
+ * Foundation's work is actually filed on /gallery. The previous set
+ * (mentorship / education / outreach) described programmes rather than the
+ * engagements the posts are about.
+ */
+export type Category = "partnerships" | "governance" | "advocacy" | "summits"
 
 /**
  * Fixed union. No `scheduled` / `publishAt` — scheduling was explicitly
@@ -97,7 +104,7 @@ export interface Comment {
   postSlug: string
   parentId: string | null
   name: string
-  /** Renders the uppercase violet "FOUNDATION" badge. */
+  /** Renders the green "FOUNDATION" badge. */
   isStaff: boolean
   body: string
   /** ISO 8601 date string. */
@@ -112,8 +119,8 @@ export interface CategoryMeta {
 }
 
 export const CATEGORIES: CategoryMeta[] = [
-  { slug: "mentorship", label: "Mentorship" },
-  { slug: "education", label: "Education" },
-  { slug: "outreach", label: "Outreach" },
   { slug: "partnerships", label: "Partnerships" },
+  { slug: "governance", label: "Governance" },
+  { slug: "advocacy", label: "Advocacy" },
+  { slug: "summits", label: "Summits" },
 ]

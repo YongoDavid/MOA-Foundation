@@ -183,3 +183,30 @@ code {
     transition: none;
   }
 }
+
+/* ── Shared interaction utilities ─────────────────────────────────────────
+   Lifted out of the retired blog.css on 27 Aug 2026 when the blog moved onto
+   the site palette. Nothing about either rule was blog-specific. */
+
+/* Horizontal scroller without a visible scrollbar. Tailwind's
+   `scrollbar-hide` is a no-op here — the plugin is not installed — so this is
+   written by hand. */
+.scroll-x {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scroll-x::-webkit-scrollbar {
+  display: none;
+}
+
+/* Stretched-link pattern: the card title carries the ONLY anchor and this
+   pseudo-element makes the whole card clickable, without nesting links. */
+.card-stretch {
+  position: relative;
+}
+.card-stretch a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}

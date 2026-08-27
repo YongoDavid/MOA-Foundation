@@ -44,12 +44,12 @@ export default async function PostPage({
   if (!post) notFound()
 
   return (
-    <main>
+    <>
       <PostHeader post={post} />
 
       {post.cover ? (
         <div className="mx-auto max-w-[1180px] px-[18px] md:px-10 pt-7">
-          <div className="relative h-[420px] overflow-hidden rounded-[20px]">
+          <div className="relative h-[420px] overflow-hidden ">
             <Image
               src={post.cover.url as string}
               alt={post.cover.alt}
@@ -61,7 +61,7 @@ export default async function PostPage({
           </div>
           <p
             className="mt-[10px] text-[12px] font-medium leading-[1.5]"
-            style={{ color: "var(--blog-ink-400)" }}
+            style={{ color: "#857C86" }}
           >
             {post.cover.alt}
           </p>
@@ -80,8 +80,8 @@ export default async function PostPage({
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full px-[14px] py-[9px] text-[12px] font-semibold leading-none"
-                style={{ background: "#F5F6F8", color: "var(--blog-ink-500)" }}
+                className="px-[14px] py-[9px] font-body text-[10.5px] font-bold uppercase leading-none tracking-[.08em]"
+                style={{ background: "#F3EEE4", color: "#5B4A2E" }}
               >
                 #{tag}
               </span>
@@ -93,6 +93,6 @@ export default async function PostPage({
       </article>
 
       <div className="h-[46px]" />
-    </main>
+    </>
   )
 }

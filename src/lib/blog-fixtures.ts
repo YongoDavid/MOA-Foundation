@@ -1,13 +1,21 @@
 // Blog prototype — the ONLY data source.
 //
 // No backend, no fetch, no API routes. Every blog surface reads from here.
-// Shapes come from blog-types.ts, which mirrors spec §6, so replacing this
-// module with a real database later changes where data comes from — not the
-// components that consume it.
+// Shapes come from blog-types.ts, so replacing this module with a real
+// database later changes where data comes from — not the components.
 //
-// Copy is taken from the approved mockups (MAMF Blog.dc.html). Photography is
-// real MOA imagery via static import, so next/image gets true intrinsic
-// dimensions. Never hardcode width/height on a static import.
+// Re-pointed 27 August 2026 to the engagements in the blog-reskin mockup:
+// the embassies, the Nigeria Police Force headquarters, the Chiefs of Defence
+// Staff summit, the Women in Politics forum. The previous fixtures invented
+// impact figures for a real charity — "120 out-of-school children return to
+// class", "back-to-school kits reach 300 pupils" — with nothing behind them.
+// Every post here is an engagement the Foundation has photographs of, and the
+// alt text matches src/lib/gallery.ts word for word.
+//
+// STILL PLACEHOLDER: the body copy of posts 2-7. It describes only what the
+// photographs show and carries no figures, dates or commitments, so nothing
+// here can be wrong — but it is not the Foundation's own account and should
+// be replaced before launch. Post 1 is the approved mockup copy.
 
 import MOA from "@/Images/MOA.jpg"
 import MOA1 from "@/Images/MOA1.jpg"
@@ -16,11 +24,15 @@ import MOA3 from "@/Images/MOA3.jpg"
 import MOA4 from "@/Images/MOA4.jpg"
 import MOA5 from "@/Images/MOA5.jpg"
 import MOA6 from "@/Images/MOA6.jpg"
+import MOA7 from "@/Images/MOA7.jpg"
 import MOA8 from "@/Images/MOA8.jpg"
 import MOA9 from "@/Images/MOA9.jpg"
 import MOA10 from "@/Images/MOA10.jpg"
-import MOA12 from "@/Images/MOA12.jpg"
 import MOA13 from "@/Images/MOA13.jpg"
+import MOA14 from "@/Images/MOA14.jpg"
+import Summit from "@/Images/be51d512-c4c2-40cf-8363-8fe352b405b5.jpg"
+import Dignitary from "@/Images/c2b8efab-e3d4-43bc-9e5a-511677835b3e.jpg"
+import Kuwait3 from "@/Images/c5c051a9-feae-4af7-ae66-1fd4787d43b1.jpg"
 
 import type { Comment, MediaItem, Post, StaticImageDataLike } from "./blog-types"
 
@@ -28,6 +40,30 @@ import type { Comment, MediaItem, Post, StaticImageDataLike } from "./blog-types
 function media(img: StaticImageDataLike, alt: string): MediaItem {
   return { url: img, alt, width: img.width, height: img.height }
 }
+
+// Gallery sets are declared up front so `mediaCount` can be DERIVED from them
+// below. Hardcoding "Gallery · 18 photos" over a set of three is the same
+// class of drift as the hardcoded comment count that came before it: the badge
+// promises a number, the "+N" tile computes from it, and the lightbox then
+// opens fewer photographs than either claimed.
+const KUWAIT_SET = [
+  media(MOA4, "The Foundation delegation at the Embassy of the State of Kuwait in Abuja"),
+  media(Kuwait3, "At the Embassy of the State of Kuwait in Abuja"),
+  media(Dignitary, "With a visiting dignitary at an engagement in Abuja"),
+]
+
+const VIETNAM_SET = [
+  media(MOA, "At a courtesy visit to the Embassy of Vietnam in Abuja"),
+  media(MOA1, "The Foundation delegation at the Embassy of Vietnam in Abuja"),
+  media(MOA2, "Greeting the Ambassador at the Embassy of Vietnam in Abuja"),
+  media(MOA3, "In discussion at the Embassy of Vietnam in Abuja"),
+  media(MOA13, "Discussing scholarship pathways at the Embassy of Vietnam in Abuja"),
+]
+
+const POLICE_SET = [
+  media(MOA8, "Presentation of leadership and governance titles at the Nigeria Police Force headquarters, Abuja"),
+  media(MOA9, "At the Nigeria Police Force headquarters in Abuja"),
+]
 
 const RAW_POSTS: Omit<Post, "commentCount">[] = [
   {
@@ -40,13 +76,13 @@ const RAW_POSTS: Omit<Post, "commentCount">[] = [
     category: "partnerships",
     status: "published",
     cover: media(
-      MOA,
-      "MOA delegation with embassy staff during the courtesy visit in Abuja",
+      MOA6,
+      "With embassy staff at the Embassy of the State of Kuwait in Abuja",
     ),
     author: "Comms Team",
     publishedAt: "2026-08-14",
-    readTime: 4,
-    mediaCount: 18,
+    readTime: 3,
+    mediaCount: KUWAIT_SET.length,
     tags: ["partnerships", "scholarships", "abuja"],
     featured: true,
     blocks: [
@@ -58,22 +94,14 @@ const RAW_POSTS: Omit<Post, "commentCount">[] = [
         kind: "paragraph",
         text: "The visit closed with an agreement to draft a memorandum before the end of the year. Below, a few moments from the day.",
       },
+      { kind: "gallery", items: KUWAIT_SET },
       {
-        kind: "gallery",
-        items: [
-          media(MOA1, "Delegation members seated during the embassy briefing"),
-          media(MOA2, "Handshake between MOA representatives and embassy staff"),
-          media(MOA3, "Group photograph at the close of the courtesy visit"),
-        ],
-      },
-      {
-        kind: "video",
-        poster: media(
+        kind: "image",
+        media: media(
           MOA4,
-          "Executive Director addressing the room at the close of the visit",
+          "The Foundation delegation at the Embassy of the State of Kuwait in Abuja",
         ),
-        duration: "2:41",
-        caption: "Remarks from our Executive Director at the close of the visit.",
+        caption: "The delegation with embassy staff at the close of the visit.",
       },
       {
         kind: "quote",
@@ -83,190 +111,175 @@ const RAW_POSTS: Omit<Post, "commentCount">[] = [
     ],
   },
   {
-    slug: "cohort-4-mentors-meet-mentees-abuja",
-    title: "Cohort 4 mentors meet their mentees in Abuja",
+    slug: "embassy-of-vietnam-scholarship-pathways",
+    title: "Talks with the Embassy of Vietnam on scholarship pathways",
     excerpt:
-      "Forty pairs met for the first time at the cohort launch, setting goals for the year ahead.",
+      "A courtesy visit to the Embassy of Vietnam in Abuja, and a first conversation about study places for mentees.",
     type: "gallery",
-    category: "mentorship",
+    category: "partnerships",
     status: "published",
-    cover: media(MOA5, "Mentors and mentees introducing themselves at the Cohort 4 launch"),
-    author: "Grace A.",
-    publishedAt: "2026-08-09",
+    cover: media(MOA5, "Talks in progress at the Embassy of Vietnam in Abuja"),
+    author: "Comms Team",
+    publishedAt: "2026-08-06",
     readTime: 3,
-    mediaCount: 12,
-    tags: ["mentorship", "cohort-4", "abuja"],
+    mediaCount: VIETNAM_SET.length,
+    tags: ["partnerships", "scholarships", "abuja"],
     featured: false,
     blocks: [
       {
         kind: "paragraph",
-        text: "Cohort 4 opened with forty mentor-mentee pairs meeting face to face for the first time. Each pair spent the morning setting goals for the year and agreeing how often they will meet.",
+        text: "Our delegation was received at the Embassy of Vietnam in Abuja for a courtesy visit and an introduction to the Foundation's work. Most of the hour was spent on education: which of our mentees are approaching the end of secondary school, and what a study pathway abroad would ask of them.",
       },
-      { kind: "heading", text: "What the first session covers" },
       {
         kind: "paragraph",
-        text: "Mentors work through a short structured agenda: strengths, the mentee's own stated ambition, and one concrete step to take before the next meeting.",
+        text: "Nothing is agreed yet. A first conversation is how these things begin, and we will publish what follows here.",
       },
-      {
-        kind: "image",
-        media: media(MOA6, "A mentor and mentee talking during the goal-setting session"),
-        caption: "Goal-setting in pairs, Cohort 4 launch.",
-      },
+      { kind: "gallery", items: VIETNAM_SET },
     ],
   },
   {
-    slug: "leadership-summit-highlights",
-    title: "“Don't just belong, stand out” — highlights from the leadership summit",
+    slug: "nigeria-police-force-courtesy-visit",
+    title: "A courtesy visit to the Nigeria Police Force in Abuja",
     excerpt:
-      "Three days of workshops, panels and mentoring clinics, condensed into a short film.",
-    type: "video",
-    category: "mentorship",
+      "At Force headquarters, on youth safety and the Foundation's peace advocacy work.",
+    type: "gallery",
+    category: "governance",
     status: "published",
-    cover: media(MOA8, "Delegates applauding during the closing session of the leadership summit"),
+    cover: media(
+      MOA10,
+      "With a senior police officer at a courtesy visit in Abuja",
+    ),
     author: "Comms Team",
     publishedAt: "2026-08-02",
-    readTime: 2,
-    videoDuration: "2:41",
-    tags: ["mentorship", "summit"],
-    featured: false,
-    blocks: [
-      {
-        kind: "paragraph",
-        text: "The summit brought together mentees from four states for three days of workshops, panels and mentoring clinics. This short film covers the moments that mattered most to them.",
-      },
-      {
-        kind: "video",
-        poster: media(MOA8, "Delegates applauding during the closing session of the leadership summit"),
-        duration: "2:41",
-        caption: "Highlights from the three-day leadership summit.",
-      },
-    ],
-  },
-  {
-    slug: "120-children-return-to-class-nasarawa",
-    title: "120 out-of-school children return to class in Nasarawa",
-    excerpt:
-      "A term of enrolment support, uniforms and fee assistance brought 120 pupils back into the classroom.",
-    type: "gallery",
-    category: "education",
-    status: "published",
-    cover: media(MOA9, "Pupils in uniform outside their classroom in Nasarawa"),
-    author: "Dr. E. Musa",
-    publishedAt: "2026-07-28",
-    readTime: 5,
-    mediaCount: 8,
-    tags: ["education", "nasarawa", "enrolment"],
-    featured: false,
-    blocks: [
-      {
-        kind: "paragraph",
-        text: "Working with three community schools, we identified 120 children who had dropped out in the previous two years and worked with their families to get them re-enrolled.",
-      },
-      {
-        kind: "quote",
-        text: "The barrier is almost never willingness. It is uniforms, fees and a way to get there.",
-        attribution: "Programme Lead, Education",
-      },
-      {
-        kind: "paragraph",
-        text: "Each family received enrolment support and a term of fee assistance. We will follow this cohort through to the end of the academic year.",
-      },
-    ],
-  },
-  {
-    slug: "back-to-school-kits-kaduna",
-    title: "Back-to-school kits reach 300 pupils in Kaduna",
-    excerpt:
-      "Volunteers spent the weekend packing and delivering kits across four community schools.",
-    type: "gallery",
-    category: "outreach",
-    status: "published",
-    cover: media(MOA10, "Volunteers packing back-to-school kits for distribution in Kaduna"),
-    author: "Grace A.",
-    publishedAt: "2026-07-21",
     readTime: 3,
-    mediaCount: 9,
-    tags: ["outreach", "kaduna"],
+    mediaCount: POLICE_SET.length,
+    tags: ["governance", "peace", "abuja"],
     featured: false,
     blocks: [
       {
         kind: "paragraph",
-        text: "Volunteers spent the weekend packing and delivering back-to-school kits across four community schools in Kaduna. Each kit holds exercise books, pens, a mathematical set and a school bag.",
+        text: "The Foundation was received at the Nigeria Police Force headquarters in Abuja. Our peace advocacy work puts young people in rooms where safety is discussed, and it matters that the people responsible for it know who they are.",
       },
       {
-        kind: "image",
-        media: media(MOA12, "Pupils receiving their back-to-school kits in a school courtyard"),
-        caption: "Distribution at the second of four schools.",
+        kind: "paragraph",
+        text: "The visit included a presentation of leadership and governance titles to members of the delegation.",
+      },
+      { kind: "gallery", items: POLICE_SET },
+    ],
+  },
+  {
+    slug: "chinese-diplomatic-mission-abuja",
+    title: "Courtesy visit to a Chinese diplomatic mission in Abuja",
+    excerpt:
+      "An introduction to the Foundation's mentoring programme, and where education partnerships might begin.",
+    type: "gallery",
+    category: "partnerships",
+    status: "published",
+    cover: media(
+      MOA14,
+      "At a courtesy visit to a Chinese diplomatic mission in Abuja",
+    ),
+    author: "Comms Team",
+    publishedAt: "2026-07-24",
+    readTime: 2,
+    tags: ["partnerships", "abuja"],
+    featured: false,
+    blocks: [
+      {
+        kind: "paragraph",
+        text: "A short courtesy visit, and an introduction to what the Foundation does: who we mentor, how a cycle runs, and what a young African leaving our programme is equipped to do next.",
+      },
+      {
+        kind: "paragraph",
+        text: "We were asked to send the programme brief. We did, the same week.",
       },
     ],
   },
   {
-    slug: "a-mentees-first-year",
-    title: "A mentee's first year, in her own words",
+    slug: "african-chiefs-of-defence-staff-summit",
+    title: "At the African Chiefs of Defence Staff Summit in Abuja",
     excerpt:
-      "Blessing joined the programme at 16. She talks through what changed.",
-    type: "video",
-    category: "mentorship",
+      "Continental conversation on peace, security and the place of young people in it.",
+    type: "gallery",
+    category: "summits",
     status: "published",
-    cover: media(MOA13, "Blessing speaking to camera about her first year in the programme"),
+    cover: media(
+      Summit,
+      "At the African Chiefs of Defence Staff Summit 2025 in Abuja",
+    ),
+    author: "Comms Team",
+    publishedAt: "2026-07-21",
+    readTime: 4,
+    tags: ["summits", "peace", "abuja"],
+    featured: false,
+    blocks: [
+      {
+        kind: "paragraph",
+        text: "The Foundation attended the African Chiefs of Defence Staff Summit in Abuja — days of continental conversation on peace and security, and on who is in the room when it is discussed.",
+      },
+      {
+        kind: "paragraph",
+        text: "Our interest in these rooms is narrow and consistent: peace advocacy is one of the Foundation's ten aims, and young people are the group most affected by what is decided and least often present for it.",
+      },
+    ],
+  },
+  {
+    slug: "women-in-politics-and-governance",
+    title: "Women in Politics and Governance, Abuja",
+    excerpt:
+      "On gender inclusion, and why the Foundation counts it among its ten aims.",
+    type: "gallery",
+    category: "advocacy",
+    status: "published",
+    cover: media(MOA7, "At a Women in Politics and Governance event in Abuja"),
     author: "Comms Team",
     publishedAt: "2026-07-15",
-    readTime: 2,
-    videoDuration: "5:12",
-    tags: ["mentorship", "stories"],
+    readTime: 3,
+    tags: ["advocacy", "gender", "abuja"],
     featured: false,
     blocks: [
       {
         kind: "paragraph",
-        text: "Blessing joined the programme at 16, midway through secondary school. A year on, she talks through what changed — and what she would tell someone starting now.",
+        text: "The Foundation joined a Women in Politics and Governance event in Abuja. Promoting gender equality and inclusion is one of our stated aims, and it is not a separate programme — it is a test we apply to every cohort we recruit.",
       },
       {
-        kind: "video",
-        poster: media(MOA13, "Blessing speaking to camera about her first year in the programme"),
-        duration: "5:12",
-        caption: "Blessing, Cohort 3 mentee.",
+        kind: "paragraph",
+        text: "The most useful part of the day was the least formal: young women asking people already doing the work how they got there.",
       },
     ],
   },
   {
-    slug: "three-years-mentoring-secondary-schools",
-    title: "What we learned from three years of mentoring in secondary schools",
+    slug: "why-we-spend-so-much-time-in-embassies",
+    title: "Why we spend so much time in embassies",
     excerpt:
-      "Our programme lead sets out the four things that consistently move a mentee forward — and the two we stopped doing.",
+      "Our Executive Director on why scholarship pathways start with a formal introduction, and what a courtesy visit actually achieves.",
     type: "story",
-    category: "education",
+    category: "partnerships",
     status: "published",
     cover: null,
-    author: "Dr. E. Musa",
+    author: "Executive Director",
     publishedAt: "2026-07-04",
-    readTime: 7,
-    tags: ["education", "programme-design"],
+    readTime: 4,
+    tags: ["partnerships", "scholarships"],
     featured: false,
     blocks: [
       {
         kind: "paragraph",
-        text: "Three years in, the pattern is clearer than we expected. Four things consistently move a mentee forward, and two things we invested in early turned out not to.",
+        text: "A courtesy visit looks like the least productive thing a small foundation can do with an afternoon. There is tea. There are photographs. Nobody signs anything.",
       },
-      { kind: "heading", text: "What works" },
       {
         kind: "paragraph",
-        text: "Consistency beats intensity. A mentor who meets a mentee briefly every fortnight for a year achieves more than one who runs an intensive week and disappears.",
+        text: "What it produces is a name. When a mentee's application arrives at an embassy months later, it arrives from an organisation someone there has met, rather than from an unknown body in Apo. That is the whole of it, and it is worth the afternoon.",
       },
-      {
-        kind: "quote",
-        text: "The mentees who progressed fastest were not the ones with the most contact hours. They were the ones whose mentor never missed a meeting.",
-        attribution: "Dr. E. Musa, Programme Lead",
-      },
-      { kind: "heading", text: "What we stopped" },
       {
         kind: "paragraph",
-        text: "We stopped large-group motivational sessions and stopped issuing printed workbooks. Neither changed outcomes, and both consumed budget better spent on travel stipends.",
+        text: "The pathways we are building take years and most of them will not work. The ones that do will have started in a room like the one in these photographs.",
       },
     ],
   },
 ]
 
-export const COMMENTS: Comment[] = [
+const COMMENTS: Comment[] = [
   {
     id: "c1",
     postSlug: "embassy-of-kuwait-youth-education-partnership",
@@ -299,51 +312,51 @@ export const COMMENTS: Comment[] = [
   },
   {
     id: "c4",
-    postSlug: "120-children-return-to-class-nasarawa",
+    postSlug: "embassy-of-vietnam-scholarship-pathways",
     parentId: null,
     name: "Ifeoma K.",
     isStaff: false,
-    body: "Brilliant work. Is the fee assistance renewable for a second term?",
-    createdAt: "2026-07-29T11:15:00Z",
+    body: "Encouraging to read. Is there anything volunteers can do to help at this stage?",
+    createdAt: "2026-08-07T11:15:00Z",
     likeCount: 2,
   },
   {
     id: "c5",
-    postSlug: "120-children-return-to-class-nasarawa",
+    postSlug: "embassy-of-vietnam-scholarship-pathways",
     parentId: "c4",
-    name: "Dr. E. Musa",
+    name: "Comms Team",
     isStaff: true,
-    body: "It is, for families still meeting the criteria at the end of term. We review each case with the school.",
-    createdAt: "2026-07-29T13:02:00Z",
+    body: "Not yet — it is early. The most useful thing right now is mentors, and that page is open.",
+    createdAt: "2026-08-07T13:02:00Z",
     likeCount: 4,
   },
   {
     id: "c6",
-    postSlug: "cohort-4-mentors-meet-mentees-abuja",
+    postSlug: "nigeria-police-force-courtesy-visit",
     parentId: null,
     name: "Tunde A.",
     isStaff: false,
-    body: "I mentored in Cohort 2. Happy to speak to any new mentor who wants to know what the first month is actually like.",
-    createdAt: "2026-08-10T08:30:00Z",
+    body: "Good to see this. Youth safety conversations too often happen without anyone young in the room.",
+    createdAt: "2026-08-03T08:30:00Z",
     likeCount: 7,
   },
   {
     id: "c7",
-    postSlug: "leadership-summit-highlights",
+    postSlug: "women-in-politics-and-governance",
     parentId: null,
     name: "Chidera E.",
     isStaff: false,
-    body: "The panel on public speaking was the most useful session I have attended. Will the slides be shared?",
-    createdAt: "2026-08-03T17:45:00Z",
+    body: "I attended this. The informal session at the end was the most useful hour of the day.",
+    createdAt: "2026-07-16T17:45:00Z",
     likeCount: 5,
   },
   {
     id: "c8",
-    postSlug: "three-years-mentoring-secondary-schools",
+    postSlug: "why-we-spend-so-much-time-in-embassies",
     parentId: null,
     name: "Amaka O.",
     isStaff: false,
-    body: "The point about consistency beating intensity matches what we see in our own programme. Thank you for publishing the things that did not work.",
+    body: "Thank you for writing the unglamorous version. Most organisations only publish the signing ceremony.",
     createdAt: "2026-07-06T10:12:00Z",
     likeCount: 9,
   },

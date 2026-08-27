@@ -95,7 +95,7 @@ export default function Lightbox({
       aria-modal="true"
       aria-label={`Photo ${index + 1} of ${images.length}`}
       className="fixed inset-0 z-[10000] flex flex-col items-center justify-center p-6"
-      style={{ background: "rgba(15,22,38,.92)" }}
+      style={{ background: "rgba(20,16,24,.92)" }}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
@@ -105,7 +105,7 @@ export default function Lightbox({
         type="button"
         onClick={onClose}
         aria-label="Close gallery"
-        className="absolute right-5 top-5 rounded-full p-2 text-white"
+        className="absolute right-5 top-5 p-2 text-white"
         style={{ background: "rgba(255,255,255,.12)" }}
       >
         <X className="h-6 w-6" />
@@ -126,7 +126,7 @@ export default function Lightbox({
           type="button"
           onClick={() => go(-1)}
           aria-label="Previous photo"
-          className="rounded-full p-3 text-white"
+          className="p-3 text-white"
           style={{ background: "rgba(255,255,255,.12)" }}
         >
           <ChevronLeft className="h-6 w-6" />
@@ -139,7 +139,7 @@ export default function Lightbox({
           type="button"
           onClick={() => go(1)}
           aria-label="Next photo"
-          className="rounded-full p-3 text-white"
+          className="p-3 text-white"
           style={{ background: "rgba(255,255,255,.12)" }}
         >
           <ChevronRight className="h-6 w-6" />

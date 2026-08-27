@@ -27,7 +27,7 @@ export default function PostBody({
               <p
                 key={i}
                 className="mb-5 text-[17.5px] font-medium leading-[1.75]"
-                style={{ color: "var(--blog-ink-700)" }}
+                style={{ color: "#2B2630" }}
               >
                 {block.text}
               </p>
@@ -69,7 +69,7 @@ export default function PostBody({
           case "image":
             return (
               <figure key={i} className="my-6">
-                <div className="relative h-[360px] overflow-hidden rounded-[18px]">
+                <div className="relative h-[360px] overflow-hidden ">
                   <Image
                     src={block.media.url as string}
                     alt={block.media.alt}
@@ -81,7 +81,7 @@ export default function PostBody({
                 {block.caption ? (
                   <figcaption
                     className="mt-[10px] text-[12px] font-medium leading-[1.5]"
-                    style={{ color: "var(--blog-ink-400)" }}
+                    style={{ color: "#857C86" }}
                   >
                     {block.caption}
                   </figcaption>

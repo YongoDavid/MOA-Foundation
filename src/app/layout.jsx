@@ -82,7 +82,7 @@ export default function RootLayout({ children }) {
         </noscript>
       </head>
       <body
-        className={`${inter.variable} ${outfit.variable} ${display.variable} ${body.variable} font-sans`}
+        className={`${inter.variable} ${outfit.variable} ${display.variable} ${body.variable} font-body`}
       >
         <Preloader />
         {/* Skip link must be the first focusable element (spec §12). */}

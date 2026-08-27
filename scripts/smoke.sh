@@ -599,7 +599,49 @@ else
   fi
 fi
 
-cat_status=$(curl -o /dev/null -s -w '%{http_code}' --max-time 20 "$BASE/blog/category/mentorship")
+# Reskin (27 Aug 2026): the blog now shares the site palette and typefaces.
+# blog.css and BlogScope are deleted, so a regression here is not a tweak —
+# it means a component is still carrying the retired prototype identity.
+if [ -n "$blog" ] && [ -n "$post" ]; then
+  stale=""
+  for token in "6C0FD6" "6c0fd6" "14A38B" "14a38b" "Jakarta" "15,22,38"; do
+    grep -qF "$token" <<< "$blog$post" && stale="$stale [$token]"
+  done
+  [ -z "$stale" ] && pass "blog carries no retired prototype palette" \
+    || fail "blog carries no retired prototype palette (found:$stale)"
+
+  # One <main> per page. The blog pages used to render their own inside the
+  # root layout's, giving screen readers two competing landmarks.
+  n=$(grep -o '<main' <<< "$blog" | wc -l | tr -d ' ')
+  [ "$n" = "1" ] && pass "blog index has exactly one <main>" \
+    || fail "blog index has exactly one <main> (got $n)"
+
+  # The blog used to be a dead end with no way back into the site.
+  grep -qF 'Moses Mentoring Foundation' <<< "$blog" \
+    && pass "blog renders inside the site shell" \
+    || fail "blog renders inside the site shell"
+
+  # The previous fixtures invented impact figures for a real charity. They
+  # must not come back with a copy-paste from an old mockup.
+  invented=""
+  for claim in "120 out-of-school" "300 pupils" "500+"; do
+    grep -qiF "$claim" <<< "$blog$post" && invented="$invented [$claim]"
+  done
+  [ -z "$invented" ] && pass "no invented impact figures on the blog" \
+    || fail "no invented impact figures on the blog (found:$invented)"
+fi
+
+# Every category in the union must resolve — a nav item pointing at a 404 is
+# how the old site's commented-out BLOG link behaved.
+missing=""
+for c in partnerships governance advocacy summits; do
+  code=$(curl -o /dev/null -s -w '%{http_code}' --max-time 20 "$BASE/blog/category/$c")
+  [ "$code" = "200" ] || missing="$missing [$c=$code]"
+done
+[ -z "$missing" ] && pass "all 4 blog categories resolve" \
+  || fail "all 4 blog categories resolve ($missing)"
+
+cat_status=$(curl -o /dev/null -s -w '%{http_code}' --max-time 20 "$BASE/blog/category/partnerships")
 if [ "$cat_status" = "200" ]; then
   pass "category route responds ($cat_status)"
 else
