@@ -479,6 +479,72 @@ else
   fi
 fi
 
+echo "-- /gallery"
+gal=$(curl -fsS --max-time 20 "$BASE/gallery" 2>/dev/null | sed 's/<!-- -->//g') || gal=""
+galsum=$(curl -fsS --max-time 20 "$BASE/gallery?category=Summits" 2>/dev/null | sed 's/<!-- -->//g') || galsum=""
+galall=$(curl -fsS --max-time 20 "$BASE/gallery?show=24" 2>/dev/null | sed 's/<!-- -->//g') || galall=""
+
+tiles() { grep -o '<li class="relative' <<< "$1" | wc -l | tr -d ' '; }
+
+if [ -z "$gal" ]; then
+  fail "/gallery responds"
+else
+  pass "/gallery responds"
+
+  n=$(tiles "$gal")
+  [ "$n" = "12" ] && pass "gallery: first page renders 12 tiles" \
+    || fail "gallery: first page renders 12 tiles (got $n)"
+
+  missing=""
+  for c in All "Courtesy visits" Summits Governance Advocacy Engagements; do
+    grep -qF ">$c<" <<< "$gal" || missing="$missing [$c]"
+  done
+  [ -z "$missing" ] && pass "gallery: all 6 category filters present" \
+    || fail "gallery: all 6 category filters present (missing:$missing)"
+
+  # Filtering is server-rendered on purpose (see PhotoGrid). These two prove
+  # it works with JavaScript off — a client-filtered grid would pass a naive
+  # "the tabs are on the page" check while filtering nothing.
+  n=$(tiles "$galsum")
+  if [ "$n" = "1" ] && grep -qF 'Showing 1 of 1 photograph' <<< "$galsum"; then
+    pass "gallery: category filter works without JavaScript"
+  else
+    fail "gallery: category filter works without JavaScript (got $n tiles)"
+  fi
+
+  n=$(tiles "$galall")
+  [ "$n" = "19" ] && pass "gallery: load-more reveals all 19 without JavaScript" \
+    || fail "gallery: load-more reveals all 19 without JavaScript (got $n)"
+
+  # The alt text is the only record of what each photograph shows, and these
+  # are real diplomatic engagements. Vague alts ("at an embassy") lose that.
+  missing=""
+  for inst in "Embassy of Vietnam" "Nigeria Police Force" "Chiefs of Defence Staff"; do
+    grep -qF "$inst" <<< "$galall" || missing="$missing [$inst]"
+  done
+  [ -z "$missing" ] && pass "gallery: alt text names the real engagements" \
+    || fail "gallery: alt text names the real engagements (missing:$missing)"
+
+  # No capture dates exist for these photographs, so the mockup's year filter
+  # is deliberately not built. If one appears, it was guessed.
+  # Match the control, not the digits — "2026" also appears in the footer
+  # copyright, which an earlier version of this check matched by accident.
+  if grep -qE 'name="year"|[?&]year=|2026 \xe2\x96\xbe' <<< "$gal"; then
+    fail "gallery: no year filter until real dates exist"
+  else
+    pass "gallery: no year filter until real dates exist"
+  fi
+
+  # Query strings come from anywhere. Bad ones must fall back, not 500.
+  bad=""
+  for q in "category=Nonsense" "show=-1" "show=abc" "show=0"; do
+    code=$(curl -s -o /dev/null --max-time 20 -w '%{http_code}' "$BASE/gallery?$q")
+    [ "$code" = "200" ] || bad="$bad [$q=$code]"
+  done
+  [ -z "$bad" ] && pass "gallery: bad query strings fall back to defaults" \
+    || fail "gallery: bad query strings fall back to defaults ($bad)"
+fi
+
 echo "-- blog routes"
 # The blog is server-rendered from fixtures. These fetch their own pages, so
 # they use a local variable rather than the shared $html.
