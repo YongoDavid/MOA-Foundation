@@ -267,6 +267,32 @@ contains "dot matrix caption required"  "solid marks, 10 mentees each"
 # future claim, not a current one. It must never come back.
 absent   "no country count"             "countries reached"
 
+echo "-- SDG grid (spec §6: the denominator is the point)"
+# All seventeen goals must render, not just the seven addressed. Showing only
+# the seven would hide the denominator, which is what "seven of seventeen"
+# means. Counted from the grid's own markup.
+# Counted from the screen-reader announcements rather than the markup: each
+# tile emits "Goal N: <full title>." exactly once, and that is the output the
+# spec actually requires. Structural counts kept hitting the RSC payload.
+sdg_count=$(grep -oE 'Goal [0-9]+:' <<< "$html" | sort -u | wc -l | tr -d ' ')
+if [ "$sdg_count" -eq 17 ]; then
+  pass "all 17 SDG goals render (denominator visible)"
+else
+  fail "all 17 SDG goals render (found $sdg_count, expected 17)"
+fi
+# Abbreviated labels must not lose the official title (spec §6).
+contains "full SDG titles announced"    "Peace, Justice and Strong Institutions"
+contains "SDG out-of-scope announced"   "Out of scope."
+
+echo "-- institutional alignment"
+contains "alignment: United Nations"    "United Nations"
+contains "alignment: Save the Children" "Save the Children"
+contains "partnership brief link"       "Request our partnership brief"
+
+echo "-- vision"
+contains "vision verbatim"              "To build a continent where every young African has access"
+contains "woven pull-quote"             "I came in able to speak"
+
 echo "-- redesign typefaces (spec v2.0 §2)"
 # Big Shoulders and Manrope replace Outfit, Inter and Plus Jakarta Sans.
 # Asserted on the compiled CSS because next/font emits @font-face there, not
