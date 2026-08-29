@@ -9,10 +9,15 @@ import { VISION } from "@/lib/content"
 import HeroImage from "../../Images/MOA8.jpg"
 import ValuesImage from "../../Images/MOA7.jpg"
 
+// One sentence, two consumers: the visible hero lead and the page description
+// that feeds search results and the social card. Typed twice they drift, and
+// then the tab preview describes the page differently from the page itself.
+const SUMMARY =
+  "A non-profit registered in Nigeria, working across the continent to mentor young Africans in leadership, education, entrepreneurship and peace advocacy."
+
 export const metadata = {
   title: "Who we are",
-  description:
-    "A non-profit registered in Abuja, working across the continent to mentor young Africans in leadership, education, entrepreneurship and peace advocacy.",
+  description: SUMMARY,
   alternates: { canonical: "/about" },
 }
 
@@ -24,7 +29,7 @@ export default function AboutPage() {
         eyebrowRule={false}
         headline={"Who we "}
         accent="are."
-        lead="A non-profit registered in Abuja, working across the continent to mentor young Africans in leadership, education, entrepreneurship and peace advocacy."
+        lead={SUMMARY}
         image={HeroImage}
         alt="Presentation of leadership and governance titles at the Nigeria Police Force headquarters, Abuja"
         height="page"
