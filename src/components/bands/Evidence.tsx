@@ -33,7 +33,7 @@ export default function Evidence() {
               // spells "three hundred" goes stale the moment EVIDENCE changes,
               // and this band would then contradict the number printed
               // directly above it.
-              caption={`Each mark is ten young Africans with a mentor in their corner — ${EVIDENCE.livesTouched} lives reached so far, and room on the board for many more.`}
+              caption={`${EVIDENCE.livesTouched} young Africans guided so far. The continent has never been short of talent — only of people to walk beside it.`}
             />
           </div>
         </div>
