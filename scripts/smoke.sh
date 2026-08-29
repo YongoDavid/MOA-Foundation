@@ -297,7 +297,24 @@ echo "-- evidence figures (client-corrected, spec §6)"
 contains "300+ lives touched"           "300+"
 contains "10+ active mentors"           "10+"
 contains "where we work is a place"     "NIGERIA"
-contains "dot matrix caption required"  "solid marks, 10 mentees each"
+# The matrix must stay EVIDENCE rather than decoration, which needs two
+# things: a visible caption, and an accessible reading of what the marks mean.
+#
+# This used to pin the caption's exact wording ("solid marks, 10 mentees
+# each"), so re-writing that line as mission copy failed the check against a
+# page that was perfectly fine. The wording is content and will change again;
+# what must not change is that both parts are present.
+if grep -qE 'class="sr-only">[0-9]+ or more lives touched, shown as [0-9]+ marks of [0-9]+ each' <<< "$html"; then
+  pass "dot matrix has an accessible reading of the marks"
+else
+  fail "dot matrix has an accessible reading of the marks"
+fi
+matrix_caption=$(grep -o 'max-w-\[620px\][^>]*>[^<]\{20,\}' <<< "$html" | wc -l | tr -d ' ')
+if [ "$matrix_caption" -ge 1 ]; then
+  pass "dot matrix carries a visible caption"
+else
+  fail "dot matrix carries a visible caption (graphic would be decoration, not evidence)"
+fi
 # "10+ countries reached" was removed deliberately: international reach is a
 # future claim, not a current one. It must never come back.
 absent   "no country count"             "countries reached"

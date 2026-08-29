@@ -27,7 +27,10 @@ export default function Evidence() {
             </span>
           </div>
           <div className="mt-7 lg:mt-[34px]">
-            <DotMatrix value={EVIDENCE.livesTouched} />
+            <DotMatrix
+              value={EVIDENCE.livesTouched}
+              caption="Every mark is ten young Africans mentored by name — not an audience reached, but people who can tell you who guided them."
+            />
           </div>
         </div>
 
@@ -35,7 +38,6 @@ export default function Evidence() {
           <Stat
             value={<CountUp value={EVIDENCE.mentors} suffix="+" />}
             label="Active mentors"
-            note="One solid segment of ten. The pale segment carries “and above”."
             divider
           >
             {/* Same convention as the matrix, at a smaller scale. */}
@@ -77,7 +79,7 @@ function Stat({
 }: {
   value: React.ReactNode
   label: string
-  note: string
+  note?: string
   children?: React.ReactNode
   divider?: boolean
   last?: boolean
@@ -96,9 +98,11 @@ function Stat({
         {label}
       </p>
       {children}
-      <p className="m-0 mt-2.5 font-body text-[12px] font-medium leading-[1.55] text-ink-600">
-        {note}
-      </p>
+      {note ? (
+        <p className="m-0 mt-2.5 font-body text-[12px] font-medium leading-[1.55] text-ink-600">
+          {note}
+        </p>
+      ) : null}
     </div>
   )
 }

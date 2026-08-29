@@ -4,8 +4,11 @@ import { ALIGNMENT } from "@/lib/content"
 // Spec §4 band 03 — `300px 1fr`. Two-column bordered list, five bodies each
 // with a right-aligned role note; the sixth cell carries the brief link.
 //
-// Named as text, not logos: written permission for the marks was never
-// confirmed, and the copy says so plainly rather than implying endorsement.
+// Named as TEXT, NOT LOGOS. Written permission for the marks was never
+// confirmed, and displaying an institution's logo implies an endorsement it
+// has not given. The visible copy used to say so; it was replaced on 29 Aug
+// 2026 and the reason now lives only here — so do not "finish" this band by
+// adding logos. Get written permission first, per body.
 //
 // The index colour is the one value here outside the nineteen-token palette —
 // the mockup's muted taupe for the ordinal. Kept local, not promoted.
@@ -34,9 +37,10 @@ export default function Alignment({
             </h2>
           ) : null}
           <p className="m-0 font-body text-[13.5px] font-medium leading-[1.65] text-ink-600">
-            Our programme design and reporting follow the frameworks of the
-            bodies below. Logos are used only with written permission, so we
-            name them plainly.
+            Leadership on this continent is not built in isolation. The bodies
+            below set the frameworks our programme design and reporting are
+            held to — and give a mentee from Abuja a standard that is
+            recognised well beyond it.
           </p>
         </div>
 
