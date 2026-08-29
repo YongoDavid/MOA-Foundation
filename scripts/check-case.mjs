@@ -19,14 +19,26 @@ import { readFileSync } from "node:fs"
 import path from "node:path"
 
 const ROOT = process.cwd()
-const tracked = new Set(
-  execSync("git ls-files", { encoding: "utf8" }).split("\n").filter(Boolean),
-)
 
-const sources = execSync(
-  "git ls-files 'src/**/*.ts' 'src/**/*.tsx' 'src/**/*.js' 'src/**/*.jsx'",
-  { encoding: "utf8" },
-).split("\n").filter(Boolean)
+// This check must FAIL SAFE. It runs as `prebuild`, so an exception here would
+// break every build — including on hosts where the build directory is not a
+// git checkout (a prebuilt or CLI-uploaded deploy). Its whole job is to catch
+// the mismatch on a developer's case-insensitive machine before the push; a CI
+// filesystem is case-sensitive already, so the ordinary build catches it there
+// regardless. No git, nothing to compare against, nothing to protect: skip.
+let tracked, sources
+try {
+  const ls = (args) =>
+    execSync(`git ls-files ${args}`, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] })
+      .split("\n")
+      .filter(Boolean)
+  tracked = new Set(ls(""))
+  sources = ls("'src/**/*.ts' 'src/**/*.tsx' 'src/**/*.js' 'src/**/*.jsx'")
+  if (tracked.size === 0) throw new Error("empty index")
+} catch {
+  console.log("asset case check: skipped — not a git checkout, nothing to compare against")
+  process.exit(0)
+}
 
 const IMPORT = /from\s+["']([^"']+\.(?:jpg|jpeg|png|gif|svg|webp|avif))["']/gi
 const problems = []
