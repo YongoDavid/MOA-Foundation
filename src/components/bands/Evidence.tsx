@@ -29,7 +29,11 @@ export default function Evidence() {
           <div className="mt-7 lg:mt-[34px]">
             <DotMatrix
               value={EVIDENCE.livesTouched}
-              caption="Every mark is ten young Africans mentored by name — not an audience reached, but people who can tell you who guided them."
+              // The figure is interpolated, never typed out. A caption that
+              // spells "three hundred" goes stale the moment EVIDENCE changes,
+              // and this band would then contradict the number printed
+              // directly above it.
+              caption={`Each mark is ten young Africans with a mentor in their corner — ${EVIDENCE.livesTouched} lives reached so far, and room on the board for many more.`}
             />
           </div>
         </div>
