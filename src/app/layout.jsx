@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next"
 import { Big_Shoulders, Manrope } from "next/font/google"
 import Preloader from "@/components/Preloader"
 import { SITE } from "@/lib/site"
@@ -89,6 +90,11 @@ export default function RootLayout({ children }) {
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />
+        {/* Vercel Analytics. Cookieless and no personal data, so it needs no
+            consent banner. It reports only from a Vercel deployment — locally
+            and in any other host it is inert, which is why nothing about it
+            shows up in the smoke run. */}
+        <Analytics />
       </body>
     </html>
   )
