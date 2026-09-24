@@ -733,6 +733,32 @@ else
     || fail "gallery: bad query strings fall back to defaults ($bad)"
 fi
 
+echo "-- /admin"
+# The admin area must never be indexed, and must never be reachable by
+# following a link from the public site. The auth redirect itself cannot be
+# asserted here: it needs real Supabase credentials, which this script does not
+# have and should not have. That part is a manual check — see the QA list.
+for r in /admin /admin/login; do
+  page=$(curl -fsS --max-time 20 "$BASE$r" 2>/dev/null) || page=""
+  if [ -z "$page" ]; then
+    fail "$r responds"
+  else
+    pass "$r responds"
+    grep -q 'name="robots" content="noindex' <<< "$page" \
+      && pass "$r is noindex" \
+      || fail "$r is noindex (it would appear in search results)"
+  fi
+done
+
+# No route the public can reach should advertise the admin area.
+leaked=""
+for r in / /about /programs /donate /contact /gallery /blog; do
+  page=$(curl -fsS --max-time 20 "$BASE$r" 2>/dev/null | sed 's/<!-- -->//g')
+  grep -qE 'href="/admin' <<< "$page" && leaked="$leaked [$r]"
+done
+[ -z "$leaked" ] && pass "no public page links to /admin" \
+  || fail "no public page links to /admin (found:$leaked)"
+
 echo "-- blog routes"
 # The blog is server-rendered from fixtures. These fetch their own pages, so
 # they use a local variable rather than the shared $html.
