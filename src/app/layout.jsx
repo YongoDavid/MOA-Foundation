@@ -29,8 +29,16 @@ export const metadata = {
   // URLs, so it has to actually be read — otherwise every Vercel preview emits
   // production canonicals and og:urls pointing at the live site. The literal is
   // the fallback so local runs and a missing var still behave.
+  // Live domain, verified 24 September 2026: www.mosesmentoringfoundation.org
+  // serves the site and the apex 307s to it. The previous fallback,
+  // mosesofafricafoundation.org, has NO DNS RECORD — it does not exist. Every
+  // canonical and og:url on the site pointed at it whenever the environment
+  // variable was absent, which is exactly when a fallback is load-bearing.
+  //
+  // Note the www. The apex redirects, so the canonical host is the www one;
+  // naming the apex here would make every canonical a redirect.
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://mosesofafricafoundation.org"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.mosesmentoringfoundation.org"
   ),
   // public/index.html carried the only <link rel="manifest"> and was deleted
   // with CRA, so without this the rewritten manifest is referenced by nothing.

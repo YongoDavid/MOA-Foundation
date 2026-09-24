@@ -175,7 +175,7 @@ contains "title tag"                    "<title>Moses Mentoring Foundation</titl
 contains "description meta"             'name="description"'
 contains "description meta mentions mentorship" 'name="description" content="Moses Mentoring Foundation identifies and empowers young talent through mentorship'
 contains "canonical link"               'rel="canonical"'
-contains "canonical on prod domain"     'rel="canonical" href="https://mosesofafricafoundation.org'
+contains "canonical on prod domain"     'rel="canonical" href="https://www.mosesmentoringfoundation.org'
 contains "og:title"                     'property="og:title"'
 contains "og:image"                     'property="og:image"'
 contains "twitter:card"                 'name="twitter:card"'
@@ -192,7 +192,7 @@ if [ "${SMOKE_PROD:-0}" = "1" ]; then
   # Positive assertion, not `absent`. An `absent` whose pattern depends on
   # Next's exact attribute order is vacuous by default: if the emitted markup
   # ever shifts, it passes forever while telling you nothing.
-  contains "og:image on prod domain"    'content="https://mosesofafricafoundation.org/opengraph-image'
+  contains "og:image on prod domain"    'content="https://www.mosesmentoringfoundation.org/opengraph-image'
 else
   printf '  skip  no localhost in social tags (dev; use SMOKE_PROD=1 vs next start)\n'
 fi
@@ -220,8 +220,8 @@ absent   "no external font host"        "fonts.gstatic.com"
 # rendered the shorter form — for a month, in the tab title and the OG card.
 # Both now read from SITE.legalName.
 #
-# The domain keeps "mosesofafricafoundation.org" and that is correct — it is
-# the address, not the name. It needs no exclusion here: the search term has
+# The domain is mosesmentoringfoundation.org (www). It is the address, not
+# the name. It needs no exclusion here: the search term has
 # spaces and a hostname does not, so a URL can never match it. An earlier
 # version of this check stripped URLs first; the strip was proven to change
 # nothing and was removed rather than left implying a protection it did not
@@ -738,17 +738,40 @@ echo "-- /admin"
 # following a link from the public site. The auth redirect itself cannot be
 # asserted here: it needs real Supabase credentials, which this script does not
 # have and should not have. That part is a manual check — see the QA list.
-for r in /admin /admin/login; do
-  page=$(curl -fsS --max-time 20 "$BASE$r" 2>/dev/null) || page=""
-  if [ -z "$page" ]; then
-    fail "$r responds"
-  else
-    pass "$r responds"
-    grep -q 'name="robots" content="noindex' <<< "$page" \
-      && pass "$r is noindex" \
-      || fail "$r is noindex (it would appear in search results)"
-  fi
-done
+# /admin must BOUNCE an anonymous request to the login page. This used to
+# assert a noindex tag on /admin, which only passed while the environment was
+# unconfigured and the page rendered a placeholder — the moment real
+# credentials arrived the route started redirecting, there was no body, and
+# the check failed against correct behaviour. Asserting the redirect tests the
+# thing that actually matters.
+admin_code=$(curl -s -o /dev/null --max-time 20 -w '%{http_code}' "$BASE/admin")
+admin_to=$(curl -s -o /dev/null --max-time 20 -w '%{redirect_url}' "$BASE/admin")
+case "$admin_code" in
+  30[1278])
+    if grep -q '/admin/login' <<< "$admin_to"; then
+      pass "/admin bounces an anonymous request to the login page"
+    else
+      fail "/admin bounces an anonymous request to the login page (went to $admin_to)"
+    fi ;;
+  200)
+    # Only legitimate with no Supabase configured, where it renders a notice.
+    if curl -fsS --max-time 20 "$BASE/admin" | grep -qi 'not configured'; then
+      pass "/admin renders the unconfigured notice (no credentials present)"
+    else
+      fail "/admin served content to an anonymous request (expected a redirect)"
+    fi ;;
+  *) fail "/admin responds (got $admin_code)" ;;
+esac
+
+login=$(curl -fsS --max-time 20 "$BASE/admin/login" 2>/dev/null) || login=""
+if [ -z "$login" ]; then
+  fail "/admin/login responds"
+else
+  pass "/admin/login responds"
+  grep -q 'name="robots" content="noindex' <<< "$login" \
+    && pass "/admin/login is noindex" \
+    || fail "/admin/login is noindex (it would appear in search results)"
+fi
 
 # No route the public can reach should advertise the admin area.
 leaked=""
