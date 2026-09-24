@@ -27,7 +27,14 @@ export async function signIn(
   const supabase = await createSupabaseServerClient()
   const { error } = await supabase.auth.signInWithPassword({ email, password })
 
-  if (error) return { error: "Those details were not accepted." }
+  if (error) {
+    // Vague to the visitor, specific in the server log. The visitor must not
+    // learn which half they got right; whoever is running the server needs to
+    // know whether this was a bad password or a misconfigured project. Without
+    // this line a wrong SUPABASE_URL is indistinguishable from a typo.
+    console.error("[admin sign-in failed]", error.status, error.code, error.message)
+    return { error: "Those details were not accepted." }
+  }
 
   revalidatePath("/admin", "layout")
   // Only ever redirect within this site. `next` arrives from the query string,

@@ -19,9 +19,26 @@
 export type SupabaseEnv = { url: string; publishableKey: string }
 
 export function readSupabaseEnv(): SupabaseEnv | null {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const raw = process.env.NEXT_PUBLIC_SUPABASE_URL
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-  if (!url || !publishableKey) return null
+  if (!raw || !publishableKey) return null
+
+  // Normalise to the ORIGIN. The Supabase dashboard shows several URLs on the
+  // same screen and the REST endpoint is the easy one to grab by mistake:
+  // pasting "https://<ref>.supabase.co/rest/v1/" sends every request to
+  // ".../rest/v1//rest/v1/…", and the project answers PGRST125 "Invalid path"
+  // to everything — including /auth/v1/token, so signing in fails with what
+  // looks exactly like a wrong password. That cost a debugging session.
+  //
+  // The project URL is always a bare origin, so taking .origin is lossless
+  // and makes either value work.
+  let url: string
+  try {
+    url = new URL(raw).origin
+  } catch {
+    return null
+  }
+
   return { url, publishableKey }
 }
 
@@ -30,9 +47,11 @@ export function requireSupabaseEnv(): SupabaseEnv {
   const env = readSupabaseEnv()
   if (!env) {
     throw new Error(
-      "Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and " +
-        "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY in .env.local (and in the " +
-        "Vercel project settings). See .env.example.",
+      "Supabase is not configured, or NEXT_PUBLIC_SUPABASE_URL is not a valid " +
+        "URL. Set NEXT_PUBLIC_SUPABASE_URL (the bare Project URL, e.g. " +
+        "https://abcdefgh.supabase.co — not the REST endpoint) and " +
+        "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY in .env.local, and in the Vercel " +
+        "project settings. See .env.example.",
     )
   }
   return env
