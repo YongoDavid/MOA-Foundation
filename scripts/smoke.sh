@@ -798,16 +798,49 @@ done
 [ -z "$leaked" ] && pass "no public page links to /admin" \
   || fail "no public page links to /admin (found:$leaked)"
 
+post_html=$(curl -fsS --max-time 20 "$BASE/blog/embassy-of-kuwait-youth-education-partnership" 2>/dev/null | sed 's/<!-- -->//g')
+
+# The reply box must actually open. "Reply" shipped twice as a control that
+# looked right and did nothing — first as a <span>, then as a button whose
+# form was never rendered because the JSX insertion silently failed. Counting
+# the Reply controls caught neither, because the controls were fine.
+#
+# Reply state lives in ?reply= specifically so this is checkable: fetch a post,
+# take the id out of its own reply link, ask for that URL, and require the form.
+reply_id=$(grep -o '?reply=[0-9a-f-]\{36\}' <<< "$post_html" | head -1 | cut -d= -f2)
+if [ -z "$reply_id" ]; then
+  fail "a post offers a reply link"
+else
+  pass "a post offers a reply link"
+  with_form=$(curl -fsS --max-time 20 \
+    "$BASE/blog/embassy-of-kuwait-youth-education-partnership?reply=$reply_id" 2>/dev/null \
+    | sed 's/<!-- -->//g')
+  if grep -qF 'Replying to' <<< "$with_form" \
+     && grep -qF "value=\"$reply_id\"" <<< "$with_form" \
+     && grep -qF 'Post reply' <<< "$with_form"; then
+    pass "the reply box opens, carrying the parent id"
+  else
+    fail "the reply box opens, carrying the parent id"
+  fi
+  # ...and is not on the page uninvited.
+  grep -qF 'Replying to' <<< "$post_html" \
+    && fail "the reply box is closed by default" \
+    || pass "the reply box is closed by default"
+fi
+
 # Controls must be controls. "Reply", "Share" and "Copy link" all shipped as
 # <span>s carrying comments calling them presentational — styled like buttons,
 # labelled with verbs, doing nothing. A reader cannot tell the difference until
 # they click. This catches the next one.
-post_html=$(curl -fsS --max-time 20 "$BASE/blog/embassy-of-kuwait-youth-education-partnership" 2>/dev/null | sed 's/<!-- -->//g')
 if [ -n "$post_html" ]; then
   fake=""
   for verb in Share "Copy link" Reply; do
     # present as a label, but NOT as a button
-    if grep -qF ">$verb<" <<< "$post_html" && ! grep -qF "$verb</button>" <<< "$post_html"; then
+    # A LINK is a real control too — Reply navigates to ?reply=<id>. What is
+    # not a control is a <span> styled to look like one.
+    if grep -qF ">$verb<" <<< "$post_html" \
+       && ! grep -qF "$verb</button>" <<< "$post_html" \
+       && ! grep -qF "$verb</a>" <<< "$post_html"; then
       fake="$fake [$verb]"
     fi
   done

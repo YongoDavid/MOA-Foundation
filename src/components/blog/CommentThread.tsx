@@ -1,6 +1,7 @@
 "use client"
 
 import { useActionState, useOptimistic, useRef, useState } from "react"
+import Link from "next/link"
 import { postComment, likeComment } from "@/app/blog/actions"
 import type { Comment } from "@/lib/blog-types"
 import { formatDate, initials } from "@/lib/blog-format"
@@ -32,14 +33,25 @@ type Draft = Comment & { pending?: boolean }
 export default function CommentThread({
   postSlug,
   comments,
+  replyTo,
 }: {
   postSlug: string
   comments: Comment[]
+  /**
+   * Which comment the reply box is open under, read from ?reply= by the page.
+   *
+   * URL state rather than useState, for the same reason the gallery and blog
+   * filters are: it renders on the server, so it works without JavaScript and
+   * a script can verify it. The previous version held this in useState and the
+   * form was never rendered at all — the JSX insertion silently failed, and
+   * counting the Reply buttons on the page did not catch it because the
+   * buttons were fine. This shape cannot fail that way unseen.
+   */
+  replyTo?: string | null
 }) {
   const formRef = useRef<HTMLFormElement>(null)
   const bodyRef = useRef<HTMLTextAreaElement>(null)
   const [expanded, setExpanded] = useState(false)
-  const [replyTo, setReplyTo] = useState<string | null>(null)
 
   const [optimistic, addOptimistic] = useOptimistic<Draft[], Draft>(
     comments as Draft[],
@@ -188,7 +200,21 @@ export default function CommentThread({
       <div className="flex flex-col gap-[22px]">
         {visible.map((c) => (
           <div key={c.id}>
-            <CommentRow comment={c} onReply={setReplyTo} />
+            <CommentRow comment={c} canReply />
+
+            {replyTo === c.id ? (
+              <div
+                id={`comment-${c.id}`}
+                className="ml-[54px] mt-4 pl-[18px]"
+                style={{ borderLeft: "2px solid #E2DBCC" }}
+              >
+                <ReplyForm
+                  postSlug={postSlug}
+                  parentId={c.id}
+                  replyingTo={c.name}
+                />
+              </div>
+            ) : null}
             {repliesFor(c.id).map((r) => (
               <div
                 key={r.id}
@@ -265,13 +291,13 @@ export default function CommentThread({
 function CommentRow({
   comment,
   compact = false,
-  onReply,
+  canReply = false,
 }: {
   comment: Draft
   compact?: boolean
-  /** Absent on a reply: the thread nests one level only, enforced by a
+  /** False on a reply: the thread nests one level only, enforced by a
       database trigger, so a reply cannot itself be replied to. */
-  onReply?: (id: string) => void
+  canReply?: boolean
 }) {
   const size = compact ? "h-9 w-9 text-[12px]" : "h-10 w-10 text-[13px]"
   return (
@@ -314,14 +340,14 @@ function CommentRow({
           className="mt-[9px] flex gap-4 text-[11.5px] font-bold leading-none"
           style={{ color: "#857C86" }}
         >
-          {onReply && !comment.pending ? (
-            <button
-              type="button"
-              onClick={() => onReply(comment.id)}
-              className="min-h-[44px] font-body text-[11.5px] font-bold uppercase tracking-[.06em] transition-colors duration-150 hover:text-umber-600"
+          {canReply && !comment.pending ? (
+            <Link
+              href={`?reply=${comment.id}#comment-${comment.id}`}
+              scroll={false}
+              className="flex min-h-[44px] items-center font-body text-[11.5px] font-bold uppercase tracking-[.06em] transition-colors duration-150 hover:text-umber-600"
             >
               Reply
-            </button>
+            </Link>
           ) : null}
           <LikeButton id={comment.id} initial={comment.likeCount} pending={Boolean(comment.pending)} />
         </div>
@@ -398,18 +424,18 @@ function ReplyForm({
   postSlug,
   parentId,
   replyingTo,
-  onDone,
 }: {
   postSlug: string
   parentId: string
   replyingTo: string
-  onDone: () => void
 }) {
   const [error, submit, pending] = useActionState<string | null, FormData>(
     async (_prev, formData) => {
       const res = await postComment({}, formData)
       if (res.error) return res.error
-      onDone()
+      // The action revalidates the path, so the reply arrives with the
+      // refreshed tree under the right parent. Closing the box is a
+      // navigation back to the page without ?reply=.
       return null
     },
     null,
@@ -475,13 +501,13 @@ function ReplyForm({
         >
           {pending ? "Posting…" : "Post reply"}
         </button>
-        <button
-          type="button"
-          onClick={onDone}
-          className="min-h-[44px] font-body text-[11px] font-bold uppercase tracking-[.09em] text-ink-500"
+        <Link
+          href="?"
+          scroll={false}
+          className="flex min-h-[44px] items-center font-body text-[11px] font-bold uppercase tracking-[.09em] text-ink-500"
         >
           Cancel
-        </button>
+        </Link>
       </div>
     </form>
   )

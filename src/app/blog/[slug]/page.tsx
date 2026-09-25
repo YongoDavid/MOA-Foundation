@@ -22,6 +22,7 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<Params>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const { slug } = await params
   const post = await getPost(slug)
@@ -41,10 +42,13 @@ export async function generateMetadata({
 
 export default async function PostPage({
   params,
+  searchParams,
 }: {
   params: Promise<Params>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const { slug } = await params
+  const sp = await searchParams
   const post = await getPost(slug)
   if (!post) notFound()
 
@@ -94,7 +98,11 @@ export default async function PostPage({
           </div>
         ) : null}
 
-        <CommentThread postSlug={post.slug} comments={await getComments(post.slug)} />
+        <CommentThread
+          postSlug={post.slug}
+          comments={await getComments(post.slug)}
+          replyTo={typeof sp.reply === "string" ? sp.reply : null}
+        />
       </article>
 
       <div className="h-[46px]" />
