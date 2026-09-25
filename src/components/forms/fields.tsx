@@ -1,6 +1,7 @@
 "use client"
 
 import type { ReactNode } from "react"
+import { SITE } from "@/lib/site"
 
 // Form primitives (spec §7). All four forms sit on dark grounds and share
 // this pattern: white-8% fill, white-16% border, uppercase micro-label above.
@@ -339,8 +340,8 @@ export function SubmittedPanel({ heading }: { heading: string }) {
       <p className="m-0 mt-3 font-body text-[14px] font-medium leading-[1.65] text-white/70">
         You will not get an automatic confirmation email. If you would rather
         follow up directly, write to{" "}
-        <a href="mailto:mosesofafrica@gmail.com" className="text-gold-500 underline">
-          mosesofafrica@gmail.com
+        <a href={`mailto:${SITE.email}`} className="text-gold-500 underline">
+          {SITE.email}
         </a>{" "}
         or call{" "}
         <a href="tel:+2348037315490" className="text-gold-500 underline">

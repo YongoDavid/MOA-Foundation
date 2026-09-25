@@ -680,12 +680,34 @@ else
   # different, real number in the donation drawer. Both are now SITE constants,
   # and on this page both must be tappable — a phone number you cannot tap on a
   # phone is the single most annoying thing a contact page can do.
-  if grep -qF 'mailto:mosesofafrica@gmail.com' <<< "$contact" \
-     && grep -qF 'tel:+2348037315490' <<< "$contact"; then
-    pass "contact: email and phone are actionable links"
+  # Read the expected address OUT OF src/lib/site.ts rather than repeating it
+  # here. It was hardcoded, and when the Foundation's address turned out to be
+  # wrong this assertion happily kept passing against the wrong value — it was
+  # asserting that two copies of a mistake agreed with each other.
+  want_email=$(grep -oE 'email:[[:space:]]*"[^"]+"' src/lib/site.ts | head -1 | sed 's/.*"\(.*\)"/\1/')
+  want_phone=$(grep -oE 'phone:[[:space:]]*"[^"]+"' src/lib/site.ts | head -1 | sed 's/.*"\(.*\)"/\1/' | tr -d ' ')
+
+  if [ -z "$want_email" ] || [ -z "$want_phone" ]; then
+    fail "contact: could not read SITE.email / SITE.phone from source"
+  elif grep -qF "mailto:$want_email" <<< "$contact" \
+       && grep -qF "tel:$want_phone" <<< "$contact"; then
+    pass "contact: email and phone are actionable, and match SITE"
   else
-    fail "contact: email and phone are actionable links"
+    fail "contact: email and phone match SITE (want $want_email / $want_phone)"
   fi
+
+  # Nothing anywhere may show a contact address other than the one in SITE.
+  # Three files hardcoded the old one, which is how the site spent weeks
+  # telling visitors to write to an inbox the Foundation does not read.
+  wrong=""
+  for r in / /contact /programs/apply /programs/mentor /donate; do
+    page=$(curl -fsS --max-time 20 "$BASE$r" 2>/dev/null | sed 's/<!-- -->//g')
+    for addr in $(grep -oE '[A-Za-z0-9._%+-]+@gmail\.com' <<< "$page" | sort -u); do
+      [ "$addr" = "$want_email" ] || wrong="$wrong [$r:$addr]"
+    done
+  done
+  [ -z "$wrong" ] && pass "no page shows a contact address other than SITE.email" \
+    || fail "no page shows a contact address other than SITE.email (found:$wrong)"
 fi
 
 echo "-- /gallery"

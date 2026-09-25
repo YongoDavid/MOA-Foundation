@@ -2,6 +2,7 @@
 
 import { Resend } from "resend"
 import { sendFormEmail, type FormKind, type Fields } from "@/lib/mail"
+import { SITE } from "@/lib/site"
 
 export type FormState = { error?: string; ok?: boolean }
 
@@ -53,7 +54,7 @@ export async function submitForm(
     console.error("[submitForm] missing RESEND_API_KEY / RESEND_FROM / FORMS_TO")
     return {
       error:
-        "This form is not connected yet. Please email mosesofafrica@gmail.com instead.",
+        `This form is not connected yet. Please email ${SITE.email} instead.`,
     }
   }
 

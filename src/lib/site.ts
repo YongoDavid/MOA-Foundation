@@ -11,7 +11,7 @@ export const SITE = {
   address: "House B61 Supercell Estate, Apo, Abuja, F.C.T., Nigeria",
   location: "Abuja, F.C.T. · Nigeria",
   phone: "+234 803 731 5490",
-  email: "mosesofafrica@gmail.com",
+  email: "mosesofafrica333@gmail.com",
   officeHours: "Monday to Friday, 9am – 5pm WAT",
   /** Rendered beside the contact submit. A content field so staff can change the promise. */
   replyPromise: "We reply within two working days.",
