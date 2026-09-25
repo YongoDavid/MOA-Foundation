@@ -1,73 +1,71 @@
-# Getting Started with Create React App
+# Moses Mentoring Foundation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The public website for the **Moses Mentoring Foundation**, a Nigeria-based non-profit
+(Abuja, F.C.T.) that mentors African youth in leadership, education, entrepreneurship and
+peace advocacy.
 
-## Available Scripts
+**Live:** https://www.mosesmentoringfoundation.org
 
-In the project directory, you can run:
+Eleven public routes plus a small admin area. The marketing pages are static content in
+the repo; the blog is database-backed and authored through `/admin`.
 
-### `npm start`
+## Running it
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npm install
+cp .env.example .env.local   # then fill .env.local in — see below
+npm run dev                  # http://localhost:3010
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Port 3010, not 3000 — 3000 is occupied on the maintainer's machine and the smoke script
+defaults to 3010 to match.
 
-### `npm test`
+**Fill in `.env.local`, never `.env.example`.** The example file is committed and is a
+template; Next reads `.env.local`, which is git-ignored. Putting real values in the
+wrong one leaves the app unconfigured *and* puts secrets in version control.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Without Supabase credentials the marketing pages work normally and the blog shows no
+posts. It will not crash.
 
-### `npm run build`
+## Commands
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Command | What it does |
+|---|---|
+| `npm run dev` | dev server on :3010 |
+| `npm run build` | production build — the real gate, and it runs `check:case` first |
+| `npm start` | production server on :3010 |
+| `npm run lint` | ESLint; fails on errors |
+| `npm run smoke` | 130 assertions against a running server |
+| `npm run check:case` | asset imports vs `git ls-files` — catches case bugs macOS cannot |
+| `npm run check:rls` | proves the Supabase access policies hold |
+| `npm run check:comments` | drives the real comment logic against the project |
+| `npm run seed:blog` | fills an empty database from the fixture content |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+`SMOKE_PROD=1 npm run smoke https://www.mosesmentoringfoundation.org` checks the live
+site, including the production-only og:image assertion.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**There is no test framework, by deliberate decision.** Verification is the build, the
+smoke script, and `docs/manual-qa-checklist.md` for what neither can reach. Please do
+not add Jest or Playwright.
 
-### `npm run eject`
+## Stack
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Next.js 16 (App Router, Turbopack) · React 19 · Tailwind CSS 3.4 · TypeScript ·
+Supabase (Postgres, Auth, Storage) · deployed on Vercel.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Layout
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+src/app/          routes; layout.jsx is the shell
+src/components/   bands/ shell/ forms/ blog/ admin/ gallery/ data/
+src/lib/          content, tokens and data access — copy lives here, not in components
+supabase/         SQL migrations, run by hand in the Supabase SQL editor
+scripts/          smoke and the check/seed utilities
+docs/             plans and the manual QA checklist
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Before you change anything
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-
-Git/Github test
+Read **`CLAUDE.md`**. It is the real documentation — the design system and its rules, the
+content that is approved verbatim and must not be reworded, the deployment requirements,
+and a list of mistakes this project has already made once. It is worth the ten minutes.

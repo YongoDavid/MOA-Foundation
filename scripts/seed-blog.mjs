@@ -25,6 +25,10 @@ import { createClient } from "@supabase/supabase-js"
 
 const ROOT = process.cwd()
 const FORCE = process.argv.includes("--force")
+// Re-upload the images and touch nothing else. --force would overwrite the
+// post ROWS too, discarding anything written in the admin since the seed —
+// which is the wrong trade when all you want is smaller files.
+const IMAGES_ONLY = process.argv.includes("--images-only")
 const BUCKET = "blog-media"
 
 // ── env ─────────────────────────────────────────────────────────────────────
@@ -111,7 +115,7 @@ for (const [ident, file] of Object.entries(imageIdents)) {
     .from(BUCKET)
     .upload(key, readFileSync(path), {
       contentType: file.toLowerCase().endsWith(".png") ? "image/png" : "image/jpeg",
-      upsert: FORCE,
+      upsert: FORCE || IMAGES_ONLY,
     })
 
   if (error && !/exists/i.test(error.message)) {
@@ -124,6 +128,11 @@ for (const [ident, file] of Object.entries(imageIdents)) {
   publicUrlFor[ident] = db.storage.from(BUCKET).getPublicUrl(key).data.publicUrl
 }
 console.log(`images: ${uploaded} uploaded, ${reused} already present (${fileCount} referenced)`)
+
+if (IMAGES_ONLY) {
+  console.log("images only — posts and comments untouched.")
+  process.exit(0)
+}
 
 // ── turn the fixture source into plain data ─────────────────────────────────
 // `media(IDENT, "alt")` becomes a MediaItem whose url is the uploaded public
