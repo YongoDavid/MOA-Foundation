@@ -798,6 +798,23 @@ done
 [ -z "$leaked" ] && pass "no public page links to /admin" \
   || fail "no public page links to /admin (found:$leaked)"
 
+# Controls must be controls. "Reply", "Share" and "Copy link" all shipped as
+# <span>s carrying comments calling them presentational — styled like buttons,
+# labelled with verbs, doing nothing. A reader cannot tell the difference until
+# they click. This catches the next one.
+post_html=$(curl -fsS --max-time 20 "$BASE/blog/embassy-of-kuwait-youth-education-partnership" 2>/dev/null | sed 's/<!-- -->//g')
+if [ -n "$post_html" ]; then
+  fake=""
+  for verb in Share "Copy link" Reply; do
+    # present as a label, but NOT as a button
+    if grep -qF ">$verb<" <<< "$post_html" && ! grep -qF "$verb</button>" <<< "$post_html"; then
+      fake="$fake [$verb]"
+    fi
+  done
+  [ -z "$fake" ] && pass "blog controls are real controls, not styled spans" \
+    || fail "blog controls are real controls, not styled spans (inert:$fake)"
+fi
+
 echo "-- blog routes"
 # The blog is server-rendered from fixtures. These fetch their own pages, so
 # they use a local variable rather than the shared $html.

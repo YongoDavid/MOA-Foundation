@@ -7,9 +7,11 @@ import { formatDate, initials } from "@/lib/blog-format"
 
 // Comments, mockup 1b and spec §8.
 //
-// PROTOTYPE: presentation and optimistic behaviour only. A submitted comment
-// appears instantly and is NOT persisted — a refresh clears it. That is stated
-// in the UI rather than left for a client to discover mid-demo.
+// Comments are PERSISTED (Supabase, 25 Sep 2026). The optimistic row makes a
+// comment appear instantly; postComment writes it. Both halves are needed —
+// an earlier revision had only the optimistic half, so a comment appeared and
+// then vanished on refresh, and this comment block still claimed that was by
+// design. See scripts/check-comments.mjs.
 //
 // Deliberately absent: the staff Delete control. Spec §8 requires it be absent
 // from the public DOM rather than hidden, and there is no auth here — so

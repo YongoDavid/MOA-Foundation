@@ -3,13 +3,13 @@ import type { Post } from "@/lib/blog-types"
 import { CATEGORIES } from "@/lib/blog-types"
 import { formatDate, initials, plural } from "@/lib/blog-format"
 import MediaBadge from "./MediaBadge"
+import PostActions from "./PostActions"
 
 // Post header, mockup 1b: breadcrumb, chips, title, author row with
 // Share / Copy link.
 //
-// Share and Copy link are presentational in the prototype — wiring the Web
-// Share API and clipboard is trivial but needs a client boundary, and this
-// header is otherwise a server component. Plan 3.
+// Share and Copy link are REAL, in PostActions — a small client island, so
+// this header stays a server component.
 
 export default function PostHeader({ post }: { post: Post }) {
   const category =
@@ -76,23 +76,7 @@ export default function PostHeader({ post }: { post: Post }) {
             </div>
           </div>
 
-          <div
-            className="ml-auto flex gap-2 text-[11.5px] font-bold leading-none"
-            style={{ color: "#5C5460" }}
-          >
-            <span
-              className="px-[15px] py-[10px]"
-              style={{ border: "1px solid rgba(20,16,24,.18)" }}
-            >
-              Share
-            </span>
-            <span
-              className="px-[15px] py-[10px]"
-              style={{ border: "1px solid rgba(20,16,24,.18)" }}
-            >
-              Copy link
-            </span>
-          </div>
+          <PostActions title={post.title} />
         </div>
       </div>
     </header>

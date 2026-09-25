@@ -1,6 +1,9 @@
-// Blog prototype — the ONLY data source.
+// Blog SEED DATA. No longer what the site reads.
 //
-// No backend, no fetch, no API routes. Every blog surface reads from here.
+// Every public surface reads src/lib/blog-db.ts (Supabase) as of 25 Sep 2026.
+// This file survives because scripts/seed-blog.mjs parses it to populate a
+// fresh database — it is the starting content, not the runtime source. Editing
+// it changes nothing on the live site; use the admin at /admin.
 // Shapes come from blog-types.ts, so replacing this module with a real
 // database later changes where data comes from — not the components.
 //
