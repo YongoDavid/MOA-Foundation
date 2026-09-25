@@ -3,6 +3,7 @@ import { getAdminUser, createSupabaseServerClient } from "@/lib/supabase/server"
 import { readSupabaseEnv } from "@/lib/supabase/env"
 import { signOut } from "./actions"
 import { formatDate } from "@/lib/blog-format"
+import { AdminShell } from "@/components/admin/AdminShell"
 
 export const metadata = {
   title: "Posts",
@@ -22,12 +23,12 @@ type Row = {
 export default async function AdminDashboard() {
   if (!readSupabaseEnv()) {
     return (
-      <Shell heading="Not configured">
+      <AdminShell heading="Not configured">
         <p className="m-0 font-body text-[15px] leading-[1.65] text-ink-600">
           Supabase credentials are missing from this deployment. See{" "}
           <code>.env.example</code>.
         </p>
-      </Shell>
+      </AdminShell>
     )
   }
 
@@ -45,13 +46,19 @@ export default async function AdminDashboard() {
   const posts = (data ?? []) as Row[]
 
   return (
-    <Shell
+    <AdminShell
       heading="Posts"
       action={
         <div className="flex flex-wrap items-center gap-4">
           <span className="font-body text-[12px] font-medium text-ink-500">
             {user?.email}
           </span>
+          <Link
+            href="/admin/posts/new"
+            className="flex min-h-[44px] items-center bg-ink-900 px-5 font-body text-[11px] font-bold uppercase leading-none tracking-[.09em] text-white transition-colors duration-150 hover:bg-green-900"
+          >
+            New post
+          </Link>
           <form action={signOut}>
             <button
               type="submit"
@@ -72,8 +79,9 @@ export default async function AdminDashboard() {
         </p>
       ) : posts.length === 0 ? (
         <p className="m-0 font-body text-[15px] leading-[1.65] text-ink-600">
-          No posts yet. The seed script moves the seven existing posts into the
-          database — see <code>scripts/seed-blog.mjs</code>.
+          No posts yet. Use <strong>New post</strong> to write one, or run{" "}
+          <code>node scripts/seed-blog.mjs</code> to bring across the seven
+          that shipped with the site.
         </p>
       ) : (
         <table className="w-full border-collapse text-left">
@@ -127,35 +135,7 @@ export default async function AdminDashboard() {
           </tbody>
         </table>
       )}
-    </Shell>
+    </AdminShell>
   )
 }
 
-function Shell({
-  heading,
-  action,
-  children,
-}: {
-  heading: string
-  action?: React.ReactNode
-  children: React.ReactNode
-}) {
-  return (
-    <section className="bg-paper px-5 py-12 lg:px-14 lg:py-16">
-      <div className="mx-auto max-w-[1180px]">
-        <div className="mb-9 flex flex-wrap items-end justify-between gap-5 border-b border-ink-900/[.14] pb-6">
-          <div>
-            <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-umber-800">
-              Foundation admin
-            </p>
-            <h1 className="m-0 mt-3 font-display text-[40px] font-extrabold uppercase leading-[.98] text-ink-900">
-              {heading}
-            </h1>
-          </div>
-          {action}
-        </div>
-        {children}
-      </div>
-    </section>
-  )
-}

@@ -22,7 +22,9 @@
     "lint": "eslint .",
     "smoke": "bash scripts/smoke.sh",
     "check:case": "node scripts/check-case.mjs",
-    "prebuild": "node scripts/check-case.mjs"
+    "prebuild": "node scripts/check-case.mjs",
+    "check:rls": "node scripts/check-rls.mjs",
+    "seed:blog": "node scripts/seed-blog.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",

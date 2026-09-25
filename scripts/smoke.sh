@@ -763,6 +763,22 @@ case "$admin_code" in
   *) fail "/admin responds (got $admin_code)" ;;
 esac
 
+# Every admin route, not just the index. A new page under /admin that forgets
+# the guard is the failure mode this catches.
+unguarded=""
+for r in /admin/posts/new "/admin/posts/embassy-of-kuwait-youth-education-partnership"; do
+  code=$(curl -s -o /dev/null --max-time 20 -w '%{http_code}' "$BASE$r")
+  to=$(curl -s -o /dev/null --max-time 20 -w '%{redirect_url}' "$BASE$r")
+  case "$code" in
+    30[1278]) grep -q '/admin/login' <<< "$to" || unguarded="$unguarded [$r->$to]" ;;
+    200) curl -fsS --max-time 20 "$BASE$r" | grep -qi 'not configured' || unguarded="$unguarded [$r served content]" ;;
+    404) ;;  # a slug that does not exist here is fine
+    *) unguarded="$unguarded [$r=$code]" ;;
+  esac
+done
+[ -z "$unguarded" ] && pass "every /admin route is behind the guard" \
+  || fail "every /admin route is behind the guard ($unguarded)"
+
 login=$(curl -fsS --max-time 20 "$BASE/admin/login" 2>/dev/null) || login=""
 if [ -z "$login" ]; then
   fail "/admin/login responds"
