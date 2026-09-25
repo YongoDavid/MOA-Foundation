@@ -39,7 +39,15 @@ export default async function EditPostPage({
 
   return (
     <AdminShell heading="Edit post">
-      <PostEditor initial={initial} isNew={false} saved={sp.saved === "1"} />
+      <PostEditor
+        initial={initial}
+        isNew={false}
+        saved={
+          sp.saved === "created" || sp.saved === "edited"
+            ? (sp.saved as "created" | "edited")
+            : undefined
+        }
+      />
     </AdminShell>
   )
 }

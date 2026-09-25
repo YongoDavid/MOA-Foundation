@@ -35,7 +35,7 @@ export default function PostEditor({
 }: {
   initial: EditorPost
   isNew: boolean
-  saved?: boolean
+  saved?: "created" | "edited"
 }) {
   const [p, setP] = useState<EditorPost>(initial)
   const [state, action, pending] = useActionState<SaveState, FormData>(savePost, {})
@@ -61,11 +61,7 @@ export default function PostEditor({
           would mean re-parsing them on the server for no gain. */}
       <input type="hidden" name="payload" value={JSON.stringify({ ...p, originalSlug: isNew ? null : initial.slug })} />
 
-      {saved ? (
-        <p role="status" className="m-0 mb-6 border-l-2 border-green-900 bg-panel px-4 py-3 font-body text-[13px] font-semibold text-ink-900">
-          Saved.
-        </p>
-      ) : null}
+      {saved ? <SavedBanner kind={saved} post={p} /> : null}
       {state.error ? (
         <p role="alert" className="m-0 mb-6 border-l-2 border-danger bg-panel px-4 py-3 font-body text-[13px] font-semibold text-ink-900">
           {state.error}
@@ -295,6 +291,76 @@ function DeleteButton({ slug, title }: { slug: string; title: string }) {
           className="min-h-[44px] border border-ink-900/20 px-5 font-body text-[11px] font-bold uppercase tracking-[.09em] text-ink-900"
         >
           Keep it
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Confirmation after a save.
+ *
+ * Deliberately loud. The old version was a one-word grey line that a person
+ * scrolled past without registering, and the client said as much: an author
+ * needs to know the work landed, and whether it is actually visible to the
+ * public or sitting as a draft.
+ *
+ * role="status" announces it to a screen reader without stealing focus.
+ * Dismissible, because it should not sit there implying a save that happened
+ * ten minutes ago is the state of the form now.
+ */
+function SavedBanner({
+  kind,
+  post,
+}: {
+  kind: "created" | "edited"
+  post: EditorPost
+}) {
+  const [open, setOpen] = useState(true)
+  if (!open) return null
+
+  const live = post.status === "published"
+
+  return (
+    <div
+      role="status"
+      className="mb-7 flex flex-wrap items-center justify-between gap-4 border-l-4 border-gold-500 bg-green-900 px-5 py-4"
+    >
+      <div>
+        <p className="m-0 font-display text-[22px] font-extrabold uppercase leading-none text-white">
+          {kind === "created" ? "Post created" : "Changes saved"}
+        </p>
+        <p className="m-0 mt-2 font-body text-[13px] leading-[1.55] text-white/[.78]">
+          {live ? (
+            <>
+              It is live on the website now, at{" "}
+              <span className="text-gold-500">/blog/{post.slug}</span>.
+            </>
+          ) : (
+            <>
+              Saved as a <strong className="text-white">draft</strong> — nobody
+              but you can see it. Set the status to Published when it is ready.
+            </>
+          )}
+        </p>
+      </div>
+      <div className="flex flex-wrap items-center gap-3">
+        {live ? (
+          <Link
+            href={`/blog/${post.slug}`}
+            target="_blank"
+            className="flex min-h-[44px] items-center bg-gold-500 px-5 font-body text-[11px] font-bold uppercase tracking-[.09em] text-ink-900 transition-colors duration-150 hover:bg-gold-200"
+          >
+            View it live →
+          </Link>
+        ) : null}
+        <button
+          type="button"
+          onClick={() => setOpen(false)}
+          aria-label="Dismiss this message"
+          className="flex min-h-[44px] items-center font-body text-[11px] font-bold uppercase tracking-[.09em] text-white/60 hover:text-white"
+        >
+          Dismiss
         </button>
       </div>
     </div>

@@ -103,7 +103,7 @@ export async function savePost(
   revalidatePath("/admin")
   revalidatePath("/blog")
   revalidatePath(`/blog/${slug}`)
-  redirect(`/admin/posts/${slug}?saved=1`)
+  redirect(`/admin/posts/${slug}?saved=${input.originalSlug ? "edited" : "created"}`)
 }
 
 export async function deletePost(form: FormData) {
