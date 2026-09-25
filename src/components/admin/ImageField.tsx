@@ -59,12 +59,15 @@ export default function ImageField({
         {label}
       </p>
 
+      {/* 120px preview + 16px gap + the alt input came to exactly the 350px a
+          390px phone offers — no slack, so any padding pushed it over. Stacked
+          until there is room for a row. */}
       {value?.url ? (
-        <div className="mb-3 flex gap-4">
+        <div className="mb-3 flex flex-col gap-4 sm:flex-row">
           <div className="relative h-[90px] w-[120px] flex-none overflow-hidden bg-sand-200">
             <Image src={value.url} alt="" fill sizes="120px" className="object-cover" />
           </div>
-          <div className="flex-1">
+          <div className="min-w-0 flex-1">
             <label className="mb-1 block font-body text-[10px] font-bold uppercase tracking-[.12em] text-ink-400">
               Alt text — describe what is happening
             </label>
@@ -83,7 +86,7 @@ export default function ImageField({
         </div>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex min-w-0 flex-wrap items-center gap-3">
         <input
           ref={inputRef}
           type="file"
@@ -93,7 +96,7 @@ export default function ImageField({
             const f = e.target.files?.[0]
             if (f) void pick(f)
           }}
-          className="font-body text-[12.5px] text-ink-600 file:mr-3 file:min-h-[40px] file:border file:border-ink-900/20 file:bg-paper file:px-4 file:font-body file:text-[11px] file:font-bold file:uppercase file:tracking-[.09em] file:text-ink-900"
+          className="w-full min-w-0 max-w-full font-body text-[12.5px] text-ink-600 file:mr-3 file:min-h-[40px] file:border file:border-ink-900/20 file:bg-paper file:px-4 file:font-body file:text-[11px] file:font-bold file:uppercase file:tracking-[.09em] file:text-ink-900"
         />
         {busy ? (
           <span className="font-body text-[12px] text-ink-500">Uploading…</span>

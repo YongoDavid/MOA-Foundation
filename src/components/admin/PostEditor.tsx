@@ -326,7 +326,7 @@ function SavedBanner({
       role="status"
       className="mb-7 flex flex-wrap items-center justify-between gap-4 border-l-4 border-gold-500 bg-green-900 px-5 py-4"
     >
-      <div>
+      <div className="min-w-0">
         <p className="m-0 font-display text-[22px] font-extrabold uppercase leading-none text-white">
           {kind === "created" ? "Post created" : "Changes saved"}
         </p>
@@ -334,7 +334,9 @@ function SavedBanner({
           {live ? (
             <>
               It is live on the website now, at{" "}
-              <span className="text-gold-500">/blog/{post.slug}</span>.
+              <span className="text-gold-500 [overflow-wrap:anywhere]">
+                /blog/{post.slug}
+              </span>.
             </>
           ) : (
             <>

@@ -84,42 +84,23 @@ export default async function AdminDashboard() {
           that shipped with the site.
         </p>
       ) : (
-        <table className="w-full border-collapse text-left">
-          <thead>
-            <tr className="border-b-2 border-ink-900">
-              {["Title", "Category", "Date", "Status"].map((h) => (
-                <th
-                  key={h}
-                  className="py-3 font-body text-[10.5px] font-bold uppercase tracking-[.14em] text-ink-400"
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
+        <>
+          {/* PHONE: one card per post.
+              This was a four-column <table> with no overflow guard. At 390px a
+              title set in 19px display type forces the table wider than the
+              viewport, and an overflowing table drags the whole page sideways
+              — which is why every screen looked broken, not just this one. A
+              table is the wrong element at this width. */}
+          <ul className="m-0 flex list-none flex-col gap-0 p-0 sm:hidden">
             {posts.map((p) => (
-              <tr key={p.id} className="border-b border-ink-900/[.14]">
-                <td className="py-4 pr-4">
-                  <Link
-                    href={`/admin/posts/${p.slug}`}
-                    className="font-display text-[19px] font-extrabold uppercase leading-[1.06] text-ink-900 underline-offset-4 hover:underline"
-                  >
-                    {p.title}
-                  </Link>
-                  {p.featured ? (
-                    <span className="ml-2 bg-gold-500 px-2 py-1 font-body text-[9px] font-bold uppercase tracking-[.1em] text-ink-900">
-                      Featured
-                    </span>
-                  ) : null}
-                </td>
-                <td className="py-4 pr-4 font-body text-[13px] capitalize text-ink-600">
-                  {p.category}
-                </td>
-                <td className="py-4 pr-4 font-body text-[13px] tabular-nums text-ink-600">
-                  {formatDate(p.published_at, "medium")}
-                </td>
-                <td className="py-4">
+              <li key={p.id} className="border-b border-ink-900/[.14] py-5">
+                <Link
+                  href={`/admin/posts/${p.slug}`}
+                  className="block font-display text-[21px] font-extrabold uppercase leading-[1.05] text-ink-900 [overflow-wrap:anywhere] underline-offset-4 hover:underline"
+                >
+                  {p.title}
+                </Link>
+                <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
                   <span
                     className={`px-2 py-1 font-body text-[9.5px] font-bold uppercase tracking-[.1em] ${
                       p.status === "published"
@@ -129,11 +110,77 @@ export default async function AdminDashboard() {
                   >
                     {p.status}
                   </span>
-                </td>
-              </tr>
+                  {p.featured ? (
+                    <span className="bg-gold-500 px-2 py-1 font-body text-[9px] font-bold uppercase tracking-[.1em] text-ink-900">
+                      Featured
+                    </span>
+                  ) : null}
+                  <span className="font-body text-[12px] capitalize text-ink-500">
+                    {p.category}
+                  </span>
+                  <span className="font-body text-[12px] tabular-nums text-ink-500">
+                    {formatDate(p.published_at, "medium")}
+                  </span>
+                </div>
+              </li>
             ))}
-          </tbody>
-        </table>
+          </ul>
+
+          {/* TABLET AND UP, where four columns genuinely fit. overflow-x is a
+              backstop for an unusually long title. */}
+          <div className="hidden overflow-x-auto sm:block">
+            <table className="w-full border-collapse text-left">
+              <thead>
+                <tr className="border-b-2 border-ink-900">
+                  {["Title", "Category", "Date", "Status"].map((h) => (
+                    <th
+                      key={h}
+                      className="py-3 font-body text-[10.5px] font-bold uppercase tracking-[.14em] text-ink-400"
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {posts.map((p) => (
+                  <tr key={p.id} className="border-b border-ink-900/[.14]">
+                    <td className="py-4 pr-4">
+                      <Link
+                        href={`/admin/posts/${p.slug}`}
+                        className="font-display text-[19px] font-extrabold uppercase leading-[1.06] text-ink-900 underline-offset-4 hover:underline"
+                      >
+                        {p.title}
+                      </Link>
+                      {p.featured ? (
+                        <span className="ml-2 bg-gold-500 px-2 py-1 font-body text-[9px] font-bold uppercase tracking-[.1em] text-ink-900">
+                          Featured
+                        </span>
+                      ) : null}
+                    </td>
+                    <td className="py-4 pr-4 font-body text-[13px] capitalize text-ink-600">
+                      {p.category}
+                    </td>
+                    <td className="py-4 pr-4 font-body text-[13px] tabular-nums text-ink-600">
+                      {formatDate(p.published_at, "medium")}
+                    </td>
+                    <td className="py-4">
+                      <span
+                        className={`px-2 py-1 font-body text-[9.5px] font-bold uppercase tracking-[.1em] ${
+                          p.status === "published"
+                            ? "bg-green-900 text-white"
+                            : "bg-sand-300 text-ink-700"
+                        }`}
+                      >
+                        {p.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </AdminShell>
   )
