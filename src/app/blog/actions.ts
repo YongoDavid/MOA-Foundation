@@ -2,68 +2,37 @@
 
 import { revalidatePath } from "next/cache"
 import { createSupabaseServerClient } from "@/lib/supabase/server"
+import { insertComment } from "@/lib/comments"
 
 export type CommentState = { error?: string; ok?: boolean }
-
-const MAX_BODY = 2000
 
 /**
  * Post a comment. Published immediately — the client's decision, 24 Sep 2026.
  *
- * Immediate publication means the guard rails are constraints and checks, not
- * a review queue:
- *
- *   * `is_staff` is never set here. Only a signed-in admin can wear the
- *     FOUNDATION badge, and the insert policy rejects it from an anonymous
- *     client anyway — this is the second lock on the same door.
- *   * The honeypot field must stay empty. A human never sees it; a bot fills
- *     every input it finds. Silently reports success so the bot does not learn
- *     to skip it.
- *   * The database enforces the same length bounds, so a client bypassing this
- *     action gains nothing.
+ * A thin wrapper. Everything that decides whether a comment is accepted lives
+ * in src/lib/comments.ts, which has no Next dependency and can therefore be
+ * exercised from a script — see scripts/check-comments.mjs. This file only
+ * unpacks the FormData, supplies a client, and revalidates.
  */
 export async function postComment(
   _prev: CommentState,
   form: FormData,
 ): Promise<CommentState> {
-  const name = String(form.get("name") ?? "").trim()
-  const body = String(form.get("body") ?? "").trim()
-  const email = String(form.get("email") ?? "").trim()
-  const slug = String(form.get("postSlug") ?? "").trim()
-  const parentRaw = String(form.get("parentId") ?? "").trim()
-  const trap = String(form.get("website") ?? "").trim()
-
-  // Bot. Report success and write nothing.
-  if (trap) return { ok: true }
-
-  if (!slug) return { error: "Something went wrong — reload the page." }
-  if (!name) return { error: "Please add your name." }
-  if (name.length > 80) return { error: "That name is too long." }
-  if (!body) return { error: "Write a comment first." }
-  if (body.length > MAX_BODY) {
-    return { error: `That is longer than ${MAX_BODY} characters.` }
-  }
-  if (email && !email.includes("@")) {
-    return { error: "That email address does not look right." }
-  }
+  const str = (k: string) => String(form.get(k) ?? "")
+  const slug = str("postSlug").trim()
 
   const supabase = await createSupabaseServerClient()
-  const { error } = await supabase.from("comments").insert({
-    post_slug: slug,
-    parent_id: parentRaw || null,
-    name,
-    email: email || null,
-    body,
-    is_staff: false,
-    like_count: 0,
+  const res = await insertComment(supabase, {
+    postSlug: slug,
+    name: str("name"),
+    body: str("body"),
+    email: str("email"),
+    parentId: str("parentId"),
+    trap: str("website"),
   })
 
-  if (error) {
-    console.error("[postComment]", error.code, error.message)
-    return { error: "Your comment could not be saved. Please try again." }
-  }
-
-  revalidatePath(`/blog/${slug}`)
+  if (!res.ok) return { error: res.error }
+  if (slug) revalidatePath(`/blog/${slug}`)
   return { ok: true }
 }
 

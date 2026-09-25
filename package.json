@@ -25,7 +25,8 @@
     "check:case": "node scripts/check-case.mjs",
     "prebuild": "node scripts/check-case.mjs",
     "check:rls": "node scripts/check-rls.mjs",
-    "seed:blog": "node scripts/seed-blog.mjs"
+    "seed:blog": "node scripts/seed-blog.mjs",
+    "check:comments": "node scripts/check-comments.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",

@@ -37,6 +37,7 @@ export default function CommentThread({
   const formRef = useRef<HTMLFormElement>(null)
   const bodyRef = useRef<HTMLTextAreaElement>(null)
   const [expanded, setExpanded] = useState(false)
+  const [replyTo, setReplyTo] = useState<string | null>(null)
 
   const [optimistic, addOptimistic] = useOptimistic<Draft[], Draft>(
     comments as Draft[],
@@ -68,7 +69,16 @@ export default function CommentThread({
         likeCount: 0,
         pending: true,
       })
-      formRef.current?.reset()
+
+        // Persist it. The optimistic row above is what makes it appear
+        // instantly; this is what makes it still be there after a refresh.
+        // An earlier revision had only the optimistic half — the comment
+        // showed, then vanished, which is exactly what the prototype
+        // notice underneath used to warn about.
+        const res = await postComment({}, formData)
+        if (res.error) return res.error
+
+        formRef.current?.reset()
       return null
     },
     null,
@@ -173,22 +183,10 @@ export default function CommentThread({
         </div>
       </form>
 
-      {/* Prototype honesty: say it here rather than let a client find out. */}
-      <p
-        className="mb-6 px-3 py-2 text-[11.5px] font-semibold"
-        style={{
-          background: "#F3EEE4",
-          color: "#14261D",
-        }}
-      >
-        Prototype — comments post instantly but are not saved. Refreshing clears
-        them.
-      </p>
-
       <div className="flex flex-col gap-[22px]">
         {visible.map((c) => (
           <div key={c.id}>
-            <CommentRow comment={c} />
+            <CommentRow comment={c} onReply={setReplyTo} />
             {repliesFor(c.id).map((r) => (
               <div
                 key={r.id}
@@ -265,9 +263,13 @@ export default function CommentThread({
 function CommentRow({
   comment,
   compact = false,
+  onReply,
 }: {
   comment: Draft
   compact?: boolean
+  /** Absent on a reply: the thread nests one level only, enforced by a
+      database trigger, so a reply cannot itself be replied to. */
+  onReply?: (id: string) => void
 }) {
   const size = compact ? "h-9 w-9 text-[12px]" : "h-10 w-10 text-[13px]"
   return (
@@ -310,7 +312,15 @@ function CommentRow({
           className="mt-[9px] flex gap-4 text-[11.5px] font-bold leading-none"
           style={{ color: "#857C86" }}
         >
-          <span>Reply</span>
+          {onReply && !comment.pending ? (
+            <button
+              type="button"
+              onClick={() => onReply(comment.id)}
+              className="min-h-[44px] font-body text-[11.5px] font-bold uppercase tracking-[.06em] transition-colors duration-150 hover:text-umber-600"
+            >
+              Reply
+            </button>
+          ) : null}
           <LikeButton id={comment.id} initial={comment.likeCount} pending={Boolean(comment.pending)} />
         </div>
       </div>
@@ -365,5 +375,112 @@ function LikeButton({
     >
       ♡ {count}
     </button>
+  )
+}
+
+
+/**
+ * Reply to one comment.
+ *
+ * Its own form and its own action state rather than a branch of the main one:
+ * two forms sharing a single useActionState would show the same pending
+ * indicator and the same error, so submitting a reply would light up the
+ * composer at the top of the page.
+ *
+ * No optimistic row here. A reply belongs under a specific parent, and the
+ * parent's optimistic list lives in the thread above — the server action
+ * revalidates the path, so the reply arrives with the refreshed tree a moment
+ * later. Getting that wrong would show the reply in the wrong place.
+ */
+function ReplyForm({
+  postSlug,
+  parentId,
+  replyingTo,
+  onDone,
+}: {
+  postSlug: string
+  parentId: string
+  replyingTo: string
+  onDone: () => void
+}) {
+  const [error, submit, pending] = useActionState<string | null, FormData>(
+    async (_prev, formData) => {
+      const res = await postComment({}, formData)
+      if (res.error) return res.error
+      onDone()
+      return null
+    },
+    null,
+  )
+
+  return (
+    <form action={submit} className="border border-ink-900/[.18] p-4">
+      <input type="hidden" name="postSlug" value={postSlug} />
+      <input type="hidden" name="parentId" value={parentId} />
+      {/* Same honeypot as the main composer. A bot that finds this form finds
+          this field too. */}
+      <input
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        style={{ position: "absolute", left: "-9999px" }}
+      />
+
+      <p className="m-0 mb-3 font-body text-[11px] font-bold uppercase tracking-[.1em] text-ink-400">
+        Replying to {replyingTo}
+      </p>
+
+      <div className="mb-2.5 grid gap-2.5 sm:grid-cols-2">
+        <input
+          name="name"
+          required
+          maxLength={80}
+          placeholder="Your name"
+          aria-label="Your name"
+          className="min-h-[44px] bg-panel px-3.5 font-body text-[13px] font-medium text-ink-900 outline-none"
+        />
+        <input
+          name="email"
+          type="email"
+          placeholder="Email (optional, not published)"
+          aria-label="Email, optional and never published"
+          className="min-h-[44px] bg-panel px-3.5 font-body text-[13px] font-medium text-ink-900 outline-none"
+        />
+      </div>
+
+      <textarea
+        name="body"
+        required
+        rows={3}
+        maxLength={MAX_LENGTH}
+        placeholder="Write your reply…"
+        aria-label="Your reply"
+        className="w-full resize-y bg-panel p-3.5 font-body text-[13.5px] leading-[1.55] text-ink-900 outline-none"
+      />
+
+      {error ? (
+        <p role="alert" className="m-0 mt-2 font-body text-[12px] font-semibold text-danger">
+          {error}
+        </p>
+      ) : null}
+
+      <div className="mt-3 flex flex-wrap gap-3">
+        <button
+          type="submit"
+          disabled={pending}
+          className="min-h-[44px] bg-ink-900 px-5 font-body text-[11px] font-bold uppercase tracking-[.09em] text-white disabled:opacity-60"
+        >
+          {pending ? "Posting…" : "Post reply"}
+        </button>
+        <button
+          type="button"
+          onClick={onDone}
+          className="min-h-[44px] font-body text-[11px] font-bold uppercase tracking-[.09em] text-ink-500"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
   )
 }
