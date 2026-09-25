@@ -1,8 +1,18 @@
 "use client"
 
 import { useActionState } from "react"
+import { submitForm } from "@/app/actions/forms"
 import { SITE } from "@/lib/site"
-import { Field, Segmented, Select, SubmitRow, SubmittedPanel, TextArea } from "./fields"
+import {
+  Field,
+  Honeypot,
+  Segmented,
+  Select,
+  SendError,
+  SubmitRow,
+  SubmittedPanel,
+  TextArea,
+} from "./fields"
 
 // General contact (spec §7, contact mockup). The subject segmented control
 // comes first: it is what routes the message internally, and asking for it
@@ -15,7 +25,7 @@ const COUNTRIES = [
   "United Kingdom", "United States", "Canada", "Other",
 ]
 
-type State = { errors: Record<string, string>; done: boolean }
+type State = { errors: Record<string, string>; done: boolean; sendError?: string }
 
 export default function ContactForm() {
   const [state, submit, pending] = useActionState<State, FormData>(
@@ -31,6 +41,12 @@ export default function ContactForm() {
         errors.message = "Please tell us a little more — at least 10 characters."
 
       if (Object.keys(errors).length > 0) return { errors, done: false }
+
+      // Local checks are for the messages; they run in the browser and a
+      // browser can be bypassed, so the action validates again server-side.
+      const sent = await submitForm('contact', {}, form)
+      if (sent.error) return { errors: {}, done: false, sendError: sent.error }
+
       return { errors: {}, done: true }
     },
     { errors: {}, done: false },
@@ -40,6 +56,7 @@ export default function ContactForm() {
 
   return (
     <form action={submit} noValidate>
+      <Honeypot />
       <Segmented
         name="subject"
         legend="I am writing about"
@@ -64,6 +81,8 @@ export default function ContactForm() {
           error={state.errors.message}
         />
       </div>
+
+      <SendError error={state.sendError} />
 
       <SubmitRow label="Send message" pending={pending} note={SITE.replyPromise} />
     </form>

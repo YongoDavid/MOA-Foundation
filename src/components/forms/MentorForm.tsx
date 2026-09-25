@@ -1,11 +1,14 @@
 "use client"
 
 import { useActionState } from "react"
+import { submitForm } from "@/app/actions/forms"
 import {
   Consent,
   Field,
+  Honeypot,
   Segmented,
   Select,
+  SendError,
   SubmitRow,
   SubmittedPanel,
   TextArea,
@@ -24,7 +27,7 @@ const COUNTRIES = [
 
 const AVAILABILITY = ["Weekday evenings", "Weekends", "Either"]
 
-type State = { errors: Record<string, string>; done: boolean }
+type State = { errors: Record<string, string>; done: boolean; sendError?: string }
 
 export default function MentorForm() {
   const [state, submit, pending] = useActionState<State, FormData>(
@@ -42,6 +45,12 @@ export default function MentorForm() {
       if (!form.get("consent")) errors.consent = "Please confirm to continue."
 
       if (Object.keys(errors).length > 0) return { errors, done: false }
+
+      // Local checks are for the messages; they run in the browser and a
+      // browser can be bypassed, so the action validates again server-side.
+      const sent = await submitForm('mentor', {}, form)
+      if (sent.error) return { errors: {}, done: false, sendError: sent.error }
+
       return { errors: {}, done: true }
     },
     { errors: {}, done: false },
@@ -51,6 +60,7 @@ export default function MentorForm() {
 
   return (
     <form action={submit} noValidate>
+      <Honeypot />
       <div className="grid gap-3.5 sm:grid-cols-2">
         <Field name="name" label="Full name" placeholder="Your name" required error={state.errors.name} />
         <Field name="email" label="Email" placeholder="you@email.org" type="email" required error={state.errors.email} />
@@ -85,14 +95,16 @@ export default function MentorForm() {
         </Consent>
       </div>
 
+      <SendError error={state.sendError} />
+
       <SubmitRow
         label="Submit application"
         pending={pending}
         note={
           <>
-            Preview only — enquiries
+            We reply within two
             <br />
-            are not yet being received.
+            working days.
           </>
         }
       />

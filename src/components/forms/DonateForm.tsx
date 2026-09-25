@@ -1,9 +1,18 @@
 "use client"
 
 import { useActionState } from "react"
+import { submitForm } from "@/app/actions/forms"
 import { DESIGNATIONS } from "@/lib/content"
 import { SITE } from "@/lib/site"
-import { Field, Segmented, SubmitRow, SubmittedPanel, TextArea } from "./fields"
+import {
+  Field,
+  Honeypot,
+  Segmented,
+  SendError,
+  SubmitRow,
+  SubmittedPanel,
+  TextArea,
+} from "./fields"
 
 /**
  * Donation enquiry (spec §7, donate mockup band 02).
@@ -18,7 +27,7 @@ import { Field, Segmented, SubmitRow, SubmittedPanel, TextArea } from "./fields"
  * people about where their money is going.
  */
 
-type State = { errors: Record<string, string>; done: boolean }
+type State = { errors: Record<string, string>; done: boolean; sendError?: string }
 
 export default function DonateForm() {
   const [state, submit, pending] = useActionState<State, FormData>(
@@ -31,6 +40,12 @@ export default function DonateForm() {
       if (!get("designation")) errors.designation = "Please choose where your gift should go."
 
       if (Object.keys(errors).length > 0) return { errors, done: false }
+
+      // Local checks are for the messages; they run in the browser and a
+      // browser can be bypassed, so the action validates again server-side.
+      const sent = await submitForm('donate', {}, form)
+      if (sent.error) return { errors: {}, done: false, sendError: sent.error }
+
       return { errors: {}, done: true }
     },
     { errors: {}, done: false },
@@ -40,6 +55,7 @@ export default function DonateForm() {
 
   return (
     <form action={submit} noValidate>
+      <Honeypot />
       <div className="grid gap-3.5">
         <Field name="name" label="Name" placeholder="Your name" required error={state.errors.name} />
         <Field name="email" label="Email" placeholder="you@email.com" type="email" required error={state.errors.email} />
@@ -64,6 +80,8 @@ export default function DonateForm() {
           placeholder="Whether you are giving once or regularly, in cash or in kind."
         />
       </div>
+
+      <SendError error={state.sendError} />
 
       <SubmitRow label="Send my details" pending={pending} />
 

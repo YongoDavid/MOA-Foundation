@@ -576,9 +576,23 @@ else
   done
   [ -z "$missing" ] && pass "apply: all 10 mentee fields" \
     || fail "apply: all 10 mentee fields (missing:$missing)"
-  grep -qF 'not yet being received' <<< "$apply" \
-    && pass "apply: submission stub is disclosed" \
-    || fail "apply: submission stub is disclosed"
+  # This asserted the OPPOSITE until 25 Sep: that the form admitted nothing
+  # was being sent. It does send now, so the promise to keep honest is the
+  # other one — never tell someone their message arrived when it did not.
+  # The success panel is only reached after the send returns without an error,
+  # and no form may claim a submission is not being received.
+  stale=""
+  for phrase in "not yet being received" "Not yet connected" "nothing was sent"; do
+    grep -qiF "$phrase" <<< "$apply" && stale="$stale [$phrase]"
+  done
+  [ -z "$stale" ] && pass "apply: no stale 'not connected' copy" \
+    || fail "apply: no stale 'not connected' copy (found:$stale)"
+
+  # Every form carries the honeypot. Without it the inbox fills with bots
+  # within days of the address being found.
+  grep -qF 'name="website"' <<< "$apply" \
+    && pass "apply: honeypot present" \
+    || fail "apply: honeypot present"
 fi
 
 if [ -z "$mentor" ]; then

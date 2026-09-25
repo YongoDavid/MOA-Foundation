@@ -1,11 +1,14 @@
 "use client"
 
 import { useActionState } from "react"
+import { submitForm } from "@/app/actions/forms"
 import {
   Consent,
   Field,
+  Honeypot,
   Segmented,
   Select,
+  SendError,
   SubmitRow,
   SubmittedPanel,
   TextArea,
@@ -28,7 +31,7 @@ const COUNTRIES = [
 
 const PROGRAMMES = ["Leadership", "Education", "Entrepreneurship", "Peace advocacy"]
 
-type State = { errors: Record<string, string>; done: boolean }
+type State = { errors: Record<string, string>; done: boolean; sendError?: string }
 
 export default function MenteeForm() {
   const [state, submit, pending] = useActionState<State, FormData>(
@@ -51,6 +54,12 @@ export default function MenteeForm() {
       if (!form.get("consent")) errors.consent = "Please confirm to continue."
 
       if (Object.keys(errors).length > 0) return { errors, done: false }
+
+      // Local checks are for the messages; they run in the browser and a
+      // browser can be bypassed, so the action validates again server-side.
+      const sent = await submitForm('mentee', {}, form)
+      if (sent.error) return { errors: {}, done: false, sendError: sent.error }
+
       return { errors: {}, done: true }
     },
     { errors: {}, done: false },
@@ -60,6 +69,7 @@ export default function MenteeForm() {
 
   return (
     <form action={submit} noValidate>
+      <Honeypot />
       <div className="grid gap-3.5 sm:grid-cols-2">
         <Field name="name" label="Full name" placeholder="Your name" required error={state.errors.name} />
         <Field name="age" label="Age" placeholder="e.g. 19" type="number" required error={state.errors.age} />
@@ -105,14 +115,16 @@ export default function MenteeForm() {
         </Consent>
       </div>
 
+      <SendError error={state.sendError} />
+
       <SubmitRow
         label="Submit application"
         pending={pending}
         note={
           <>
-            Preview only — applications
+            We reply within two
             <br />
-            are not yet being received.
+            working days.
           </>
         }
       />

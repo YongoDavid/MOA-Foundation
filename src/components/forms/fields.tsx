@@ -244,6 +244,39 @@ export function Consent({
   )
 }
 
+/**
+ * Invisible to a person, irresistible to a bot.
+ *
+ * Not `hidden` and not `display:none` — some bots skip those. Positioned off
+ * screen, out of the tab order, and hidden from assistive technology, so a
+ * real visitor can neither see it nor land on it.
+ */
+export function Honeypot() {
+  return (
+    <input
+      name="website"
+      type="text"
+      tabIndex={-1}
+      autoComplete="off"
+      aria-hidden="true"
+      style={{ position: "absolute", left: "-9999px", width: 1, height: 1 }}
+    />
+  )
+}
+
+/** A delivery failure, as opposed to a field being wrong. */
+export function SendError({ error }: { error?: string }) {
+  if (!error) return null
+  return (
+    <p
+      role="alert"
+      className="m-0 mt-5 border-l-2 border-danger bg-white/[.06] px-4 py-3 font-body text-[13px] font-medium leading-[1.6] text-white"
+    >
+      {error}
+    </p>
+  )
+}
+
 export function FieldError({ id, error }: { id: string; error?: string }) {
   if (!error) return null
   return (
@@ -283,9 +316,12 @@ export function SubmitRow({
 /**
  * Success state — REPLACES the form rather than opening a modal (spec §7).
  *
- * PROTOTYPE: no backend is connected, so this says so. Showing a plain
- * "thank you, we'll be in touch" would repeat the old site's newsletter,
- * which displayed "✓ Subscribed!" while sending nothing.
+ * This used to say plainly that nothing had been sent, because nothing was.
+ * Submissions are delivered by email as of 25 Sep 2026, so it says what
+ * actually happened instead. The rule it was protecting still stands: never
+ * report a success that did not occur. The old site displayed "✓ Subscribed!"
+ * while sending nothing, and the panel only reaches this state after the send
+ * has come back without an error.
  */
 export function SubmittedPanel({ heading }: { heading: string }) {
   return (
@@ -297,12 +333,12 @@ export function SubmittedPanel({ heading }: { heading: string }) {
         {heading}
       </h3>
       <p className="m-0 mt-4 font-body text-[14px] font-medium leading-[1.65] text-white/70">
-        Your details passed validation — but this site is a preview and no
-        submission endpoint is connected yet, so nothing was sent and no
-        confirmation email will arrive.
+        This has reached the Foundation&rsquo;s inbox and a member of the team
+        will reply. We answer every message, usually within two working days.
       </p>
       <p className="m-0 mt-3 font-body text-[14px] font-medium leading-[1.65] text-white/70">
-        To reach the Foundation today, write to{" "}
+        You will not get an automatic confirmation email. If you would rather
+        follow up directly, write to{" "}
         <a href="mailto:mosesofafrica@gmail.com" className="text-gold-500 underline">
           mosesofafrica@gmail.com
         </a>{" "}

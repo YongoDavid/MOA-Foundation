@@ -1,14 +1,18 @@
 "use client"
 
 import { useActionState } from "react"
+import { submitForm } from "@/app/actions/forms"
 
 // Spec §4 — green-900, `1fr 1fr`. The field and button are FLUSH: no gap, no
 // radius. That adjacency is the design.
 //
-// PROTOTYPE: the submit is stubbed. Backend is deferred until the client has
-// seen this version, so the form validates and reports honestly rather than
-// pretending to subscribe anyone. The old site showed "✓ Subscribed!" for
-// three seconds while sending nothing; this does not repeat that.
+// Sign-ups are emailed to the Foundation (25 Sep 2026). NOT a mailing list:
+// an inbox full of addresses is not something you can send a newsletter from.
+// A real list means Mailchimp, Buttondown or Resend Audiences, with an
+// unsubscribe link and a consent record, and that is a separate decision.
+//
+// The old site showed "✓ Subscribed!" for three seconds while sending
+// nothing. This only reports success after the send returns without error.
 export default function NewsletterBand() {
   const [state, submit, pending] = useActionState<
     { ok: boolean; message: string } | null,
@@ -18,9 +22,13 @@ export default function NewsletterBand() {
     if (!email || !email.includes("@")) {
       return { ok: false, message: "Enter a valid email address." }
     }
+
+    const sent = await submitForm("newsletter", {}, formData)
+    if (sent.error) return { ok: false, message: sent.error }
+
     return {
       ok: true,
-      message: "Not yet connected — sign-ups are not being received.",
+      message: "Thank you — we have your address.",
     }
   }, null)
 
@@ -41,6 +49,15 @@ export default function NewsletterBand() {
 
         <div>
           <form action={submit} className="flex">
+            {/* Same honeypot as the page forms. */}
+            <input
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              style={{ position: "absolute", left: "-9999px", width: 1, height: 1 }}
+            />
             <label htmlFor="newsletter-email" className="sr-only">
               Email address
             </label>
