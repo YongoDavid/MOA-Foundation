@@ -796,63 +796,38 @@ else
     || fail "/admin/login is noindex (it would appear in search results)"
 fi
 
-# No route the public can reach should advertise the admin area.
-leaked=""
-for r in / /about /programs /donate /contact /gallery /blog; do
-  page=$(curl -fsS --max-time 20 "$BASE$r" 2>/dev/null | sed 's/<!-- -->//g')
-  grep -qE 'href="/admin' <<< "$page" && leaked="$leaked [$r]"
-done
-[ -z "$leaked" ] && pass "no public page links to /admin" \
-  || fail "no public page links to /admin (found:$leaked)"
-
-post_html=$(curl -fsS --max-time 20 "$BASE/blog/embassy-of-kuwait-youth-education-partnership" 2>/dev/null | sed 's/<!-- -->//g')
-
-# The reply box must actually open. "Reply" shipped twice as a control that
-# looked right and did nothing — first as a <span>, then as a button whose
-# form was never rendered because the JSX insertion silently failed. Counting
-# the Reply controls caught neither, because the controls were fine.
+# STAFF CONTROLS MUST NOT RENDER FOR A VISITOR.
 #
-# Reply state lives in ?reply= specifically so this is checkable: fetch a post,
-# take the id out of its own reply link, ask for that URL, and require the form.
-reply_id=$(grep -o '?reply=[0-9a-f-]\{36\}' <<< "$post_html" | head -1 | cut -d= -f2)
-if [ -z "$reply_id" ]; then
-  fail "a post offers a reply link"
-else
-  pass "a post offers a reply link"
-  with_form=$(curl -fsS --max-time 20 \
-    "$BASE/blog/embassy-of-kuwait-youth-education-partnership?reply=$reply_id" 2>/dev/null \
-    | sed 's/<!-- -->//g')
-  if grep -qF 'Replying to' <<< "$with_form" \
-     && grep -qF "value=\"$reply_id\"" <<< "$with_form" \
-     && grep -qF 'Post reply' <<< "$with_form"; then
-    pass "the reply box opens, carrying the parent id"
-  else
-    fail "the reply box opens, carrying the parent id"
-  fi
-  # ...and is not on the page uninvited.
-  grep -qF 'Replying to' <<< "$post_html" \
-    && fail "the reply box is closed by default" \
-    || pass "the reply box is closed by default"
-fi
-
-# Controls must be controls. "Reply", "Share" and "Copy link" all shipped as
-# <span>s carrying comments calling them presentational — styled like buttons,
-# labelled with verbs, doing nothing. A reader cannot tell the difference until
-# they click. This catches the next one.
-if [ -n "$post_html" ]; then
-  fake=""
-  for verb in Share "Copy link" Reply; do
-    # present as a label, but NOT as a button
-    # A LINK is a real control too — Reply navigates to ?reply=<id>. What is
-    # not a control is a <span> styled to look like one.
-    if grep -qF ">$verb<" <<< "$post_html" \
-       && ! grep -qF "$verb</button>" <<< "$post_html" \
-       && ! grep -qF "$verb</a>" <<< "$post_html"; then
-      fake="$fake [$verb]"
-    fi
+# There used to be a rule here that no public page could link to /admin at
+# all. It was dropped on 25 Sep: robots.txt discloses /admin to anyone who
+# reads it, so hiding the link protected nothing, and staff needed a way in
+# that was not "remember the URL". A discreet Staff login sits in the footer
+# now.
+#
+# What DOES matter is that the staff bar — Manage posts, Edit this post — is
+# invisible to a reader. It is rendered server-side behind a session check, so
+# if it ever appears in anonymous HTML that check has broken.
+leaked=""
+for r in / /blog /blog/embassy-of-kuwait-youth-education-partnership; do
+  page=$(curl -fsS --max-time 20 "$BASE$r" 2>/dev/null | sed 's/<!-- -->//g')
+  for control in "Signed in as staff" "Manage posts" "Edit this post"; do
+    grep -qF "$control" <<< "$page" && leaked="$leaked [$r:$control]"
   done
-  [ -z "$fake" ] && pass "blog controls are real controls, not styled spans" \
-    || fail "blog controls are real controls, not styled spans (inert:$fake)"
+done
+[ -z "$leaked" ] && pass "staff controls are invisible to an anonymous visitor" \
+  || fail "staff controls are invisible to an anonymous visitor (leaked:$leaked)"
+
+# The way in is the LOGIN page, never a deep link into the admin itself.
+home=$(curl -fsS --max-time 20 "$BASE/" 2>/dev/null)
+if grep -qF 'href="/admin/login"' <<< "$home"; then
+  pass "the footer offers a staff login"
+else
+  fail "the footer offers a staff login"
+fi
+if grep -qE 'href="/admin(/posts)?"' <<< "$home"; then
+  fail "no public page deep-links into the admin"
+else
+  pass "no public page deep-links into the admin"
 fi
 
 echo "-- blog routes"

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { getComments, getPost, getPosts } from "@/lib/blog-db"
 import PostBody from "@/components/blog/PostBody"
 import PostHeader from "@/components/blog/PostHeader"
+import StaffBar from "@/components/admin/StaffBar"
 import CommentThread from "@/components/blog/CommentThread"
 
 
@@ -54,6 +55,7 @@ export default async function PostPage({
 
   return (
     <>
+      <StaffBar editSlug={post.slug} />
       <PostHeader post={post} />
 
       {post.cover ? (

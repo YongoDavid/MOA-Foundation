@@ -54,6 +54,25 @@ export async function createSupabaseServerClientOrNull() {
   return createSupabaseServerClient()
 }
 
+/**
+ * Is there an auth cookie at all?
+ *
+ * A cheap pre-check. getAdminUser() calls Supabase to revalidate the token,
+ * which is a network round trip — and the public blog is rendered per request,
+ * so doing that for every anonymous visitor would add a round trip to every
+ * page view to decide whether to show a staff link that nobody but staff can
+ * use.
+ *
+ * A visitor with no cookie cannot be signed in, so the answer is already
+ * known. This is NOT an authorisation check: the cookie could be stale or
+ * forged, and all it is ever used for is whether to render a link. Anything
+ * behind that link is still guarded by the proxy and by RLS.
+ */
+export async function hasAuthCookie(): Promise<boolean> {
+  const store = await cookies()
+  return store.getAll().some((c) => c.name.startsWith("sb-"))
+}
+
 /** The signed-in admin, or null. Never throws on a missing session. */
 export async function getAdminUser() {
   const supabase = await createSupabaseServerClient()

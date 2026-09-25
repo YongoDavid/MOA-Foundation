@@ -5,6 +5,7 @@ import FeaturedPost from "@/components/blog/FeaturedPost"
 import PostCard from "@/components/blog/PostCard"
 import RecentList from "@/components/blog/RecentList"
 import { SCRIM } from "@/lib/tokens"
+import StaffBar from "@/components/admin/StaffBar"
 
 import HeaderImage from "@/Images/MOA6.jpg"
 
@@ -40,6 +41,7 @@ export default async function BlogIndexPage() {
 
   return (
     <>
+      <StaffBar />
       <section className="relative flex min-h-[240px] items-end bg-ink-900 lg:min-h-[200px]">
         <Image
           src={HeaderImage}

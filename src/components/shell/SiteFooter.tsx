@@ -103,6 +103,16 @@ export default function SiteFooter() {
         <div className="flex flex-col gap-2 pt-[26px] font-body text-[11px] font-semibold uppercase leading-none tracking-[.06em] text-white/40 sm:flex-row sm:justify-between">
           <span>© 2026 {SITE.legalName}</span>
           <span>{SITE.location}</span>
+          {/* Deliberately understated, and deliberately present. Staff need a
+              way in that is not "remember the URL"; readers do not need it
+              advertised. robots.txt already discloses /admin, so hiding this
+              link protected nothing — the proxy and the RLS policies do. */}
+          <Link
+            href="/admin/login"
+            className="font-body text-[11px] font-medium normal-case tracking-normal text-white/30 underline-offset-4 transition-colors duration-150 hover:text-white/60 hover:underline"
+          >
+            Staff login
+          </Link>
         </div>
       </div>
     </footer>
