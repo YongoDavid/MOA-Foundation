@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 import { createServerClient } from "@supabase/ssr"
-import { requireSupabaseEnv } from "./env"
+import { readSupabaseEnv, requireSupabaseEnv } from "./env"
 
 /**
  * Supabase client for Server Components, Server Actions and Route Handlers.
@@ -34,6 +34,24 @@ export async function createSupabaseServerClient() {
       },
     },
   })
+}
+
+/**
+ * A client, or null when Supabase is not configured.
+ *
+ * The blog reads through this rather than the throwing variant. A marketing
+ * site must not return 500 on its own homepage because a database is
+ * unreachable or an environment variable is missing from a deploy — and it
+ * did: with the credentials absent, / and every blog route answered 500,
+ * because the recent-posts band reads the database and the client constructor
+ * threw before any query ran.
+ *
+ * Unconfigured now degrades to "no posts", which is wrong but harmless, and
+ * leaves the nine marketing routes untouched.
+ */
+export async function createSupabaseServerClientOrNull() {
+  if (!readSupabaseEnv()) return null
+  return createSupabaseServerClient()
 }
 
 /** The signed-in admin, or null. Never throws on a missing session. */

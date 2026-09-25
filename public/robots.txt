@@ -1,3 +1,14 @@
 # https://www.robotstxt.org/robotstxt.html
+
 User-agent: *
-Disallow:
+Allow: /
+
+# The admin area. Nothing on the public site links to it and every page there
+# carries a noindex tag, but a crawler that never fetches it cannot read that
+# tag — so say it here as well.
+Disallow: /admin
+
+# Reply state is a query parameter. Without this a crawler treats every
+# ?reply=<uuid> as a separate page and indexes hundreds of near-duplicates of
+# each post.
+Disallow: /*?reply=

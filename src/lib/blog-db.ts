@@ -1,5 +1,5 @@
 import "server-only"
-import { createSupabaseServerClient } from "@/lib/supabase/server"
+import { createSupabaseServerClientOrNull } from "@/lib/supabase/server"
 import type { Block, Comment, MediaItem, Post } from "./blog-types"
 
 /**
@@ -66,7 +66,8 @@ function toPost(r: Row, commentCount: number): Post {
 async function countsBySlug(slugs: string[]): Promise<Map<string, number>> {
   const counts = new Map<string, number>()
   if (slugs.length === 0) return counts
-  const supabase = await createSupabaseServerClient()
+  const supabase = await createSupabaseServerClientOrNull()
+  if (!supabase) return counts
   const { data } = await supabase
     .from("comments")
     .select("post_slug")
@@ -79,7 +80,8 @@ async function countsBySlug(slugs: string[]): Promise<Map<string, number>> {
 
 /** Published posts, newest first. Drafts are excluded by RLS, not by this filter. */
 export async function getPosts(): Promise<Post[]> {
-  const supabase = await createSupabaseServerClient()
+  const supabase = await createSupabaseServerClientOrNull()
+  if (!supabase) return []
   const { data, error } = await supabase
     .from("posts")
     .select(COLUMNS)
@@ -96,7 +98,8 @@ export async function getPosts(): Promise<Post[]> {
 }
 
 export async function getPost(slug: string): Promise<Post | undefined> {
-  const supabase = await createSupabaseServerClient()
+  const supabase = await createSupabaseServerClientOrNull()
+  if (!supabase) return undefined
   const { data } = await supabase
     .from("posts")
     .select(COLUMNS)
@@ -127,7 +130,8 @@ export async function getFeatured(): Promise<Post | undefined> {
  * which is accepted on the form and must never be returned to a browser.
  */
 export async function getComments(slug: string): Promise<Comment[]> {
-  const supabase = await createSupabaseServerClient()
+  const supabase = await createSupabaseServerClientOrNull()
+  if (!supabase) return []
   const { data, error } = await supabase
     .from("comments_public")
     .select("id,post_slug,parent_id,name,is_staff,body,created_at,like_count")
@@ -152,7 +156,8 @@ export async function getComments(slug: string): Promise<Comment[]> {
 
 /** Slugs for generateStaticParams / sitemaps. */
 export async function getPublishedSlugs(): Promise<string[]> {
-  const supabase = await createSupabaseServerClient()
+  const supabase = await createSupabaseServerClientOrNull()
+  if (!supabase) return []
   const { data } = await supabase.from("posts").select("slug").eq("status", "published")
   return (data ?? []).map((r) => r.slug)
 }
