@@ -246,7 +246,14 @@ echo "-- stylesheet"
 # and their order varies between runs — so `head -1` picked a different file
 # each time and the brand-token check failed roughly half the time. That looked
 # like flakiness; it was the assertion reading the wrong file.
-css_paths=$(grep -o '/_next/static/\(css\|chunks\)/[^"]*\.css' <<< "$html" | sort -u)
+#
+# A PRODUCTION build adds another path again: /_next/static/immutable/chunks/.
+# Running this against the live site failed four assertions — stylesheet,
+# both fonts, and the preloader circle — because no path matched, so the CSS
+# was never fetched and every check against it looked broken. The site was
+# perfectly styled. Match any .css under /_next/static/ rather than keep
+# chasing the directory layout.
+css_paths=$(grep -o '/_next/static/[^"]*\.css' <<< "$html" | sort -u)
 if [ -z "$css_paths" ]; then
   fail "stylesheet linked"
 else
