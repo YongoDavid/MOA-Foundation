@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { getFeatured, getPosts } from "@/lib/blog-fixtures"
+import { getFeatured, getPosts } from "@/lib/blog-db"
 import CategoryChips from "@/components/blog/CategoryChips"
 import FeaturedPost from "@/components/blog/FeaturedPost"
 import PostCard from "@/components/blog/PostCard"
@@ -7,6 +7,14 @@ import RecentList from "@/components/blog/RecentList"
 import { SCRIM } from "@/lib/tokens"
 
 import HeaderImage from "@/Images/MOA6.jpg"
+
+/**
+ * Rendered per request. The blog is database-backed now, and the client's two
+ * requirements — an edit in the admin shows on the site straight away, and a
+ * comment appears the moment it is posted — are incompatible with serving a
+ * cached page. Traffic here is low; correctness is worth the round trip.
+ */
+export const dynamic = "force-dynamic"
 
 export const metadata = {
   title: "Stories & Activities",
@@ -21,9 +29,9 @@ export const metadata = {
 // No <main> of its own: the root layout already provides <main id="main">, and
 // nesting a second one is invalid HTML that gives screen readers two competing
 // landmarks. Same in [slug] and the category route.
-export default function BlogIndexPage() {
-  const posts = getPosts()
-  const featured = getFeatured()
+export default async function BlogIndexPage() {
+  const posts = await getPosts()
+  const featured = await getFeatured()
   // Featured takes the hero, the next three fill the column beside it, the
   // remainder flow into the grid.
   const rest = posts.filter((p) => p.slug !== featured?.slug)

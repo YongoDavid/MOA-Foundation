@@ -1,6 +1,7 @@
 "use client"
 
 import { useActionState, useOptimistic, useRef, useState } from "react"
+import { postComment, likeComment } from "@/app/blog/actions"
 import type { Comment } from "@/lib/blog-types"
 import { formatDate, initials } from "@/lib/blog-format"
 
@@ -102,6 +103,9 @@ export default function CommentThread({
         className="mb-7 p-[18px]"
         style={{ border: "1px solid rgba(20,16,24,.18)" }}
       >
+        {/* The action reads the slug from FormData rather than a closure, so
+            the same handler works for a reply form later. */}
+        <input type="hidden" name="postSlug" value={postSlug} />
         <div className="mb-[10px] grid gap-[10px] sm:grid-cols-2">
           <input
             name="name"
@@ -307,9 +311,59 @@ function CommentRow({
           style={{ color: "#857C86" }}
         >
           <span>Reply</span>
-          <span>♡ {comment.likeCount}</span>
+          <LikeButton id={comment.id} initial={comment.likeCount} pending={Boolean(comment.pending)} />
         </div>
       </div>
     </div>
+  )
+}
+
+
+/**
+ * Like a comment.
+ *
+ * Unlimited by the client's decision (25 Sep 2026) — the same visitor may
+ * click as often as they like — so there is no per-person guard and the number
+ * measures enthusiasm rather than people.
+ *
+ * The count moves immediately and is reconciled with whatever the database
+ * returns, so two people liking at the same moment both land: the increment
+ * happens inside Postgres, not as a read-then-write from here.
+ *
+ * An optimistic comment has no database row yet, so its button is inert until
+ * the page refreshes and it acquires a real id.
+ */
+function LikeButton({
+  id,
+  initial,
+  pending,
+}: {
+  id: string
+  initial: number
+  pending: boolean
+}) {
+  const [count, setCount] = useState(initial)
+  const [busy, setBusy] = useState(false)
+
+  if (pending) {
+    return <span aria-hidden="true">♡ {count}</span>
+  }
+
+  return (
+    <button
+      type="button"
+      disabled={busy}
+      aria-label={`Like this comment. ${count} ${count === 1 ? "like" : "likes"} so far.`}
+      onClick={async () => {
+        setBusy(true)
+        setCount((n) => n + 1)
+        const next = await likeComment(id)
+        if (typeof next === "number") setCount(next)
+        setBusy(false)
+      }}
+      className="min-h-[44px] font-body text-[11.5px] font-bold uppercase tracking-[.06em] transition-colors duration-150 hover:text-umber-600 disabled:opacity-60"
+    >
+      ♡ {count}
+    </button>
   )
 }

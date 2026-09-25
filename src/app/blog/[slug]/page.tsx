@@ -1,15 +1,20 @@
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { getComments, getPost, getPosts } from "@/lib/blog-fixtures"
+import { getComments, getPost, getPosts } from "@/lib/blog-db"
 import PostBody from "@/components/blog/PostBody"
 import PostHeader from "@/components/blog/PostHeader"
 import CommentThread from "@/components/blog/CommentThread"
 
+
+/**
+ * Rendered per request. The blog is database-backed now, and the client's two
+ * requirements — an edit in the admin shows on the site straight away, and a
+ * comment appears the moment it is posted — are incompatible with serving a
+ * cached page. Traffic here is low; correctness is worth the round trip.
+ */
 type Params = { slug: string }
 
-export function generateStaticParams(): Params[] {
-  return getPosts().map((p) => ({ slug: p.slug }))
-}
+export const dynamic = "force-dynamic"
 
 // Per-post metadata: title, description from excerpt, canonical, OG from the
 // cover (spec §12). Article JSON-LD is deferred to Plan 3.
@@ -19,7 +24,7 @@ export async function generateMetadata({
   params: Promise<Params>
 }) {
   const { slug } = await params
-  const post = getPost(slug)
+  const post = await getPost(slug)
   if (!post) return {}
   return {
     title: post.title,
@@ -40,7 +45,7 @@ export default async function PostPage({
   params: Promise<Params>
 }) {
   const { slug } = await params
-  const post = getPost(slug)
+  const post = await getPost(slug)
   if (!post) notFound()
 
   return (
@@ -89,7 +94,7 @@ export default async function PostPage({
           </div>
         ) : null}
 
-        <CommentThread postSlug={post.slug} comments={getComments(post.slug)} />
+        <CommentThread postSlug={post.slug} comments={await getComments(post.slug)} />
       </article>
 
       <div className="h-[46px]" />

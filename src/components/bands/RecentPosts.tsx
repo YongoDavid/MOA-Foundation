@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { getPosts } from "@/lib/blog-fixtures"
+import { getPosts } from "@/lib/blog-db"
 import { CATEGORIES } from "@/lib/blog-types"
 import { formatDate, plural } from "@/lib/blog-format"
 
@@ -8,8 +8,8 @@ import { formatDate, plural } from "@/lib/blog-format"
 //
 // Replaces the old LatestPostsBlock, which rendered in the retired blog
 // palette. Reads the same fixtures; only the treatment changes.
-export default function RecentPosts() {
-  const posts = getPosts().slice(0, 3)
+export default async function RecentPosts() {
+  const posts = (await getPosts()).slice(0, 3)
   if (posts.length === 0) return null
 
   return (

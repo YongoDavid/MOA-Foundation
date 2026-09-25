@@ -11,7 +11,7 @@ export default function NewPostPage() {
     excerpt: "",
     type: "story",
     category: "partnerships",
-    status: "draft",
+    status: "published",
     author: "Comms Team",
     publishedAt: today,
     readTime: 3,
@@ -22,8 +22,9 @@ export default function NewPostPage() {
     mediaCount: null,
     videoDuration: null,
   }
-  // Starts as a DRAFT. A new post should never be one mistaken click from
-  // being live, and drafts are invisible to the public by RLS policy.
+  // Starts PUBLISHED, at the client's request (25 Sep 2026). Draft remains
+  // available in the status dropdown for anyone who wants to work on a post
+  // before it goes live; it is simply not the default any more.
   return (
     <AdminShell heading="New post">
       <PostEditor initial={blank} isNew />

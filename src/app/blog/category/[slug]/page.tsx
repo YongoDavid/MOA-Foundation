@@ -2,16 +2,19 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { CATEGORIES } from "@/lib/blog-types"
 import type { Category } from "@/lib/blog-types"
-import { getPostsByCategory } from "@/lib/blog-fixtures"
+import { getPostsByCategory } from "@/lib/blog-db"
 import CategoryChips from "@/components/blog/CategoryChips"
 import PostCard from "@/components/blog/PostCard"
 
 type Params = { slug: string }
 
-// Four fixed categories, so every category page is known at build time.
-export function generateStaticParams(): Params[] {
-  return CATEGORIES.map((c) => ({ slug: c.slug }))
-}
+/**
+ * Rendered per request. The blog is database-backed now, and the client's two
+ * requirements — an edit in the admin shows on the site straight away, and a
+ * comment appears the moment it is posted — are incompatible with serving a
+ * cached page. Traffic here is low; correctness is worth the round trip.
+ */
+export const dynamic = "force-dynamic"
 
 export async function generateMetadata({
   params,
@@ -38,7 +41,7 @@ export default async function CategoryPage({
   // category exists and simply has no posts yet.
   if (!meta) notFound()
 
-  const posts = getPostsByCategory(slug)
+  const posts = await getPostsByCategory(slug)
 
   return (
     <>

@@ -115,25 +115,33 @@ export default function PostEditor({
             <Select
               value={p.status}
               onChange={(v) => set("status", v as Post["status"])}
-              options={[["draft", "Draft — only you can see it"], ["published", "Published — live on the site"]]}
+              options={[["published", "Published — live on the site"], ["draft", "Draft — only you can see it"]]}
             />
 
-            <Label>Slug</Label>
+            <Label>Web address</Label>
             {isNew ? (
-              <input
-                value={p.slug}
-                onChange={(e) => set("slug", e.target.value)}
-                placeholder="left blank, it is made from the title"
-                className="mb-1 min-h-[44px] w-full border border-ink-900/[.18] px-3 font-body text-[13px] text-ink-900 outline-none"
-              />
+              <>
+                <input
+                  value={p.slug}
+                  onChange={(e) => set("slug", e.target.value)}
+                  placeholder="made from the title if left empty"
+                  className="mb-1 min-h-[44px] w-full border border-ink-900/[.18] px-3 font-body text-[13px] text-ink-900 outline-none"
+                />
+                <p className="m-0 mb-4 font-body text-[11.5px] leading-[1.5] text-ink-500">
+                  The end of the web address — /blog/your-post. Leave it empty
+                  and it is made from the title.
+                </p>
+              </>
             ) : (
               <>
                 <p className="m-0 mb-1 break-words bg-panel px-3 py-2.5 font-body text-[13px] text-ink-600">
-                  {p.slug}
+                  /blog/{p.slug}
                 </p>
                 <p className="m-0 mb-4 font-body text-[11.5px] leading-[1.5] text-ink-500">
-                  Fixed after publishing. Comments are linked to it, and
-                  changing it would break every link already shared.
+                  This is where the post lives on the website. It cannot be
+                  changed once the post exists — its comments are attached to
+                  it, and anyone who has already shared the link would get a
+                  missing page.
                 </p>
               </>
             )}
