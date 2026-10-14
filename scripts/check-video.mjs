@@ -98,6 +98,13 @@ try {
   html.includes("1:35")
     ? ok("the stored duration is shown") : bad("the duration is missing")
 
+  // The frame takes the video's own shape. A fixed landscape box letterboxed
+  // 16:9 on a phone and pillarboxed it on a desktop, and squashed upright
+  // phone footage into a strip. 1280x720 must come out as 16:9.
+  html.includes("aspect-ratio:1.777")
+    ? ok("the frame matches the video's aspect ratio")
+    : bad("the frame is not using the video's dimensions")
+
   // The file must be fetchable by an anonymous visitor, with a range request,
   // which is how every browser actually pulls a video.
   const ranged = await fetch(ticket.publicUrl, { headers: { range: "bytes=0-1023" } })

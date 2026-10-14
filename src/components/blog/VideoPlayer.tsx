@@ -53,6 +53,18 @@ export default function VideoPlayer({
   const posterUrl =
     typeof poster.url === "string" ? poster.url : poster.url?.src
 
+  // THE FRAME TAKES THE VIDEO'S SHAPE, not a fixed 340px box.
+  //
+  // A fixed landscape box is wrong at both ends. On a phone a 16:9 clip sat
+  // inside it with a black band above and below; on a desktop the same clip
+  // was pillarboxed and rendered SMALLER than the column it sits in. And
+  // phone footage is usually shot upright, which that box reduced to a
+  // narrow strip. The poster carries the real dimensions, so use them.
+  const ratio =
+    poster.width > 0 && poster.height > 0 ? poster.width / poster.height : 16 / 9
+  // An upright video would otherwise be taller than the screen it is read on.
+  const portrait = ratio < 1
+
   const start = () => {
     setStarted(true)
     void ref.current?.play()
@@ -60,7 +72,12 @@ export default function VideoPlayer({
 
   return (
     <figure className="m-0">
-      <div className="relative h-[340px] overflow-hidden bg-green-950">
+      <div
+        className={`relative max-h-[78vh] overflow-hidden bg-green-950 ${
+          portrait ? "mx-auto w-full max-w-[420px]" : "w-full"
+        }`}
+        style={{ aspectRatio: ratio }}
+      >
         <video
           ref={ref}
           src={src}

@@ -62,7 +62,15 @@ export function validateUpload(kind: UploadKind, file: FileMeta): UploadCheck {
   }
   if (kind === "video") {
     if (!(VIDEO_TYPES as readonly string[]).includes(file.type)) {
-      return { ok: false, error: "MP4 video only." }
+      // Worth being specific: a phone recording is the most likely wrong
+      // file, and "MP4 video only" leaves the author with nowhere to go.
+      // Every other refusal in this function names the fix.
+      return {
+        ok: false,
+        error:
+          "MP4 video only — that file is not one. iPhone recordings are .mov, " +
+          "which most browsers will not play; export or convert it to MP4 and try again.",
+      }
     }
     if (file.size > MAX_VIDEO_BYTES) {
       const mb = (file.size / 1024 / 1024).toFixed(0)

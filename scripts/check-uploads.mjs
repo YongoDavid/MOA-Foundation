@@ -162,6 +162,14 @@ vb && vb.file_size_limit === 50 * 1024 * 1024
   ? ok("the bucket enforces 50MB too, not just the code")
   : bad(`bucket limit is ${vb ? vb.file_size_limit : "unset"} — run 0004_video.sql`)
 
+// ── refusals that have to be actionable ─────────────────────────────────────
+// A refusal the author cannot act on is a dead end. The most likely wrong
+// file is a phone recording, so that message must name the fix.
+const mov = U.validateUpload("video", { name: "IMG_0421.MOV", size: 9e6, type: "video/quicktime" })
+!mov.ok && /\.mov/i.test(mov.error) && /mp4/i.test(mov.error)
+  ? ok("the .mov refusal names the format and the fix")
+  : bad("the .mov refusal does not say what to do about it")
+
 // ── codec detection ─────────────────────────────────────────────────────────
 // The warning in the editor is only as good as this. An HEVC file that reads
 // as "unknown" ships silently and plays for nobody outside Safari.

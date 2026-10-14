@@ -132,7 +132,7 @@ export default function ImageField({
             const f = e.target.files?.[0]
             if (f) void pick(f)
           }}
-          className="w-full min-w-0 max-w-full font-body text-[12.5px] text-ink-600 file:mr-3 file:min-h-[40px] file:border file:border-ink-900/20 file:bg-paper file:px-4 file:font-body file:text-[11px] file:font-bold file:uppercase file:tracking-[.09em] file:text-ink-900"
+          className="w-full min-w-0 max-w-full font-body text-[12.5px] text-ink-600 file:mr-3 file:min-h-[44px] file:border file:border-ink-900/20 file:bg-paper file:px-4 file:font-body file:text-[11px] file:font-bold file:uppercase file:tracking-[.09em] file:text-ink-900"
         />
         {busy ? (
           <span className="font-body text-[12px] text-ink-500">Uploading…</span>
@@ -141,7 +141,7 @@ export default function ImageField({
           <button
             type="button"
             onClick={onClear}
-            className="min-h-[40px] font-body text-[11px] font-bold uppercase tracking-[.09em] text-danger"
+            className="min-h-[44px] font-body text-[11px] font-bold uppercase tracking-[.09em] text-danger"
           >
             Remove
           </button>
