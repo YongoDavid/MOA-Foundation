@@ -42,7 +42,12 @@ export default function SiteHeader() {
                   key={item.href}
                   href={item.href}
                   aria-current={isCurrent ? "page" : undefined}
-                  className={`relative font-body text-[11.5px] font-bold uppercase leading-none tracking-[.1em] transition-colors duration-150 hover:text-ink-900 ${
+                  // py-4 makes the hit area 44px without moving anything:
+                  // the bar's height is fixed and the items are centred in
+                  // it, so this is invisible. The underline below is
+                  // positioned off THIS box, so its offset moves with the
+                  // padding — 33 - 16 = 17.
+                  className={`relative flex items-center py-4 font-body text-[11.5px] font-bold uppercase leading-none tracking-[.1em] transition-colors duration-150 hover:text-ink-900 ${
                     isCurrent ? "text-ink-900" : "text-ink-600"
                   }`}
                 >
@@ -51,7 +56,7 @@ export default function SiteHeader() {
                     // Pinned to the header's bottom edge, not the item's.
                     <span
                       aria-hidden="true"
-                      className="absolute -bottom-[33px] left-0 right-0 h-[2px] bg-umber-600"
+                      className="absolute -bottom-[17px] left-0 right-0 h-[2px] bg-umber-600"
                     />
                   ) : null}
                 </Link>

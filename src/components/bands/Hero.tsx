@@ -63,6 +63,12 @@ export default function Hero({
       />
 
       <div className="relative z-[1] flex w-full flex-col justify-center px-5 py-14 lg:px-14 lg:py-0">
+       {/* The 1440 wrapper the header and all fifteen other bands already
+           have. Without it the headline started at the screen edge while the
+           wordmark directly above it stopped at 1440 — a 184px stagger at
+           1920px, growing with the screen. The padding stays OUTSIDE the cap,
+           which is how the other bands reach the same left edge. */}
+       <div className="mx-auto w-full max-w-[1440px]">
        <div className="max-w-[720px]">
         <p
           className={`m-0 flex items-center gap-3 font-body uppercase leading-none ${
@@ -109,6 +115,7 @@ export default function Hero({
             ))}
           </div>
         ) : null}
+       </div>
        </div>
       </div>
 

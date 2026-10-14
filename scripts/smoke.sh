@@ -473,6 +473,33 @@ else
   fail "the apply form's photo column is not responsive"
 fi
 
+# Above 1440px the hero and the section headers used to start at the screen
+# edge while the wordmark directly above them and every content band below
+# stopped at 1440 — a 184px stagger at 1920px that grew with the screen.
+hero_capped=$(grep -c 'mx-auto w-full max-w-\[1440px\]' <<< "$html")
+if [ "$hero_capped" -ge 1 ]; then
+  pass "the hero copy is held to the same 1440 column as the header"
+else
+  fail "the hero copy has no 1440 cap — it will not line up above 1440px"
+fi
+if grep -q 'max-w-\[1440px\] items-end' <<< "$html"; then
+  pass "section headers are held to the same 1440 column"
+else
+  fail "section headers have no 1440 cap"
+fi
+
+# The desktop nav links had a 12px-tall hit area inside an 88px bar. The
+# current-page underline is positioned off the LINK box, so the padding that
+# fixes the hit area and the underline's offset have to move together: these
+# two are one change and must not drift apart.
+about_html=$(curl -fsS --max-time 20 "$BASE/about" || true)
+if grep -q 'flex items-center py-4 font-body text-\[11.5px\]' <<< "$about_html" \
+   && grep -q -- '-bottom-\[17px\]' <<< "$about_html"; then
+  pass "desktop nav links are a 44px target, with the underline offset to match"
+else
+  fail "the nav hit area and the current-page underline have drifted apart"
+fi
+
 # The record figures animate on scroll. The SERVER must still render the real
 # numbers — someone with JavaScript off has to see 300, not 0, and these are
 # the figures the client corrected.

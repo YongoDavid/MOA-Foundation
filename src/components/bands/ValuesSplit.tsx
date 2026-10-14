@@ -20,38 +20,45 @@ export default function ValuesSplit({
   return (
     <section className="grid bg-green-950 lg:grid-cols-2">
       <div className="bg-ink-900 px-5 py-12 lg:px-14 lg:py-[78px]">
-        <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-gold-500">
-          02 — What guides us
-        </p>
-        <h2 className="m-0 mb-7 mt-4 font-display text-[32px] font-extrabold uppercase leading-[1.02] text-white lg:text-[42px]">
-          Five values
-        </h2>
-        <ol className="m-0 flex list-none flex-col p-0">
-          {VALUES.map((v, i) => (
-            <li
-              key={v.name}
-              className={`flex gap-[18px] border-t border-white/[.16] py-[18px] ${
-                i === VALUES.length - 1 ? "border-b" : ""
-              }`}
-            >
-              <span
-                aria-hidden="true"
-                className="shrink-0 font-body text-[10.5px] font-semibold leading-[1.8]"
-                style={{ color: ORDINAL_MUTED }}
+        {/* The text column is capped at a readable measure. These three bands
+          are the only ones with no 1440 wrapper, so above about 1500px their
+          copy ran to 130 characters a line while every other band on the site
+          stopped at 1440. The cap is above the content box at 1440, so the
+          design at its target width is untouched. */}
+        <div className="w-full max-w-[640px]">
+          <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-gold-500">
+            02 — What guides us
+          </p>
+          <h2 className="m-0 mb-7 mt-4 font-display text-[32px] font-extrabold uppercase leading-[1.02] text-white lg:text-[42px]">
+            Five values
+          </h2>
+          <ol className="m-0 flex list-none flex-col p-0">
+            {VALUES.map((v, i) => (
+              <li
+                key={v.name}
+                className={`flex gap-[18px] border-t border-white/[.16] py-[18px] ${
+                  i === VALUES.length - 1 ? "border-b" : ""
+                }`}
               >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div>
-                <h3 className="m-0 font-body text-[16px] font-bold leading-[1.4] text-white">
-                  {v.name}
-                </h3>
-                <p className="m-0 mt-1 font-body text-[13.5px] font-medium leading-[1.6] text-white/65">
-                  {v.note}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ol>
+                <span
+                  aria-hidden="true"
+                  className="shrink-0 font-body text-[10.5px] font-semibold leading-[1.8]"
+                  style={{ color: ORDINAL_MUTED }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 className="m-0 font-body text-[16px] font-bold leading-[1.4] text-white">
+                    {v.name}
+                  </h3>
+                  <p className="m-0 mt-1 font-body text-[13.5px] font-medium leading-[1.6] text-white/65">
+                    {v.note}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
       <div className="relative h-[320px] self-start overflow-hidden bg-green-950 lg:h-[640px]">
         <Image

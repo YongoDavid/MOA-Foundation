@@ -70,7 +70,7 @@ export default function PostBody({
           case "image":
             return (
               <figure key={i} className="my-6">
-                <div className="relative h-[360px] overflow-hidden ">
+                <div className="relative h-[220px] overflow-hidden md:h-[360px]">
                   <Image
                     src={block.media.url as string}
                     alt={block.media.alt}

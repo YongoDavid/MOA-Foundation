@@ -165,6 +165,17 @@ reason that script is not enough.
       is a band about a third of the screen, not a 700px vertical slice.
 - [ ] Filter bars scroll horizontally with **no visible scrollbar**.
 
+## 7b. Large screens (1920px and wider)
+
+Everything on this site stops at a 1440px column. These are the places that
+did not, and the check is simply whether the left edges agree.
+
+- [ ] **The hero headline starts directly under the wordmark**, not at the
+      screen edge. Same for the section headers over the photographic bands.
+- [ ] **No line of body copy runs much past 90 characters.** Look at the
+      vision band, the values band and the two form pages.
+- [ ] Nothing else grew a second left edge of its own.
+
 ## 8. Typography and shape
 
 - [x] Big Shoulders and Manrope are the only families in the compiled CSS —

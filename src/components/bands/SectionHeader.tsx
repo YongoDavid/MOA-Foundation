@@ -45,7 +45,11 @@ export default function SectionHeader({
         className="pointer-events-none absolute inset-0 hidden lg:block"
         style={{ background: SCRIM.sectionHeader }}
       />
-      <div className="pointer-events-none relative z-[1] flex w-full items-end justify-between gap-6 px-5 pb-6 pt-10 lg:px-14 lg:pb-8">
+      {/* The same 1440 wrapper the header and the content bands use. Without
+          it this heading sat at the screen edge while the band under it
+          stopped at 1440. */}
+      <div className="pointer-events-none relative z-[1] w-full px-5 pb-6 pt-10 lg:px-14 lg:pb-8">
+      <div className="mx-auto flex w-full max-w-[1440px] items-end justify-between gap-6">
         <div>
           <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-gold-500">
             {eyebrow}
@@ -59,6 +63,7 @@ export default function SectionHeader({
             {note}
           </span>
         ) : null}
+      </div>
       </div>
     </div>
   )

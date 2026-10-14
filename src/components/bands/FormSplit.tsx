@@ -27,18 +27,25 @@ export default function FormSplit({
   return (
     <section className="grid lg:grid-cols-2">
       <div className="bg-ink-900 px-5 py-12 lg:px-14 lg:py-[74px]">
-        <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-gold-500">
-          {eyebrow}
-        </p>
-        <h2 className="m-0 mb-2.5 mt-4 font-display text-[30px] font-extrabold uppercase leading-[1.02] text-white lg:text-[40px]">
-          {heading}
-        </h2>
-        {lead ? (
-          <p className="m-0 mb-8 max-w-[430px] font-body text-[14px] font-medium leading-[1.65] text-white/70">
-            {lead}
+        {/* The text column is capped at a readable measure. These three bands
+          are the only ones with no 1440 wrapper, so above about 1500px their
+          copy ran to 130 characters a line while every other band on the site
+          stopped at 1440. The cap is above the content box at 1440, so the
+          design at its target width is untouched. */}
+        <div className="w-full max-w-[640px]">
+          <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-gold-500">
+            {eyebrow}
           </p>
-        ) : null}
-        {children}
+          <h2 className="m-0 mb-2.5 mt-4 font-display text-[30px] font-extrabold uppercase leading-[1.02] text-white lg:text-[40px]">
+            {heading}
+          </h2>
+          {lead ? (
+            <p className="m-0 mb-8 max-w-[430px] font-body text-[14px] font-medium leading-[1.65] text-white/70">
+              {lead}
+            </p>
+          ) : null}
+          {children}
+        </div>
       </div>
       {/* The tall photo is a DESKTOP measurement. Applied unconditionally it
           made a 390px phone render a 700px-tall column — a landscape

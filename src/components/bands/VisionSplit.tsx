@@ -26,54 +26,61 @@ export default function VisionSplit({
   return (
     <section className="grid bg-green-950 lg:grid-cols-2">
       <div className="bg-ink-900 px-5 py-12 lg:px-14 lg:py-20">
-        <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-gold-500">
-          04 — Our vision
-        </p>
-        <h2 className="m-0 mb-[18px] mt-4 font-display text-[32px] font-extrabold uppercase leading-[1.02] text-white lg:text-[42px]">
-          Eight things we are
-          <br />
-          building toward
-        </h2>
+        {/* The text column is capped at a readable measure. These three bands
+          are the only ones with no 1440 wrapper, so above about 1500px their
+          copy ran to 130 characters a line while every other band on the site
+          stopped at 1440. The cap is above the content box at 1440, so the
+          design at its target width is untouched. */}
+        <div className="w-full max-w-[640px]">
+          <p className="m-0 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.2em] text-gold-500">
+            04 — Our vision
+          </p>
+          <h2 className="m-0 mb-[18px] mt-4 font-display text-[32px] font-extrabold uppercase leading-[1.02] text-white lg:text-[42px]">
+            Eight things we are
+            <br />
+            building toward
+          </h2>
 
-        {/* Verbatim — read from content.ts, shared with /about. */}
-        <p className="m-0 mb-7 border-l-2 border-gold-500 pl-4 font-body text-[14px] font-medium leading-[1.66] text-white/[.82] [text-wrap:pretty] lg:text-[14.5px]">
-          {VISION}
-        </p>
+          {/* Verbatim — read from content.ts, shared with /about. */}
+          <p className="m-0 mb-7 border-l-2 border-gold-500 pl-4 font-body text-[14px] font-medium leading-[1.66] text-white/[.82] [text-wrap:pretty] lg:text-[14.5px]">
+            {VISION}
+          </p>
 
-        <ol className="m-0 flex list-none flex-col p-0">
-          {VISION_ITEMS.map((item, i) => (
-            <li key={i}>
-              <div className="flex gap-4 border-t border-white/[.16] py-[15px]">
-                <span
-                  aria-hidden="true"
-                  className="shrink-0 font-body text-[10.5px] font-semibold leading-[1.6]"
-                  style={{ color: ORDINAL_MUTED }}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="font-body text-[13.5px] font-semibold leading-[1.55] text-white">
-                  {item}
-                </span>
-              </div>
+          <ol className="m-0 flex list-none flex-col p-0">
+            {VISION_ITEMS.map((item, i) => (
+              <li key={i}>
+                <div className="flex gap-4 border-t border-white/[.16] py-[15px]">
+                  <span
+                    aria-hidden="true"
+                    className="shrink-0 font-body text-[10.5px] font-semibold leading-[1.6]"
+                    style={{ color: ORDINAL_MUTED }}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="font-body text-[13.5px] font-semibold leading-[1.55] text-white">
+                    {item}
+                  </span>
+                </div>
 
-              {FLAGS.showQuotes && i + 1 === quoteAfter ? (
-                <figure className="my-[22px] border-l-[3px] border-gold-500 bg-green-quote px-6 py-[22px]">
-                  <blockquote className="m-0 font-body text-[17px] font-medium leading-[1.55] text-white [text-wrap:pretty] lg:text-[19px]">
-                    &ldquo;I came in able to speak. I left able to decide. That is
-                    the difference the programme made.&rdquo;
-                  </blockquote>
-                  <figcaption className="mt-3.5 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.14em] text-gold-500">
-                    Cohort 3 mentee · Abuja
-                  </figcaption>
-                </figure>
-              ) : null}
+                {FLAGS.showQuotes && i + 1 === quoteAfter ? (
+                  <figure className="my-[22px] border-l-[3px] border-gold-500 bg-green-quote px-6 py-[22px]">
+                    <blockquote className="m-0 font-body text-[17px] font-medium leading-[1.55] text-white [text-wrap:pretty] lg:text-[19px]">
+                      &ldquo;I came in able to speak. I left able to decide. That is
+                      the difference the programme made.&rdquo;
+                    </blockquote>
+                    <figcaption className="mt-3.5 font-body text-[10.5px] font-bold uppercase leading-none tracking-[.14em] text-gold-500">
+                      Cohort 3 mentee · Abuja
+                    </figcaption>
+                  </figure>
+                ) : null}
 
-              {i === VISION_ITEMS.length - 1 ? (
-                <div aria-hidden="true" className="border-t border-white/[.16]" />
-              ) : null}
-            </li>
-          ))}
-        </ol>
+                {i === VISION_ITEMS.length - 1 ? (
+                  <div aria-hidden="true" className="border-t border-white/[.16]" />
+                ) : null}
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
 
       <div className="relative h-[320px] self-start overflow-hidden bg-green-950 lg:h-[820px]">

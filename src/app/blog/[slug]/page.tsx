@@ -60,7 +60,10 @@ export default async function PostPage({
 
       {post.cover ? (
         <div className="mx-auto max-w-[1180px] px-[18px] md:px-10 pt-7">
-          <div className="relative h-[420px] overflow-hidden ">
+          {/* 420px is a desktop measurement. On a 390px phone it cropped the
+              cover to a near-square and ate half the screen before a word of
+              the piece. */}
+          <div className="relative h-[240px] overflow-hidden md:h-[420px]">
             <Image
               src={post.cover.url as string}
               alt={post.cover.alt}
