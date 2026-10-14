@@ -33,10 +33,24 @@ const origin = new URL(env.NEXT_PUBLIC_SUPABASE_URL).origin
 const admin = createClient(origin, env.SUPABASE_SECRET_KEY, { auth: { persistSession: false } })
 
 const U = await import("../src/lib/uploads.ts")
+const F = await import("../src/lib/blog-format.ts")
 
 let fails = 0
 const ok = (m) => console.log(`  ok    ${m}`)
 const bad = (m) => { console.log(`  FAIL  ${m}`); fails++ }
+
+// ── the duration shown on a card ────────────────────────────────────────────
+// Derived from the block, because the editor has no field for it and never
+// had one. Pure, so it is checked here rather than through a server action.
+F.deriveVideoDuration([{ kind: "video", src: "https://x/a.mp4", durationSeconds: 95.4 }], null) === "1:35"
+  ? ok("a card duration is derived from the video block")
+  : bad("the card duration is not derived from the block")
+F.deriveVideoDuration([{ kind: "paragraph" }], "2:10") === "2:10"
+  ? ok("a post with no video keeps whatever it had")
+  : bad("a post with no video lost its stored duration")
+F.deriveVideoDuration([{ kind: "video", src: "", durationSeconds: 90 }], null) === null
+  ? ok("an empty video block derives nothing")
+  : bad("an empty video block produced a duration")
 
 const SLUG = `zz-video-check-${Date.now().toString(36)}`
 let ticket = null

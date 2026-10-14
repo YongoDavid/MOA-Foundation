@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { createSupabaseServerClient, getAdminUser } from "@/lib/supabase/server"
 import type { Block, MediaItem } from "@/lib/blog-types"
+import { deriveVideoDuration } from "@/lib/blog-format"
 import {
   createUploadTicket,
   type Ticket,
@@ -91,7 +92,7 @@ export async function savePost(
     cover: input.cover,
     blocks: input.blocks,
     media_count: input.mediaCount,
-    video_duration: input.videoDuration,
+    video_duration: deriveVideoDuration(input.blocks, input.videoDuration),
   }
 
   // Only one post may be featured (there is a partial unique index). Clear the

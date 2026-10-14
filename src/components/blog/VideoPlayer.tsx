@@ -111,7 +111,7 @@ export default function VideoPlayer({
                 alt={poster.alt}
                 fill
                 sizes="(max-width: 768px) 100vw, 760px"
-                className="object-cover"
+                className="object-contain"
               />
             ) : null}
             <span className="relative">

@@ -70,3 +70,25 @@ export function formatDuration(seconds: number): string {
   const s = total % 60
   return `${m}:${String(s).padStart(2, "0")}`
 }
+
+/**
+ * The duration shown on a post CARD, derived from the post's first video.
+ *
+ * Cards read a post-level `videoDuration` string, and the editor has never
+ * had a field for it — so every video post written in the admin showed a
+ * bare "Video" with no running time, while the block beside it held the
+ * exact number read from the file. Rather than add a box for someone to
+ * mistype, take it from the block.
+ *
+ * Pure, and free of any `next/*` import, so a script can drive it.
+ */
+export function deriveVideoDuration(
+  blocks: { kind: string; src?: string; durationSeconds?: number }[],
+  fallback: string | null,
+): string | null {
+  const v = blocks.find(
+    (b) => b.kind === "video" && typeof b.src === "string" && b.src.trim() !== "",
+  )
+  if (!v || !v.durationSeconds || v.durationSeconds <= 0) return fallback
+  return formatDuration(v.durationSeconds)
+}
