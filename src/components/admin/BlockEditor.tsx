@@ -1,7 +1,7 @@
 "use client"
 
 import ImageField from "./ImageField"
-import { formatDuration } from "@/lib/blog-format"
+import VideoField from "./VideoField"
 import type { Block, MediaItem } from "@/lib/blog-types"
 
 const EMPTY_MEDIA: MediaItem = { url: "", alt: "", width: 0, height: 0 }
@@ -12,10 +12,7 @@ const KINDS: { kind: Block["kind"]; label: string }[] = [
   { kind: "image", label: "Image" },
   { kind: "gallery", label: "Gallery" },
   { kind: "quote", label: "Quote" },
-  // Video is NOT offered yet. The block compiles and renders, but nothing can
-  // put a file in it until the next phase — and an author who added one would
-  // publish something that looks like a playable video and is not. Restored
-  // in Phase 3, with the upload field.
+  { kind: "video", label: "Video" },
 ]
 
 function blank(kind: Block["kind"]): Block {
@@ -119,21 +116,40 @@ export default function BlockEditor({
 
               {b.kind === "video" ? (
                 <>
-                  <ImageField
-                    label="Poster frame"
-                    value={b.poster.url ? b.poster : null}
-                    onChange={(poster) => replace(i, { ...b, poster })}
-                    onClear={() => replace(i, { ...b, poster: { ...EMPTY_MEDIA } })}
+                  <VideoField
+                    value={b.src ? { src: b.src, poster: b.poster, durationSeconds: b.durationSeconds, sizeBytes: b.sizeBytes } : null}
+                    onChange={(v) => replace(i, { ...b, ...v })}
+                    onClear={() =>
+                      replace(i, {
+                        ...b,
+                        src: "",
+                        poster: { ...EMPTY_MEDIA },
+                        durationSeconds: 0,
+                        sizeBytes: 0,
+                      })
+                    }
                   />
-                  {/* Duration is read from the file, not typed — it was a
-                      free-text box that could say anything. The upload
-                      field arrives in the next phase; until then this block
-                      cannot be created from the editor at all. */}
-                  <p className="m-0 mt-2 font-body text-[12px] leading-[1.5] text-ink-500">
-                    {b.src
-                      ? `${formatDuration(b.durationSeconds)} · ${(b.sizeBytes / 1024 / 1024).toFixed(1)}MB`
-                      : "No video attached yet."}
-                  </p>
+                  {/* Duration, dimensions and the poster are all read from the
+                      file. Duration used to be a free-text box that could say
+                      anything. This override exists because the frame at ~1s
+                      is sometimes a blur or a lens cap, and because a browser
+                      that cannot decode the video returns no frame at all. */}
+                  {b.src ? (
+                    <div className="mt-3">
+                      <ImageField
+                        label="Poster frame — replace the grabbed still (optional)"
+                        value={b.poster.url ? b.poster : null}
+                        onChange={(poster) => replace(i, { ...b, poster })}
+                        onClear={() => replace(i, { ...b, poster: { ...EMPTY_MEDIA } })}
+                      />
+                    </div>
+                  ) : null}
+                  <input
+                    value={b.caption ?? ""}
+                    onChange={(e) => replace(i, { ...b, caption: e.target.value })}
+                    placeholder="Caption (optional)"
+                    className="mt-2 min-h-[44px] w-full border border-ink-900/[.18] px-3 font-body text-[13.5px] text-ink-900 outline-none"
+                  />
                 </>
               ) : null}
 

@@ -123,7 +123,20 @@ export type SignedUrlIssuer = {
 }
 
 export type Ticket =
-  | { ok: true; path: string; token: string; publicUrl: string }
+  | {
+      ok: true
+      path: string
+      token: string
+      /**
+       * The full upload URL. The browser PUTs to this directly with XHR
+       * rather than going through supabase-js, because XHR reports progress
+       * and a 50MB upload on mobile data with no progress bar looks frozen.
+       * Verified: a raw PUT to this URL returns 200 and the object is
+       * readable afterwards.
+       */
+      signedUrl: string
+      publicUrl: string
+    }
   | { ok: false; error: string }
 
 /**
@@ -154,6 +167,42 @@ export async function createUploadTicket(
     ok: true,
     path: data.path,
     token: data.token,
+    signedUrl: data.signedUrl,
     publicUrl: bucket.getPublicUrl(data.path).data.publicUrl,
   }
+}
+
+
+/**
+ * Which codec is inside the MP4.
+ *
+ * "MP4" is a container, not a codec. An iPhone set to High Efficiency records
+ * HEVC into a .mp4 — Safari plays it, Chrome and Firefox usually do not. So a
+ * clip that looks perfect to whoever uploaded it is a black rectangle for a
+ * large share of visitors, and nothing in the file extension or MIME type
+ * gives that away.
+ *
+ * Detection is a scan for the codec fourCC rather than a real box parse. The
+ * marker lives in the `stsd` box inside `moov`, and `moov` sits at the start
+ * of the file for web-optimised exports and at the END for most camera
+ * recordings — so callers should pass both ends. A parse would be more
+ * correct and much more code for a check whose job is to raise a warning.
+ */
+export type Mp4Codec = "h264" | "hevc" | "unknown"
+
+export function detectMp4Codec(...chunks: Uint8Array[]): Mp4Codec {
+  const find = (needle: string): boolean => {
+    const n = [...needle].map((c) => c.charCodeAt(0))
+    return chunks.some((buf) => {
+      outer: for (let i = 0; i + n.length <= buf.length; i++) {
+        for (let j = 0; j < n.length; j++) if (buf[i + j] !== n[j]) continue outer
+        return true
+      }
+      return false
+    })
+  }
+  // HEVC first: a file can carry both markers, and the risky one decides.
+  if (find("hvc1") || find("hev1")) return "hevc"
+  if (find("avc1")) return "h264"
+  return "unknown"
 }

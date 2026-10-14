@@ -6,6 +6,7 @@ import { createSupabaseServerClient, getAdminUser } from "@/lib/supabase/server"
 import type { Block, MediaItem } from "@/lib/blog-types"
 import {
   createUploadTicket,
+  type Ticket,
   type FileMeta,
   type UploadKind,
 } from "@/lib/uploads"
@@ -58,6 +59,20 @@ export async function savePost(
   const slug = (await slugify(input.slug || input.title)).trim()
   if (!slug) return { error: "A slug is required — give the post a title." }
   if (!input.title.trim()) return { error: "A title is required." }
+
+  // A video block with no file renders as a dead player with a play button
+  // that does nothing. Catch it before it is published rather than after a
+  // visitor finds it. Drafts may be incomplete — that is what a draft is.
+  if (input.status === "published") {
+    const empty = input.blocks.findIndex(
+      (b) => b.kind === "video" && !b.src.trim(),
+    )
+    if (empty !== -1) {
+      return {
+        error: `Block ${empty + 1} is a video with no file attached. Upload one, remove the block, or save as a draft.`,
+      }
+    }
+  }
 
   const supabase = await createSupabaseServerClient()
 
@@ -122,9 +137,12 @@ export async function deletePost(form: FormData) {
   redirect("/admin")
 }
 
-export type UploadResult =
-  | { ok: true; path: string; token: string; publicUrl: string }
-  | { ok: false; error: string }
+/**
+ * Re-exported rather than restated. It was restated once, and the copy went
+ * stale the moment the ticket grew a signedUrl field — the browser could not
+ * see a property the server was already sending.
+ */
+export type UploadResult = Ticket
 
 /**
  * Issue an upload ticket. The FILE NEVER PASSES THROUGH HERE.

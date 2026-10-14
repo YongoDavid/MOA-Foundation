@@ -162,5 +162,50 @@ vb && vb.file_size_limit === 50 * 1024 * 1024
   ? ok("the bucket enforces 50MB too, not just the code")
   : bad(`bucket limit is ${vb ? vb.file_size_limit : "unset"} — run 0004_video.sql`)
 
+// ── codec detection ─────────────────────────────────────────────────────────
+// The warning in the editor is only as good as this. An HEVC file that reads
+// as "unknown" ships silently and plays for nobody outside Safari.
+const buf = (s) => new TextEncoder().encode(`\0\0\0\x28stsd\0\0\0\x01${s}`)
+
+U.detectMp4Codec(buf("avc1")) === "h264" ? ok("avc1 reads as H.264") : bad("avc1 was not detected")
+U.detectMp4Codec(buf("hvc1")) === "hevc" ? ok("hvc1 reads as HEVC") : bad("hvc1 was not detected")
+U.detectMp4Codec(buf("hev1")) === "hevc" ? ok("hev1 reads as HEVC") : bad("hev1 was not detected")
+U.detectMp4Codec(buf("mp4a")) === "unknown" ? ok("an audio-only marker is not mistaken for video") : bad("mp4a was misread")
+U.detectMp4Codec(new Uint8Array(0)) === "unknown" ? ok("an empty buffer is unknown, not a crash") : bad("an empty buffer broke detection")
+
+// A file carrying both markers must read as the risky one. Some exports write
+// an avc1 thumbnail track alongside an HEVC video track; calling that H.264
+// would suppress the warning on exactly the file that needs it.
+U.detectMp4Codec(buf("avc1"), buf("hvc1")) === "hevc"
+  ? ok("a mixed file is treated as HEVC") : bad("a mixed file was called H.264")
+
+// moov sits at the END of most camera recordings, so a marker found only in
+// the tail chunk must still count. This is why the caller passes both ends.
+U.detectMp4Codec(new Uint8Array(1024), buf("hvc1")) === "hevc"
+  ? ok("a marker in the trailing chunk is found") : bad("only the first chunk is scanned")
+
+// ── the raw PUT the browser actually performs ───────────────────────────────
+// VideoField does not use uploadToSignedUrl: it needs XHR for a progress bar,
+// so it PUTs to ticket.signedUrl itself. Testing uploadToSignedUrl instead
+// would be testing a dependency of the claim rather than the claim.
+const rt = await U.createUploadTicket(admin, "video", clip)
+if (!rt.ok) {
+  bad(`no ticket for the raw PUT: ${rt.error}`)
+} else {
+  rt.signedUrl && rt.signedUrl.startsWith("http")
+    ? ok("the ticket carries a full upload URL") : bad("signedUrl is missing or not absolute")
+  const put = await fetch(rt.signedUrl, {
+    method: "PUT",
+    headers: { "content-type": "video/mp4" },
+    body: Buffer.alloc(4096),
+  })
+  put.ok ? ok("a raw PUT to the signed URL is accepted") : bad(`the raw PUT failed (${put.status})`)
+  const back = await fetch(rt.publicUrl)
+  back.ok && back.headers.get("content-type") === "video/mp4"
+    ? ok("the raw-PUT object is readable and served as video/mp4")
+    : bad(`raw-PUT object not readable as video (${back.status} ${back.headers.get("content-type")})`)
+  await admin.storage.from(U.VIDEO_BUCKET).remove([rt.path])
+}
+
 console.log(fails === 0 ? "\nuploads: all checks passed" : `\nuploads: ${fails} FAILED`)
 process.exit(fails === 0 ? 0 : 1)
