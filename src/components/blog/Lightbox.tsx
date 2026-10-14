@@ -105,13 +105,17 @@ export default function Lightbox({
         type="button"
         onClick={onClose}
         aria-label="Close gallery"
-        className="absolute right-5 top-5 p-2 text-white"
+        className="absolute right-5 top-5 p-[10px] text-white"
         style={{ background: "rgba(255,255,255,.12)" }}
       >
         <X className="h-6 w-6" />
       </button>
 
-      <div className="relative h-[70vh] w-full max-w-[1100px]">
+      {/* 70vh is right in portrait and too tall in landscape: on a phone
+          turned sideways the viewport is about 390px high, and 70vh plus the
+          controls and caption came to more than that, so the bottom was cut
+          off with nothing to scroll. The cap leaves room for both. */}
+      <div className="relative h-[70vh] max-h-[calc(100vh-180px)] w-full max-w-[1100px]">
         <Image
           src={current.url as string}
           alt={current.alt}

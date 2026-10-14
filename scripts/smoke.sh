@@ -454,6 +454,25 @@ else
   fi
 fi
 
+# Body scroll is locked while the menu is open and the panel is a fixed
+# full-screen box, so anything below the fold was unreachable — on a shorter
+# phone that was the phone number, the email and the social row.
+if grep -q 'overscroll-contain' <<< "$menu"; then
+  pass "mobile menu can scroll when it is taller than the screen"
+else
+  fail "mobile menu has no scroll — content past the fold is unreachable"
+fi
+
+# The form bands' photo column is sized for a DESKTOP. Applied unconditionally
+# it gave a 390px phone a 700px-tall crop and 700px of scrolling after the
+# form. Its two sibling bands already capped this; this one did not.
+apply_html=$(curl -fsS --max-time 20 "$BASE/programs/apply" || true)
+if grep -q 'h-\[320px\][^"]*lg:min-h-\[var(--split-min-h)\]' <<< "$apply_html"; then
+  pass "the apply form's photo is phone-height on a phone, prop-height above lg"
+else
+  fail "the apply form's photo column is not responsive"
+fi
+
 # The record figures animate on scroll. The SERVER must still render the real
 # numbers — someone with JavaScript off has to see 300, not 0, and these are
 # the figures the client corrected.

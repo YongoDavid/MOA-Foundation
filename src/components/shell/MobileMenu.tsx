@@ -38,10 +38,15 @@ export default function MobileMenu({
     // Display must therefore be toggled by CLASS, not by the attribute.
     // The attribute stays: it is what removes the panel from the
     // accessibility tree and takes its links out of the tab order.
+    //
+    // It also SCROLLS. Body scroll is locked while it is open, and the panel
+    // is a fixed full-screen box, so without overflow-y-auto anything past
+    // the fold was simply unreachable — on a shorter phone that was the
+    // phone number, the email address and the social row.
     <div
       id="mobile-menu"
       hidden={!open}
-      className={`fixed inset-0 z-[9998] flex-col bg-ink-900 px-5 pb-8 pt-5 motion-safe:transition-transform motion-safe:duration-200 lg:hidden ${
+      className={`fixed inset-0 z-[9998] flex-col overflow-y-auto overscroll-contain bg-ink-900 px-5 pb-8 pt-5 motion-safe:transition-transform motion-safe:duration-200 lg:hidden ${
         open ? "flex" : "hidden"
       }`}
     >

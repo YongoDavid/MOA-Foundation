@@ -105,6 +105,9 @@ For **each** of `/programs/apply`, `/programs/mentor`, `/donate`, `/contact`:
 
 ## 6. Blog
 
+- [ ] **Lightbox in landscape on a phone.** Turn the phone sideways and open
+      a photo. The caption and the previous/next row are both fully visible,
+      not cut off at the bottom.
 - [ ] **Lightbox.** Click a gallery photo. It opens, arrow keys move between
       **all** photos in the set (not just the three visible tiles), Escape
       closes, focus returns to the tile that opened it.
@@ -150,12 +153,16 @@ reason that script is not enough.
 ## 7. Mobile (390px) — every route
 
 - [ ] Hamburger opens the full-screen ink menu; Escape and the gold cross close it.
+- [ ] **The open menu scrolls.** On a shorter phone, the phone number, email
+      and social row at the bottom can all be reached.
 - [ ] Body scroll is locked while the menu is open.
 - [ ] **Every tap target is at least 44–48px.** Check specifically: hamburger,
       menu close, footer link columns, footer socials, menu phone/email, SDG
       grid "full report" link, blog comment composer.
 - [x] The four-column footer is `grid-cols-2` below `lg`.
 - [ ] No horizontal scroll on any route. Check the SDG grid and the gallery.
+- [ ] **/programs/apply and /programs/mentor**: the photograph beside the form
+      is a band about a third of the screen, not a 700px vertical slice.
 - [ ] Filter bars scroll horizontally with **no visible scrollbar**.
 
 ## 8. Typography and shape

@@ -1,4 +1,5 @@
 import Image, { type StaticImageData } from "next/image"
+import type { CSSProperties } from "react"
 import type { ReactNode } from "react"
 
 // Shared form band — ink-900 panel left, photograph right.
@@ -39,9 +40,16 @@ export default function FormSplit({
         ) : null}
         {children}
       </div>
+      {/* The tall photo is a DESKTOP measurement. Applied unconditionally it
+          made a 390px phone render a 700px-tall column — a landscape
+          photograph cropped to a vertical slice, with 700px of scrolling
+          after the form. Its two sibling bands already cap this at 320px on
+          mobile; this one did not. Carried through a custom property because
+          the height is a prop and an inline style cannot be made conditional
+          on a breakpoint. */}
       <div
-        className="relative self-start overflow-hidden bg-green-950"
-        style={{ minHeight }}
+        className="relative h-[320px] self-start overflow-hidden bg-green-950 lg:h-auto lg:min-h-[var(--split-min-h)]"
+        style={{ "--split-min-h": `${minHeight}px` } as CSSProperties}
       >
         <Image
           src={image}
