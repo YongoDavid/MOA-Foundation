@@ -262,15 +262,29 @@ function probe(file: File): Promise<{
     // Required on iOS, which otherwise refuses to decode without a gesture.
     v.playsInline = true
 
+    let settled = false
     const done = (r: {
       durationSeconds: number
       width: number
       height: number
       posterBlob: Blob | null
     }) => {
+      if (settled) return
+      settled = true
+      clearTimeout(watchdog)
       URL.revokeObjectURL(url)
       resolve(r)
     }
+
+    // Seeking is not guaranteed to fire anything. Setting currentTime to a
+    // value it already holds may raise no `seeked` at all, and a decoder can
+    // simply stall — either way the promise would never settle and the
+    // upload would sit at "Reading duration…" forever. Give up and carry on
+    // without a poster; one can be uploaded by hand.
+    const watchdog = setTimeout(
+      () => done({ durationSeconds: 0, width: 0, height: 0, posterBlob: null }),
+      10_000,
+    )
 
     v.onerror = () =>
       // Undecodable here — almost always HEVC on a browser without support.
@@ -297,7 +311,13 @@ function probe(file: File): Promise<{
           done({ durationSeconds, width, height, posterBlob: null })
         }
       }
-      v.currentTime = Math.min(1, durationSeconds / 2 || 0)
+      // Never 0 — a seek to the current position may fire nothing.
+      const at = Math.min(1, durationSeconds / 2)
+      if (at > 0) {
+        v.currentTime = at
+      } else {
+        done({ durationSeconds, width, height, posterBlob: null })
+      }
     }
 
     v.src = url
