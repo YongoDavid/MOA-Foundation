@@ -195,6 +195,12 @@ export async function createUploadTicket(
  * of the file for web-optimised exports and at the END for most camera
  * recordings — so callers should pass both ends. A parse would be more
  * correct and much more code for a check whose job is to raise a warning.
+ *
+ * A scan can also be wrong in the other direction: four particular bytes can
+ * occur by chance inside compressed video data, so an H.264 file can read as
+ * HEVC perhaps once in a thousand. That is the second reason the editor
+ * offers "Upload anyway" rather than refusing — a heuristic should not be
+ * able to block a correct file outright.
  */
 export type Mp4Codec = "h264" | "hevc" | "unknown"
 
