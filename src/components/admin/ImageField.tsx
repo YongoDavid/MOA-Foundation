@@ -2,7 +2,9 @@
 
 import { useRef, useState } from "react"
 import Image from "next/image"
-import { uploadMedia } from "@/app/admin/posts/actions"
+import { requestUpload } from "@/app/admin/posts/actions"
+import { createSupabaseBrowserClient } from "@/lib/supabase/client"
+import { BUCKET, validateUpload } from "@/lib/uploads"
 import type { MediaItem } from "@/lib/blog-types"
 
 /**
@@ -32,19 +34,53 @@ export default function ImageField({
   const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
+  /**
+   * Upload straight to Supabase. The file does not pass through our server —
+   * a Server Action body is capped near 4.5MB on Vercel, so anything larger
+   * would be rejected before our code ran.
+   *
+   *   1. check it locally, so an obvious problem costs no round trip
+   *   2. ask the server for a ticket  (a few hundred bytes)
+   *   3. PUT the bytes to storage     (the whole file, direct)
+   */
   async function pick(file: File) {
     setError(null)
     setBusy(true)
     try {
-      const dims = await readDimensions(file)
-      const fd = new FormData()
-      fd.set("file", file)
-      const res = await uploadMedia(fd)
-      if (res.error || !res.url) {
-        setError(res.error ?? "Upload failed.")
+      const local = validateUpload("image", {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      })
+      if (!local.ok) {
+        setError(local.error)
         return
       }
-      onChange({ url: res.url, alt: value?.alt ?? "", ...dims })
+
+      const dims = await readDimensions(file)
+
+      const ticket = await requestUpload("image", {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      })
+      if (!ticket.ok) {
+        setError(ticket.error)
+        return
+      }
+
+      const supabase = createSupabaseBrowserClient()
+      const { error: upErr } = await supabase.storage
+        .from(BUCKET)
+        .uploadToSignedUrl(ticket.path, ticket.token, file, {
+          contentType: file.type,
+        })
+      if (upErr) {
+        setError("The upload did not finish. Check your connection and try again.")
+        return
+      }
+
+      onChange({ url: ticket.publicUrl, alt: value?.alt ?? "", ...dims })
     } catch {
       setError("Could not read that file.")
     } finally {

@@ -28,7 +28,8 @@
     "check:rls": "node scripts/check-rls.mjs",
     "seed:blog": "node scripts/seed-blog.mjs",
     "check:comments": "node scripts/check-comments.mjs",
-    "check:forms": "node scripts/check-forms.mjs"
+    "check:forms": "node scripts/check-forms.mjs",
+    "check:uploads": "node scripts/check-uploads.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",

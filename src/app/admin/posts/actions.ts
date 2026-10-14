@@ -4,8 +4,11 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { createSupabaseServerClient, getAdminUser } from "@/lib/supabase/server"
 import type { Block, MediaItem } from "@/lib/blog-types"
-
-const BUCKET = "blog-media"
+import {
+  createUploadTicket,
+  type FileMeta,
+  type UploadKind,
+} from "@/lib/uploads"
 
 export type SaveState = { error?: string; ok?: boolean }
 
@@ -119,40 +122,31 @@ export async function deletePost(form: FormData) {
   redirect("/admin")
 }
 
-export type UploadResult = { url?: string; error?: string }
+export type UploadResult =
+  | { ok: true; path: string; token: string; publicUrl: string }
+  | { ok: false; error: string }
 
 /**
- * Upload one image to the blog-media bucket.
+ * Issue an upload ticket. The FILE NEVER PASSES THROUGH HERE.
  *
- * Goes through the ADMIN'S SESSION, not the secret key, so the storage
- * policies in 0002_storage.sql are what authorise it. If this ever starts
- * failing with "new row violates row-level security", that migration has not
- * been run — the upload is not supposed to work without it.
+ * It used to: the previous action took the File in FormData and forwarded it
+ * to Supabase. That caps out at roughly 4.5MB on Vercel no matter what the
+ * code allows, so the 10MB limit it advertised was a limit it could not
+ * honour — anything between those two sizes failed in production and worked
+ * locally. The browser now sends the bytes straight to storage and this only
+ * says whether it may.
+ *
+ * The ticket is short-lived and single-use, and only a signed-in admin can
+ * obtain one, which is what makes it safe for the browser to finish the
+ * upload with the publishable key.
  */
-export async function uploadMedia(form: FormData): Promise<UploadResult> {
-  if (!(await getAdminUser())) return { error: "Your session has expired." }
-
-  const file = form.get("file")
-  if (!(file instanceof File) || file.size === 0) return { error: "No file received." }
-  if (file.size > 10 * 1024 * 1024) return { error: "That image is larger than 10MB." }
-  if (!/^image\/(jpeg|png|webp|avif)$/.test(file.type)) {
-    return { error: "Images only — JPEG, PNG, WebP or AVIF." }
+export async function requestUpload(
+  kind: UploadKind,
+  file: FileMeta,
+): Promise<UploadResult> {
+  if (!(await getAdminUser())) {
+    return { ok: false, error: "Your session has expired. Sign in again." }
   }
-
   const supabase = await createSupabaseServerClient()
-  // Random prefix: two posts can legitimately both have a "cover.jpg", and the
-  // second must not silently replace the first.
-  const safe = file.name.toLowerCase().replace(/[^a-z0-9.]+/g, "-").slice(-60)
-  const key = `posts/${Date.now().toString(36)}-${safe}`
-
-  const { error } = await supabase.storage
-    .from(BUCKET)
-    .upload(key, file, { contentType: file.type, upsert: false })
-
-  if (error) {
-    console.error("[uploadMedia]", error.message)
-    return { error: error.message }
-  }
-
-  return { url: supabase.storage.from(BUCKET).getPublicUrl(key).data.publicUrl }
+  return createUploadTicket(supabase, kind, file)
 }
