@@ -136,6 +136,16 @@ reason that script is not enough.
       preloading video spends it on people who never watch.
 - [ ] Try a file over 50MB. It is refused before anything uploads, and the
       message says what to do.
+- [ ] **Press Cancel mid-upload.** It stops, says nothing was saved, and the
+      same file can be chosen again straight away.
+- [ ] An HEVC file does **not** start uploading. It waits on *Upload anyway*
+      or *Choose another file*.
+- [ ] Try a `.mov`. The refusal names the format and says what to do.
+- [ ] **A portrait video is not squashed into a letterbox**, and a landscape
+      one fills the column on a desktop rather than sitting pillarboxed
+      inside it.
+- [ ] The post's card in the blog index shows the running time, which nobody
+      typed.
 
 ## 7. Mobile (390px) — every route
 
