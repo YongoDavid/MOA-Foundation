@@ -59,6 +59,7 @@ export default function PostBody({
             return (
               <div key={i} className="mb-[34px]">
                 <VideoPlayer
+                  src={block.src}
                   poster={block.poster}
                   durationSeconds={block.durationSeconds}
                   caption={block.caption}

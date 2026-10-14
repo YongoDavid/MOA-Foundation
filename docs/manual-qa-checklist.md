@@ -108,12 +108,34 @@ For **each** of `/programs/apply`, `/programs/mentor`, `/donate`, `/contact`:
 - [ ] **Lightbox.** Click a gallery photo. It opens, arrow keys move between
       **all** photos in the set (not just the three visible tiles), Escape
       closes, focus returns to the tile that opened it.
-- [ ] **Comments.** Post one. It appears instantly at the top. **Refresh — it
-      is gone.** Expected: fixtures, no backend.
+- [ ] **Comments.** Post one. It appears at the top, and it is **still there
+      after a refresh** — they are saved to the database as of 25 September.
+- [ ] Reply to a comment. The reply form opens under that comment and the
+      reply lands nested beneath it, not at the top level.
 - [ ] Empty name on a comment gives an inline error.
 - [x] Delete never appears in the public DOM. Badge is green in markup.
 - [x] Category tabs navigate to real URLs; all four resolve.
 - [ ] Post body, quote and tags all render in the site palette.
+
+## 6b. Video — the part no script can check
+
+A script can prove a `<video>` element renders with the right source
+(`npm run check:video`). It cannot watch a picture move. These four are the
+reason that script is not enough.
+
+- [ ] **Upload a video in the editor** (`/admin` → a post → add a Video
+      block). The progress bar moves, and the duration and a poster frame
+      appear by themselves. Nothing is typed in by hand.
+- [ ] **Play it on the published post.** It plays inline. On an iPhone it
+      must NOT jump to fullscreen on its own.
+- [ ] **Play it in Chrome or Firefox, not only Safari.** A black rectangle
+      with working controls means the file is HEVC and the editor's warning
+      was ignored or did not fire.
+- [ ] **Open the post and do not press play.** In the network panel, the
+      video file is not requested. Egress on this plan is 5GB a month and a
+      preloading video spends it on people who never watch.
+- [ ] Try a file over 50MB. It is refused before anything uploads, and the
+      message says what to do.
 
 ## 7. Mobile (390px) — every route
 
@@ -166,9 +188,13 @@ For **each** of `/programs/apply`, `/programs/mentor`, `/donate`, `/contact`:
 
 ## Known limitations — expected, not bugs
 
-1. **No form submits.** All four validate and then say so. No backend by
-   client decision.
-2. **Comments do not persist.** A refresh clears them.
-3. **Blog body copy for posts 2–7 is placeholder.** Post 1 is approved copy.
-4. **No year filter on `/gallery`** — no photograph has a capture date.
-6. **All social links are `href="#"`.**
+1. **Blog body copy for posts 2–7 is placeholder.** Post 1 is approved copy.
+2. **No year filter on `/gallery`** — no photograph has a capture date.
+3. **All social links are `href="#"`.**
+4. **Videos are capped at 50MB and H.264 only.** Storage allows 50MB on this
+   plan, and HEVC does not play outside Safari. Both are enforced in the
+   editor before upload, with a message rather than a bare refusal.
+
+Two items that used to live here are no longer true: the forms deliver by
+email as of 25 September, and comments persist to the database as of the
+same date. Items 1 and 2 of this list said otherwise for weeks.

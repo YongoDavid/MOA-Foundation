@@ -27,6 +27,7 @@
     "prebuild": "node scripts/check-case.mjs",
     "check:rls": "node scripts/check-rls.mjs",
     "seed:blog": "node scripts/seed-blog.mjs",
+    "check:video": "node scripts/check-video.mjs",
     "check:comments": "node scripts/check-comments.mjs",
     "check:forms": "node scripts/check-forms.mjs",
     "check:uploads": "node scripts/check-uploads.mjs"
