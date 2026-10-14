@@ -117,6 +117,14 @@ export default function VideoField({
       // Unreadable here means unreadable everywhere; let the upload attempt
       // produce the real error rather than inventing one.
     }
+    // Cancel is on screen during the read above, so honour it. Without this
+    // the upload began anyway and the button appeared to do nothing.
+    if (cancelled.current) {
+      setBusy(false)
+      setStage("")
+      if (inputRef.current) inputRef.current.value = ""
+      return
+    }
     setCodec(found)
     setBusy(false)
     setStage("")
