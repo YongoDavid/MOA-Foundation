@@ -1,6 +1,7 @@
 import Image from "next/image"
 import type { MediaItem } from "@/lib/blog-types"
 import PlayBadge from "./PlayBadge"
+import { formatDuration } from "@/lib/blog-format"
 
 // Video block, mockup 1b.
 //
@@ -14,11 +15,11 @@ import PlayBadge from "./PlayBadge"
 
 export default function VideoPlayer({
   poster,
-  duration,
+  durationSeconds,
   caption,
 }: {
   poster: MediaItem
-  duration: string
+  durationSeconds: number
   caption?: string
 }) {
   return (
@@ -54,7 +55,7 @@ export default function VideoPlayer({
             />
           </div>
           <span className="text-[11px] font-semibold leading-none text-white">
-            0:36 / {duration}
+            0:00 / {formatDuration(durationSeconds)}
           </span>
         </div>
       </div>

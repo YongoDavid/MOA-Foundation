@@ -110,5 +110,57 @@ const { error: naked } = await anon.storage
   .upload(`posts/__unauthorised-${Date.now()}.jpg`, Buffer.from("x"), { contentType: "image/jpeg" })
 naked ? ok("an anonymous upload WITHOUT a ticket is refused") : bad("anonymous upload succeeded with no ticket")
 
+// ── video ───────────────────────────────────────────────────────────────────
+const clip = { name: "Embassy Visit.mp4", size: 30 * 1024 * 1024, type: "video/mp4" }
+
+U.validateUpload("video", clip).ok ? ok("a 30MB mp4 is accepted") : bad("a 30MB mp4 was rejected")
+!U.validateUpload("video", { ...clip, type: "video/quicktime" }).ok
+  ? ok("a .mov is rejected") : bad("a .mov was accepted")
+!U.validateUpload("video", { ...clip, type: "image/jpeg" }).ok
+  ? ok("an image is rejected as video") : bad("an image was accepted as video")
+
+const over = U.validateUpload("video", { ...clip, size: 80 * 1024 * 1024 })
+if (!over.ok && over.error.includes("80MB") && /re-export/i.test(over.error)) {
+  ok("an 80MB video is refused, and the message says what to do")
+} else {
+  bad("the oversize video message is unhelpful or missing")
+}
+
+// 50MB exactly must pass — it is the documented ceiling, not a value to be
+// off-by-one about.
+U.validateUpload("video", { ...clip, size: 50 * 1024 * 1024 }).ok
+  ? ok("exactly 50MB is allowed") : bad("50MB is rejected — off by one at the ceiling")
+
+U.bucketFor("video") === "blog-video" && U.bucketFor("image") === "blog-media"
+  ? ok("video and images route to separate buckets") : bad("bucket routing is wrong")
+
+U.storageKey("video", "Clip.MP4").startsWith("video/")
+  ? ok("video keys live under video/") : bad("video key is in the wrong folder")
+
+// a real video ticket, redeemed
+const vt = await U.createUploadTicket(admin, "video", clip)
+if (!vt.ok) {
+  bad(`no video ticket: ${vt.error}`)
+} else {
+  ok("a video ticket is issued")
+  const { error } = await anon.storage
+    .from(U.VIDEO_BUCKET)
+    .uploadToSignedUrl(vt.path, vt.token, Buffer.alloc(2048), { contentType: "video/mp4" })
+  if (error) {
+    bad(`the video upload failed: ${error.message}`)
+  } else {
+    ok("the browser-side video upload completes")
+    const r = await fetch(vt.publicUrl)
+    r.ok ? ok("the video is publicly readable") : bad(`video not readable (${r.status})`)
+  }
+  await admin.storage.from(U.VIDEO_BUCKET).remove([vt.path])
+}
+
+// the bucket must actually hold the ceiling, not just the code
+const { data: vb } = await admin.storage.getBucket(U.VIDEO_BUCKET)
+vb && vb.file_size_limit === 50 * 1024 * 1024
+  ? ok("the bucket enforces 50MB too, not just the code")
+  : bad(`bucket limit is ${vb ? vb.file_size_limit : "unset"} — run 0004_video.sql`)
+
 console.log(fails === 0 ? "\nuploads: all checks passed" : `\nuploads: ${fails} FAILED`)
 process.exit(fails === 0 ? 0 : 1)

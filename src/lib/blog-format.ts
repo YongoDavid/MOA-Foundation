@@ -57,3 +57,16 @@ export function mediaLabel(
 export function plural(count: number, singular: string, pluralForm?: string): string {
   return `${count} ${count === 1 ? singular : (pluralForm ?? `${singular}s`)}`
 }
+
+/**
+ * Seconds to "m:ss". The duration used to be a free-text field an author
+ * typed, which could say anything and frequently would. It is read from the
+ * file now, so it only needs formatting.
+ */
+export function formatDuration(seconds: number): string {
+  if (!Number.isFinite(seconds) || seconds <= 0) return "0:00"
+  const total = Math.round(seconds)
+  const m = Math.floor(total / 60)
+  const s = total % 60
+  return `${m}:${String(s).padStart(2, "0")}`
+}

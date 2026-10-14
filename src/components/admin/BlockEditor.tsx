@@ -1,6 +1,7 @@
 "use client"
 
 import ImageField from "./ImageField"
+import { formatDuration } from "@/lib/blog-format"
 import type { Block, MediaItem } from "@/lib/blog-types"
 
 const EMPTY_MEDIA: MediaItem = { url: "", alt: "", width: 0, height: 0 }
@@ -11,7 +12,10 @@ const KINDS: { kind: Block["kind"]; label: string }[] = [
   { kind: "image", label: "Image" },
   { kind: "gallery", label: "Gallery" },
   { kind: "quote", label: "Quote" },
-  { kind: "video", label: "Video" },
+  // Video is NOT offered yet. The block compiles and renders, but nothing can
+  // put a file in it until the next phase — and an author who added one would
+  // publish something that looks like a playable video and is not. Restored
+  // in Phase 3, with the upload field.
 ]
 
 function blank(kind: Block["kind"]): Block {
@@ -21,7 +25,14 @@ function blank(kind: Block["kind"]): Block {
     case "image": return { kind, media: { ...EMPTY_MEDIA } }
     case "gallery": return { kind, items: [] }
     case "quote": return { kind, text: "" }
-    case "video": return { kind, poster: { ...EMPTY_MEDIA }, duration: "0:00" }
+    case "video":
+      return {
+        kind,
+        src: "",
+        poster: { ...EMPTY_MEDIA },
+        durationSeconds: 0,
+        sizeBytes: 0,
+      }
   }
 }
 
@@ -114,15 +125,14 @@ export default function BlockEditor({
                     onChange={(poster) => replace(i, { ...b, poster })}
                     onClear={() => replace(i, { ...b, poster: { ...EMPTY_MEDIA } })}
                   />
-                  <input
-                    value={b.duration}
-                    onChange={(e) => replace(i, { ...b, duration: e.target.value })}
-                    placeholder="Duration, m:ss"
-                    className="mt-2 min-h-[44px] w-full border border-ink-900/[.18] px-3 font-body text-[13.5px] text-ink-900 outline-none"
-                  />
+                  {/* Duration is read from the file, not typed — it was a
+                      free-text box that could say anything. The upload
+                      field arrives in the next phase; until then this block
+                      cannot be created from the editor at all. */}
                   <p className="m-0 mt-2 font-body text-[12px] leading-[1.5] text-ink-500">
-                    The player shows this poster and cannot play — there is no
-                    media pipeline yet. It never autoplays.
+                    {b.src
+                      ? `${formatDuration(b.durationSeconds)} · ${(b.sizeBytes / 1024 / 1024).toFixed(1)}MB`
+                      : "No video attached yet."}
                   </p>
                 </>
               ) : null}

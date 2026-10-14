@@ -65,7 +65,22 @@ export type Block =
   | { kind: "heading"; text: string }
   | { kind: "image"; media: MediaItem; caption?: string }
   | { kind: "gallery"; items: MediaItem[] }
-  | { kind: "video"; poster: MediaItem; duration: string; caption?: string }
+  // `src` is the thing that was missing: there was nowhere to put a video,
+  // so no upload could have been stored even if one had been possible.
+  //
+  // durationSeconds is a NUMBER read from the file, not the free-text
+  // "m:ss" it used to be — that was typed by hand and could say anything.
+  // sizeBytes is kept so the egress cost of a post is visible without
+  // fetching the file: the plan allows 5 GB a month and every view pays full
+  // price.
+  | {
+      kind: "video"
+      src: string
+      poster: MediaItem
+      durationSeconds: number
+      sizeBytes: number
+      caption?: string
+    }
   | { kind: "quote"; text: string; attribution?: string }
 
 export interface Post {
