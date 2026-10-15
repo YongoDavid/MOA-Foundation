@@ -500,6 +500,34 @@ else
   fail "the nav hit area and the current-page underline have drifted apart"
 fi
 
+# The photographic section headers are 150-210px tall and full width, so they
+# show about a fifth of each photograph's height. object-cover centres that
+# slice, and in every one of these pictures the people stand in the upper
+# third — the bands shipped showing torsos with the faces cropped off. Each
+# band carries a focal point measured from its own file, so this asserts the
+# four distinct values rather than merely that some object-position exists.
+focals=0
+for f in '50% 20%' '50% 26%' '50% 28%' '50% 10%'; do
+  if grep -q "object-position:$f" <<< "$html"; then
+    focals=$((focals + 1))
+  fi
+done
+if [ "$focals" -eq 4 ]; then
+  pass "all four section headers hold their photograph's faces, not its centre"
+else
+  fail "only $focals of 4 section-header focal points are set"
+fi
+
+# Card thumbnails are wide and short. Centring that crop cut the heads off
+# group photographs, and on a post whose cover is a portrait flyer it showed
+# the middle of the flyer and hid the title.
+tops=$(grep -o 'object-cover object-top' <<< "$html" | wc -l | tr -d ' ')
+if [ "$tops" -ge 1 ]; then
+  pass "card thumbnails hold the top of the picture ($tops on the homepage)"
+else
+  fail "card thumbnails are centre-cropped again"
+fi
+
 # The record figures animate on scroll. The SERVER must still render the real
 # numbers — someone with JavaScript off has to see 300, not 0, and these are
 # the figures the client corrected.

@@ -224,7 +224,7 @@ export default function VideoField({
                 alt=""
                 fill
                 sizes="(max-width: 640px) 100vw, 120px"
-                className="object-cover"
+                className="object-cover object-top"
               />
             ) : null}
           </div>

@@ -104,7 +104,7 @@ function PathwayCard({
           alt={alt}
           fill
           sizes="(max-width: 1024px) 100vw, 33vw"
-          className="object-cover"
+          className="object-cover object-top"
         />
       </div>
       <div className="flex flex-1 flex-col p-6 lg:p-[26px]">

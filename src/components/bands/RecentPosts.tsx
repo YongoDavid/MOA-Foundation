@@ -49,7 +49,7 @@ export default async function RecentPosts() {
                       alt={post.cover.alt}
                       fill
                       sizes="(max-width: 1024px) 100vw, 33vw"
-                      className="object-cover"
+                      className="object-cover object-top"
                     />
                   ) : null}
                 </div>

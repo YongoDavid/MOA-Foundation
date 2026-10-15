@@ -70,7 +70,7 @@ export default async function PostPage({
               fill
               priority
               sizes="(max-width: 1180px) 100vw, 1100px"
-              className="object-cover"
+              className="object-cover object-top"
             />
           </div>
           <p

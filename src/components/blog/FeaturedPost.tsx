@@ -38,7 +38,7 @@ export default function FeaturedPost({ post }: { post: Post }) {
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 60vw"
-            className="object-cover"
+            className="object-cover object-top"
           />
         ) : null}
 

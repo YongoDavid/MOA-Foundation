@@ -84,7 +84,7 @@ export default function PostCard({
             alt={post.cover.alt}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover"
+            className="object-cover object-top"
           />
         ) : null}
         {post.type === "video" ? (

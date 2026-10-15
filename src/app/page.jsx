@@ -47,6 +47,7 @@ export default function Home() {
         heading="The record so far"
         note="As of August 2026"
         image={EvidenceHeaderImage}
+        focal="50% 20%"
         alt="Presentation of leadership and governance titles at the Nigeria Police Force headquarters, Abuja"
       />
       <Evidence />
@@ -57,6 +58,7 @@ export default function Home() {
         eyebrow="03 — Who we work with"
         heading="Institutional alignment"
         image={AlignmentHeaderImage}
+        focal="50% 26%"
         alt="The Foundation delegation at the Embassy of the State of Kuwait in Abuja"
       />
       <Alignment />
@@ -73,6 +75,7 @@ export default function Home() {
             eyebrow="05 — Aims & objectives"
             heading="Ten specific objectives"
             image={ObjectivesHeaderImage}
+            focal="50% 28%"
             alt="With embassy staff at the Embassy of the State of Kuwait in Abuja"
           />
           <Objectives />
@@ -83,6 +86,7 @@ export default function Home() {
         eyebrow="06 — Take part"
         heading="Three ways in"
         image={PathwaysHeaderImage}
+        focal="50% 10%"
         alt="At the Nigeria Police Force headquarters in Abuja"
       />
       <Pathways

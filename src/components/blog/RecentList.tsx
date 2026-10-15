@@ -45,7 +45,7 @@ export default function RecentList({ posts }: { posts: Post[] }) {
                   alt={post.cover.alt}
                   fill
                   sizes="(max-width: 768px) 96px, 120px"
-                  className="object-cover"
+                  className="object-cover object-top"
                 />
               ) : null}
               {isVideo ? (

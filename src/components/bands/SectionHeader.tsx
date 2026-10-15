@@ -14,6 +14,7 @@ export default function SectionHeader({
   note,
   image,
   alt,
+  focal = "50% 25%",
 }: {
   /** e.g. "01 — THE EVIDENCE". Sentence-case in markup; uppercased in CSS. */
   eyebrow: string
@@ -22,6 +23,21 @@ export default function SectionHeader({
   note?: string
   image: StaticImageData
   alt: string
+  /**
+   * Where to hold the photograph as it is cropped, as a CSS object-position.
+   *
+   * This band is 150–210px tall and full width, so a 3:2 photograph is cut to
+   * roughly a fifth of its height. `object-cover` centres that slice by
+   * default, and in every one of these photographs the people stand in the
+   * UPPER third — so the default showed torsos and cropped the faces off the
+   * top. Each caller passes the band that holds its own subject, measured
+   * from the actual file rather than guessed.
+   *
+   * It is an inline style, not a class: Tailwind's scanner cannot see a class
+   * name assembled at runtime, so a prop-driven utility would silently not
+   * be emitted.
+   */
+  focal?: string
 }) {
   return (
     // min-h + in-flow content, for the same reason as Hero: an absolutely
@@ -34,6 +50,7 @@ export default function SectionHeader({
         fill
         sizes="100vw"
         className="object-cover"
+        style={{ objectPosition: focal }}
       />
       <div
         aria-hidden="true"

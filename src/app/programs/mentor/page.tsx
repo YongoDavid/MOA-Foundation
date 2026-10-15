@@ -68,6 +68,7 @@ export default function MentorPage() {
         eyebrow="01 — Who we are looking for"
         heading="Fit matters more than seniority"
         image={CriteriaHeaderImage}
+        focal="50% 20%"
         alt="At a courtesy visit to a Chinese diplomatic mission in Abuja"
       />
 
