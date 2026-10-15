@@ -176,6 +176,18 @@ did not, and the check is simply whether the left edges agree.
       vision band, the values band and the two form pages.
 - [ ] Nothing else grew a second left edge of its own.
 
+## 7c. Photographs — the crop
+
+Faces are what a grep cannot see.
+
+- [ ] **Every section-header band shows faces, not torsos.** Check the four
+      on the homepage, and the one on /programs/mentor.
+- [ ] The bands are 320px on a desktop and 220px on a phone. They are
+      taller than the original spec on purpose, at the client's request.
+- [ ] **Card thumbnails are not cut off at the head.** Check the homepage
+      recent posts, the blog index and the featured card.
+- [ ] A post whose cover is a portrait image shows its top, not its middle.
+
 ## 8. Typography and shape
 
 - [x] Big Shoulders and Manrope are the only families in the compiled CSS —

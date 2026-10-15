@@ -500,8 +500,8 @@ else
   fail "the nav hit area and the current-page underline have drifted apart"
 fi
 
-# The photographic section headers are 150-210px tall and full width, so they
-# show about a fifth of each photograph's height. object-cover centres that
+# The photographic section headers are 220-320px tall and full width, so they
+# show about a third of each photograph's height. object-cover centres that
 # slice, and in every one of these pictures the people stand in the upper
 # third — the bands shipped showing torsos with the faces cropped off. Each
 # band carries a focal point measured from its own file, so this asserts the

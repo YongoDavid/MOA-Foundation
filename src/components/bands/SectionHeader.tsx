@@ -1,9 +1,17 @@
 import Image, { type StaticImageData } from "next/image"
 import { SCRIM } from "@/lib/tokens"
 
-// Photographic section header — exactly 210px desktop, 150–170px mobile
-// (spec §2 Layout). Used by homepage bands 01, 03, 05 and 06, and by the
-// inner sections of About, Programs and Become a Mentor.
+// Photographic section header. Used by homepage bands 01, 03, 05 and 06, and
+// by the inner sections of About, Programs and Become a Mentor.
+//
+// HEIGHT IS A DELIBERATE DEPARTURE FROM THE SPEC. §2 Layout says exactly
+// 210px on desktop and 150–170px on mobile. At 210px across 1440 the band
+// shows about a fifth of a 3:2 photograph — correctly framed after the focal
+// point below, but still a sliver, and the Foundation's reading of it was
+// that the pictures looked zoomed in. Raised to 320/270/220 on 15 Oct 2026
+// at the client's explicit request, which shows about a third of the frame.
+// The focal values each caller passes were re-checked against the new box
+// and all still hold; they are not independent of this number.
 //
 // The scrim comes from the shared constant rather than a hand-written
 // gradient: the spec allows exactly three, and centralising them is what stops
@@ -43,7 +51,7 @@ export default function SectionHeader({
     // min-h + in-flow content, for the same reason as Hero: an absolutely
     // positioned overlay cannot make its box taller, so a longer heading
     // silently spills out over the neighbouring sections.
-    <div className="relative flex min-h-[150px] items-end bg-ink-900 md:min-h-[180px] lg:min-h-[210px]">
+    <div className="relative flex min-h-[220px] items-end bg-ink-900 md:min-h-[270px] lg:min-h-[320px]">
       <Image
         src={image}
         alt={alt}
