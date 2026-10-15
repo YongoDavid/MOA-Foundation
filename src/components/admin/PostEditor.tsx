@@ -54,6 +54,31 @@ export default function PostEditor({
         (b.kind === "gallery" && b.items.some((i) => i.url && !i.alt.trim())),
     ).length
 
+  /**
+   * Take the video's own frame as the post cover.
+   *
+   * The block poster is already grabbed from the file. The post COVER is a
+   * separate field, and leaving it manual meant someone had to find a still
+   * of a video they had just uploaded a still of. Only fills an EMPTY cover,
+   * and only at the moment a poster first arrives, so clearing it or
+   * choosing a different one sticks.
+   */
+  function adoptBlocks(blocks: Block[]) {
+    setP((prev) => {
+      const next = { ...prev, blocks }
+      if (prev.cover?.url) return next
+      const shot = blocks.find(
+        (b) => b.kind === "video" && b.poster.url !== "",
+      )
+      if (!shot || shot.kind !== "video") return next
+      const alreadyThere = prev.blocks.some(
+        (b) => b.kind === "video" && b.poster.url === shot.poster.url,
+      )
+      if (alreadyThere) return next
+      return { ...next, cover: shot.poster }
+    })
+  }
+
   return (
     <form action={action}>
       {/* The whole document goes over as one JSON field. Blocks are a nested,
@@ -94,15 +119,16 @@ export default function PostEditor({
               onClear={() => set("cover", null)}
             />
             <p className="m-0 mt-2 font-body text-[12px] leading-[1.5] text-ink-500">
-              Story posts have no cover by design — leave this empty and the
-              card renders on the green ground instead.
+              Upload a video below and this fills itself from the video&rsquo;s
+              own frame. Story posts have no cover by design — leave this
+              empty and the card renders on the green ground instead.
             </p>
           </div>
 
           <h2 className="m-0 mb-4 border-b-2 border-ink-900 pb-3 font-display text-[24px] font-extrabold uppercase text-ink-900">
             Body
           </h2>
-          <BlockEditor blocks={p.blocks} onChange={(b) => set("blocks", b)} />
+          <BlockEditor blocks={p.blocks} onChange={adoptBlocks} />
         </div>
 
         <aside className="flex min-w-0 flex-col gap-5 lg:sticky lg:top-6 lg:self-start">
