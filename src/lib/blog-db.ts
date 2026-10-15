@@ -1,4 +1,5 @@
 import "server-only"
+import { coverFor } from "./blog-format"
 import { createSupabaseServerClientOrNull } from "@/lib/supabase/server"
 import type { Block, Comment, MediaItem, Post } from "./blog-types"
 
@@ -43,7 +44,7 @@ function toPost(r: Row, commentCount: number): Post {
     type: r.type,
     category: r.category,
     status: r.status,
-    cover: r.cover,
+    cover: coverFor(r.cover, r.blocks ?? []),
     author: r.author ?? "Comms Team",
     publishedAt: r.published_at,
     readTime: r.read_time ?? 3,

@@ -92,3 +92,33 @@ export function deriveVideoDuration(
   if (!v || !v.durationSeconds || v.durationSeconds <= 0) return fallback
   return formatDuration(v.durationSeconds)
 }
+
+/**
+ * The image a CARD should use for a post.
+ *
+ * A post written before the editor adopted the video's frame has no cover,
+ * and its card rendered as an empty box — which is what the Foundation saw
+ * on the homepage: a blank panel that opened a video that played fine.
+ *
+ * Filling it in the editor only helps posts edited afterwards, so the
+ * fallback lives here, at the point every surface reads. A post with no
+ * cover and no video keeps its empty cover: a story card on the green
+ * ground is the design, not an omission.
+ *
+ * Pure, and free of any `next/*` import, so a script can drive it.
+ */
+export function coverFor<T extends { url: unknown }>(
+  cover: T | null,
+  blocks: { kind: string; src?: string; poster?: T }[],
+): T | null {
+  if (cover && cover.url) return cover
+  const v = blocks.find(
+    (b) =>
+      b.kind === "video" &&
+      typeof b.src === "string" &&
+      b.src.trim() !== "" &&
+      b.poster != null &&
+      Boolean(b.poster.url),
+  )
+  return v?.poster ?? cover
+}

@@ -39,6 +39,21 @@ let fails = 0
 const ok = (m) => console.log(`  ok    ${m}`)
 const bad = (m) => { console.log(`  FAIL  ${m}`); fails++ }
 
+// ── the image shown on a card ───────────────────────────────────────────────
+// A video post written before the editor adopted the frame has no cover, and
+// its card rendered as an empty box on the homepage.
+const POSTER = { url: "https://x/p.jpg", alt: "", width: 480, height: 848 }
+const COVER = { url: "https://x/c.jpg", alt: "c", width: 100, height: 100 }
+F.coverFor(null, [{ kind: "video", src: "https://x/a.mp4", poster: POSTER }]) === POSTER
+  ? ok("a coverless video post falls back to the video's own frame")
+  : bad("a coverless video post still has no card image")
+F.coverFor(COVER, [{ kind: "video", src: "https://x/a.mp4", poster: POSTER }]) === COVER
+  ? ok("a chosen cover is not overridden by the frame")
+  : bad("the frame overrode a cover someone chose")
+F.coverFor(null, [{ kind: "paragraph" }]) === null
+  ? ok("a story with no cover stays coverless, which is the design")
+  : bad("a coverless story grew a cover")
+
 // ── the duration shown on a card ────────────────────────────────────────────
 // Derived from the block, because the editor has no field for it and never
 // had one. Pure, so it is checked here rather than through a server action.
