@@ -19,7 +19,7 @@ export const GOALS: Goal[] = [
   { n: 10, label: "Inequality", title: "Reduced Inequalities" },
   { n: 11, label: "Cities", title: "Sustainable Cities and Communities" },
   { n: 12, label: "Consumption", title: "Responsible Consumption and Production" },
-  { n: 13, label: "Climate", title: "Climate Action" },
+  { n: 13, label: "Climate action", title: "Climate Action" },
   { n: 14, label: "Oceans", title: "Life Below Water" },
   { n: 15, label: "Land", title: "Life on Land" },
   { n: 16, label: "Peace & justice", title: "Peace, Justice and Strong Institutions" },

@@ -226,11 +226,36 @@ absent   "no external font host"        "fonts.gstatic.com"
 # version of this check stripped URLs first; the strip was proven to change
 # nothing and was removed rather than left implying a protection it did not
 # provide.
-name_drift=$(grep -oi 'Moses of Africa' <<< "$html" | wc -l | tr -d ' ')
-if [ "$name_drift" = "0" ]; then
-  pass "legal name is consistent (no 'Moses of Africa' in the markup)"
+#
+# 19 Oct 2026 — THIS USED TO MATCH THE BARE PHRASE AND IT WAS TOO WIDE.
+# It went red against production the day the Foundation published a post
+# called "Moses of Africa to the World". "Moses of Africa" is the founder's
+# own moniker; it is on the outreach flyer and in the contact address, and
+# the Foundation is entitled to write it. What was retired is the retired
+# ORGANISATION NAME, so that is what this now looks for: the phrase followed
+# closely by Mentoring or Foundation. A guard that fires on the client's own
+# words gets switched off, and then it guards nothing.
+old_org=$(grep -oiE 'moses of africa[^<>]{0,12}(mentoring|foundation)' <<< "$html" | wc -l | tr -d ' ')
+if [ "$old_org" = "0" ]; then
+  pass "the retired organisation name appears nowhere"
 else
-  fail "legal name is consistent (found $name_drift use(s) of the old name)"
+  fail "the retired organisation name is back ($old_org use(s))"
+fi
+
+# And the positive form, which is the actual claim: the site calls itself by
+# the name in SITE.legalName. Read from source, never restated here — the
+# email assertion that spent weeks green was one that hardcoded its own copy
+# of the value it was checking.
+legal=$(grep -oE 'legalName: *"[^"]*"' src/lib/site.ts | head -1 | sed 's/.*"\(.*\)"/\1/')
+if [ -z "$legal" ]; then
+  fail "could not read legalName out of src/lib/site.ts"
+else
+  if grep -q "<title>$legal</title>" <<< "$html" \
+     && grep -q "og:site_name\" content=\"$legal\"" <<< "$html"; then
+    pass "the tab title and the OG card both say \"$legal\""
+  else
+    fail "the tab title or the OG card does not say \"$legal\""
+  fi
 fi
 
 echo "-- file-convention assets actually resolve"
