@@ -30,7 +30,7 @@ export default function Home() {
         eyebrow="Don't just belong, stand out."
         headline={"Africa's Emerging Leaders\nfor "}
         accent="Excellence."
-        lead="We mentor young Africans in leadership, education, entrepreneurship and peace advocacy — and report what that work produces."
+        lead="Our mission is to cultivate leadership, education, entrepreneurship, and peace advocacy among African youth, while transparently reporting our outcomes."
         actions={[
           { label: "Read our mandate", href: "/about", variant: "primary" },
           { label: "Partner with us", href: "/contact", variant: "outline" },

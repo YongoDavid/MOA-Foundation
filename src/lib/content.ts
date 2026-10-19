@@ -19,7 +19,7 @@
  * eligibility line.
  */
 export const MANDATE =
-  "To inspire guide and equip African youths with the right knowledge, skills, ethics and moral values required to discover their full potentials, develop their skills and talents to become valuable in the global market being the best version of themselves. We aim at creating opportunities for mentorship, education and leadership that nurture responsible citizens and visionary leaders who will drive sustainable economic, social and political development across the continent and beyond."
+  "To inspire guide and equipe African youths with the right knowledge, skills, ethics and moral values required to discover their full potentials, develop their skills and talents to become valuable in the global market being the best version of themselves. We aim at creating opportunities for mentorship, education and leadership that nurture responsible citizens and visionary leaders who will drive sustainable economic, social and political development across the continent and beyond."
 
 export const VISION =
   "To build a continent where every young African has access to education, mentorship and empowerment, enabling them to rise as confident leaders, peace advocates, innovators and change makers who contribute to the sustainable development of Africa and also thrive globally."
@@ -36,14 +36,6 @@ export const VISION_ITEMS = [
   "To build a continent where every young African's are intentional in making impact locally and also thriving globally",
 ] as const
 
-/**
- * Ten specific objectives — real, already-published content.
- *
- * The spec's stop-block warns these read "Objective one — paste verbatim text"
- * and says to ship the band switched off. That note predates the v3 mockup,
- * whose objectives are these ten, verified word-for-word against the previous
- * site. Confirmed with the client 27 Aug: band 05 ships visible.
- */
 export const OBJECTIVES = [
   "Harnessing youth potential through professional mentorship.",
   "Public enlightenment via seminars, workshops, and outreaches.",
